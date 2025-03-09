@@ -46,38 +46,47 @@ public class LoginControllerServlet extends HttpServlet {
     } 
 
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    String rememberMe = request.getParameter("rememberMe");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String rememberMe = request.getParameter("rememberMe");
 
-    // Kiểm tra thông tin đăng nhập
-    if (username != null && password != null && username.equals(USERNAME_SYSTEM) && BCrypt.checkpw(password, PASSWORD_HASHED)) {
-        HttpSession session = request.getSession();
-        session.setAttribute("session_Login", username);
+        if (username != null && password != null && username.equals(USERNAME_SYSTEM) && password.equals(PASSWORD_SYSTEM)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("session_Login", username);
+            if (rememberMe != null) {
+                Cookie usernameCookie = new Cookie("CookieUserName", username);
+                Cookie passwordCookie = new Cookie("CookiePassWord", password);
 
-        if (rememberMe != null) {
-            Cookie usernameCookie = new Cookie("CookieUserName", username);
-            usernameCookie.setMaxAge(60 * 60 * 24);
-            usernameCookie.setHttpOnly(true);
-            usernameCookie.setSecure(true);
-            response.addCookie(usernameCookie);
+                
+                usernameCookie.setMaxAge(60 * 60 * 24);
+                passwordCookie.setMaxAge(60 * 60 * 24);
+
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+
+            } else {
+                Cookie cookie[] = request.getCookies();
+                if (cookie != null) {
+                    for (Cookie cookie1 : cookie) {
+                        if (cookie1.getName().equals("CookieUserName")) {
+                            cookie1.setMaxAge(0);
+                            response.addCookie(cookie1);
+                        }
+                        if (cookie1.getName().equals("CookiePassWord")) {
+                            cookie1.setMaxAge(0);
+                            response.addCookie(cookie1);
+                        }
+                    }
+                }
+            }
+            response.sendRedirect("welcome.jsp");
         } else {
-            // Xóa cookie nếu người dùng bỏ chọn "Remember Me"
-            Cookie deleteUsernameCookie = new Cookie("CookieUserName", "");
-            deleteUsernameCookie.setMaxAge(0);
-            deleteUsernameCookie.setPath("/");
-            response.addCookie(deleteUsernameCookie);
+            request.setAttribute("error", "Invalid username or password!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-
-        response.sendRedirect("welcome.jsp");
-    } else {
-        request.setAttribute("error", "Invalid username or password!");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-}
-
 
     @Override
     public String getServletInfo() {
