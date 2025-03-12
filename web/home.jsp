@@ -35,6 +35,14 @@
             footer {
                 margin-top: auto;
             }
+            
+            .img_banner img{
+                width: 90%;
+                height: 500px;
+                margin: 10px -5% 10px 5%;
+            }
+            
+            
 
         </style>
     </head>
@@ -42,7 +50,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="#">Perfume Store: Nhung chu be dan</a>
+                <a class="navbar-brand" href="home.jsp">Perfume Store: Nhung chu be dan</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -50,7 +58,7 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Contact.html">Contact</a></li>
                         <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
                     </ul>
                 </div>
@@ -60,11 +68,11 @@
         <!-- Slider -->
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="img/476498250_1622121185087076_4096243358621469653_n.png" class="d-block w-100" alt="Nước hoa 1"/>
+                <div class="carousel-item active img_banner">
+                    <img src="img/476498250_1622121185087076_4096243358621469653_n.png"  alt="Nước hoa 1"/>
                 </div>
-                <div class="carousel-item">
-                    <img src="img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png" class="d-block w-100" alt="Nước hoa 2"/>
+                <div class="carousel-item img_banner">
+                    <img src="img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png"  alt="Nước hoa 2"/>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
