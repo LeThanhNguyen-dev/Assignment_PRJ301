@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -72,7 +73,7 @@
                 border-radius: 10px;
                 padding-left: 20px;
             }
-            
+
             .perfume-shop:hover{
                 width: 50%;
                 background-color:gold ;
@@ -86,46 +87,46 @@
                 border-radius: 10px;
                 padding-left: 20px;
             }
-            
+
             .sign_up{
                 margin-top: 10px;
                 display: flex;
                 gap: 10px;
             }
-            
+
             .sign_up .link{
                 text-decoration: none;
                 color: black;
             }
-            
-   
+
+
         </style>
     </head>
     <body>
         <div class="login-container">
-            <div class="perfume-shop">
-                Perfume Shop
-            </div>
-          
-            <div class="login">
-                <form action="login" method="POST">
-                    <label>Username: </label>
-                    <input type="text" name="Username" value="" />
-
-                    <label>Password: </label>
-                    <input type="password" name="Password" value="" />
-
-                    <input type="submit" value="Login" />
-
-                    <input type="checkbox" name="Remember me" value="ON" />
-                    <label class="check_box">Remember me</label><br>
-                </form>
-                <div class="sign_up">
-                    <label>Don't have an account?</label>
-                    <a class="nav-link link" href="signup.jsp">Sign Up</a>
+                <div class="perfume-shop">
+                    Perfume Shop
                 </div>
 
+
+        <div class="login">
+            <form action="login" method="POST">
+                <label>Username: </label>
+                <input type="text" name="username" value="" />
+
+                <label>Password: </label>
+                <input type="password" name="password" value="" />
+
+                <input type="submit" value="Login" />
+                <input type="checkbox" name="rememberme" value="ON" />
+                <label class="check_box">Remember Me</label><br>
+            </form>
+            <div class="sign_up">
+                <label>Don't have an account?</label>
+                <a class="nav-link link" href="signup.jsp">Sign Up</a>
             </div>
+            <p style="color: red">${requestScope.error}</p>
         </div>
-    </body>
+    </div>
+</body>
 </html>

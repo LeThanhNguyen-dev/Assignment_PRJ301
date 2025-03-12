@@ -5,6 +5,13 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="model.Customer" %>
+<%
+    // Lấy thông tin khách hàng từ session
+    Customer customer = (Customer) session.getAttribute("session_Login");
+    boolean isLoggedIn = (customer != null);
+%>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -35,22 +42,23 @@
             footer {
                 margin-top: auto;
             }
-            
+
             .img_banner img{
                 width: 90%;
                 height: 500px;
                 margin: 10px -5% 10px 5%;
             }
-            
-            
+
+
 
         </style>
     </head>
     <body>
+
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="home.jsp">Perfume Store: Nhung chu be dan</a>
+                <a class="navbar-brand" href="home.jsp">Perfume Store</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -58,8 +66,20 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Contact.html">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
+
+                        <% if (isLoggedIn) {%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout">Logout</a> 
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link text-warning">Hello, <%= customer.getName()%>!</span>
+                        </li>
+                        <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.jsp">Login</a>
+                        </li>
+                        <% }%>
                     </ul>
                 </div>
             </div>
