@@ -49,7 +49,15 @@
                 margin: 10px -5% 10px 5%;
             }
 
-
+            .navbar-nav {
+                margin: 0 auto;
+                display: flex;
+                gap: 20px;
+            }
+            .navbar-brand {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
 
         </style>
     </head>
@@ -68,7 +76,7 @@
                         <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
 
-                        <% if (isLoggedIn) {%>
+                        <% if (isLoggedIn) { %>
                         <li class="nav-item">
                             <a class="nav-link" href="logout">Logout</a> 
                         </li>
@@ -79,11 +87,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="login.jsp">Login</a>
                         </li>
-                        <% }%>
+                        <% } %>
+
+                        <!-- Biểu tượng giỏ hàng -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="cart.jsp">
+                                <i class="fas fa-shopping-cart"></i> Cart
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
 
         <!-- Slider -->
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
