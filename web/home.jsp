@@ -64,7 +64,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="home.jsp">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
 
@@ -123,30 +123,7 @@
             </div>
         </div>
 
-        <!-- Modal Đăng Nhập -->
-        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalLabel">Đăng Nhập</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="loginServlet" method="post">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Đăng Nhập</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Footer -->
         <footer class="bg-dark text-white text-center py-3 footer">

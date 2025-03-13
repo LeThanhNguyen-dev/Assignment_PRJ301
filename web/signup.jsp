@@ -75,6 +75,7 @@
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
                     <button type="button" id="sendOTP" disabled>Xác thực</button>
+                    <span id="otpStatus" style="display:none; color:blue;">Đang gửi mã OTP...</span>
                 </div>
                 <div class="form-group">
                     <label for="otp">Mã OTP:</label>
@@ -107,18 +108,26 @@
 
             // Gửi yêu cầu OTP qua AJAX
             document.getElementById('sendOTP').addEventListener('click', function () {
-                console.log("Time send mail " +new Date().getTime());
                 var email = document.getElementById('email').value;
-                var username = document.getElementById('username').value; // Lấy giá trị username
+                var username = document.getElementById('username').value;
+
+                var otpStatus = document.getElementById('otpStatus');
+                otpStatus.style.display = 'inline';
+
+                this.disabled = true;
+
                 fetch('sendOTP', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: 'email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username) // Gửi cả email và username
+                    body: 'email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username)
                 })
                         .then(response => response.json())
                         .then(data => {
+                            otpStatus.style.display = 'none';
+                            this.disabled = false;
+
                             if (data.status === 'success') {
                                 alert(data.message);
                             } else {
@@ -126,6 +135,8 @@
                             }
                         })
                         .catch(error => {
+                            otpStatus.style.display = 'none';
+                            this.disabled = false;
                             alert('Lỗi khi gửi OTP. Vui lòng thử lại.');
                         });
             });
