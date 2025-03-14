@@ -1,4 +1,4 @@
-`<%-- 
+<%-- 
     Document   : home.jsp
     Created on : Mar 8, 2025, 11:08:53 AM
     Author     : ADMIN
@@ -8,7 +8,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.Customer" %>
 <%
-    // Lấy thông tin khách hàng từ session
     Customer customer = (Customer) session.getAttribute("session_Login");
     boolean isLoggedIn = (customer != null);
 %>
@@ -21,10 +20,61 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
+            /* Navbar Styles */
+            .navbar {
+                padding: 1rem 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .navbar-brand {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: #fff !important;
+                transition: color 0.3s;
+            }
+
+            .navbar-brand:hover {
+                color: #ddd !important;
+            }
+
+            .navbar-nav {
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .nav-link {
+                color: #fff !important;
+                font-weight: 500;
+                padding: 0.5rem 1rem !important;
+                transition: all 0.3s ease;
+            }
+
+            .nav-link:hover {
+                color: #ddd !important;
+                transform: translateY(-2px);
+            }
+
+            .nav-link i {
+                margin-right: 0.3rem;
+            }
+
+            .navbar-toggler {
+                border: none;
+            }
+
+            @media (max-width: 991px) {
+                .navbar-nav {
+                    padding: 1rem;
+                    background: #212529;
+                }
+            }
+
+           
             .product-card:hover {
                 transform: scale(1.05);
                 transition: 0.3s;
             }
+            
             .footer {
                 margin-top: 700px;
                 padding-top: 20px;
@@ -43,26 +93,14 @@
                 margin-top: auto;
             }
 
-            .img_banner img{
+            .img_banner img {
                 width: 90%;
                 height: 500px;
                 margin: 10px -5% 10px 5%;
             }
-
-            .navbar-nav {
-                margin: 0 auto;
-                display: flex;
-                gap: 20px;
-            }
-            .navbar-brand {
-                font-size: 1.5rem;
-                font-weight: bold;
-            }
-
         </style>
     </head>
     <body>
-
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
@@ -74,41 +112,40 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
 
                         <% if (isLoggedIn) { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout">Logout</a> 
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link text-warning">Hello, <%= customer.getName()%>!</span>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="contact.jsp">Contact</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link text-warning">Hello, <%= customer.getName()%>!</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="cart.jsp">
+                                    <i class="fas fa-shopping-cart"></i> Cart
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout">Logout</a> 
+                            </li>
                         <% } else { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.jsp">Login</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="login.jsp">Login</a>
+                            </li>
                         <% } %>
-
-                        <!-- Biểu tượng giỏ hàng -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="cart.jsp">
-                                <i class="fas fa-shopping-cart"></i> Cart
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-
         <!-- Slider -->
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active img_banner">
-                    <img src="img/476498250_1622121185087076_4096243358621469653_n.png"  alt="Nước hoa 1"/>
+                    <img src="img/476498250_1622121185087076_4096243358621469653_n.png" alt="Nước hoa 1"/>
                 </div>
                 <div class="carousel-item img_banner">
-                    <img src="img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png"  alt="Nước hoa 2"/>
+                    <img src="img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png" alt="Nước hoa 2"/>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -166,7 +203,7 @@
 
         <!-- Footer -->
         <footer class="bg-dark text-white text-center py-3 footer">
-            <p>&copy; 2025 Perfume Store. Copyright nhung chu be dan.</p>
+            <p>© 2025 Perfume Store. Copyright nhung chu be dan.</p>
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
