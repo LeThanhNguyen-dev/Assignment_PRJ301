@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="model.Customer" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,20 +33,33 @@
     <div class="container checkout-container">
         <h2 class="checkout-header">🛍️ Checkout</h2>
 
+        <%
+            // Lấy thông tin khách hàng từ session (sau khi họ đã đăng nhập)
+            Customer customer = (Customer) session.getAttribute("loggedInCustomer");
+        %>
+
         <form action="CheckoutServlet" method="post">
             <div class="mb-3">
                 <label for="fullName" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                <input type="text" class="form-control" id="fullName" name="fullName" 
+                       value="<%= (customer != null) ? customer.getName() : "" %>" required>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" 
+                       value="<%= (customer != null) ? customer.getEmail() : "" %>" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" 
+                       value="<%= (customer != null) ? customer.getPhone() : "" %>" required>
             </div>
 
             <div class="mb-3">
                 <label for="address" class="form-label">Shipping Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                <textarea class="form-control" id="address" name="address" rows="3" required><%= (customer != null) ? customer.getAddress() : "" %></textarea>
             </div>
 
             <div class="mb-3">
