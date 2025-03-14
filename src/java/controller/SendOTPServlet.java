@@ -26,8 +26,6 @@ public class SendOTPServlet extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
 
-        System.out.println("thời gian vào doPost: " + java.time.LocalDateTime.now());
-
         if (email == null || email.trim().isEmpty()) {
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"error\",\"message\":\"Email là bắt buộc.\"}");
@@ -53,10 +51,7 @@ public class SendOTPServlet extends HttpServlet {
         } catch (Exception e) {
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"error\",\"message\":\"Gửi OTP thất bại. Vui lòng thử lại.\"}");
-        } finally {
-            System.out.println("thời gian het doPost: " + java.time.LocalDateTime.now());
-
-        }
+        } 
 
     }
 
