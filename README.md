@@ -1,7 +1,3 @@
-Dưới đây là file README.md ghép gọn lại thành một trang để bạn có thể dễ dàng sao chép và sử dụng:
-
-markdown
-Sao chép
 # Hướng Dẫn Sử Dụng Git
 
 Đây là các lệnh Git cơ bản để làm việc với repository của bạn.
