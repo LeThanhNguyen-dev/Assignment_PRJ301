@@ -69,7 +69,6 @@
                 }
             }
 
-            /* CSS gốc của contact.jsp */
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -128,6 +127,13 @@
                 width: 100%;
                 height: 300px;
                 border: 0;
+            }
+            .footer {
+                margin-top: 700px;
+                padding-top: 20px;
+                position: relative;
+                bottom: 0;
+                width: 100%;
             }
         </style>
     </head>
@@ -197,6 +203,10 @@
             <h3>Bản Đồ</h3>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3837.5903579205033!2d108.33225087591964!3d15.87811314452433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31420dd5cf609957%3A0x5e46b5d87efcfd01!2zMzQ0IE5ndXnhu4VuIER1eSBIaeG7h3UsIEPhuqltIENow6J1LCBI4buZaSBBbiwgUXXhuqNuZyBOYW1sIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1741750390698!5m2!1svi!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
+                <!-- Footer -->
+        <footer class="bg-dark text-white text-center py-3 footer">
+            <p>© 2025 Perfume Store. Copyright nhung chu be dan.</p>
+        </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
