@@ -19,29 +19,29 @@
         <style>
             /* Navbar Styles - All navbar-related CSS grouped here */
             .navbar {
-                padding: 0.5rem 1rem; 
+                padding: 0.5rem 1rem;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
             .navbar-brand {
-                font-size: 1.5rem; 
+                font-size: 1.5rem;
                 font-weight: 700;
                 color: #fff !important;
-                margin-right: 1rem; 
+                margin-right: 1rem;
             }
             .navbar-nav {
-                gap: 0.8rem; 
+                gap: 0.8rem;
                 align-items: center;
             }
             .nav-link {
                 color: #fff !important;
                 font-weight: 500;
-                padding: 0.5rem 0.8rem !important; 
+                padding: 0.5rem 0.8rem !important;
             }
             .nav-link:hover {
                 color: #ddd !important;
             }
             .cart-badge {
-                font-size: 0.7rem; 
+                font-size: 0.7rem;
                 position: absolute;
                 top: 2px;
                 right: 5px;
@@ -51,18 +51,18 @@
                 border-radius: 50%;
             }
             .search-form {
-                width: 25%; 
-                margin: 0 1rem; 
+                width: 25%;
+                margin: 0 1rem;
             }
             .search-form .input-group {
                 width: 100%;
             }
             .search-form .form-control {
-                font-size: 0.9rem; 
-                padding: 0.4rem 0.6rem; 
+                font-size: 0.9rem;
+                padding: 0.4rem 0.6rem;
             }
             .search-form .btn {
-                padding: 0.4rem 0.6rem; 
+                padding: 0.4rem 0.6rem;
             }
             .dropdown-toggle.nav-link {
                 color: #fff !important;
@@ -129,7 +129,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="home">Perfume Store</a>
-                
+
                 <form class="search-form" method="GET" action="search">
                     <div class="input-group">
                         <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
@@ -169,10 +169,10 @@
                             </li>
                             <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
                             <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-                        </c:if>
-                        <c:if test="${!isLoggedIn}">
+                            </c:if>
+                            <c:if test="${!isLoggedIn}">
                             <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
-                        </c:if>
+                            </c:if>
                     </ul>
                 </div>
             </div>
@@ -196,8 +196,7 @@
         </div>
 
         <div class="container mt-5">
-            <h3 class="text-center mb-4">Danh sách sản phẩm</h3>
-            
+            <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
             <div class="row">
                 <c:forEach var="product" items="${productList}">
                     <div class="col-md-4 mb-4">
@@ -205,15 +204,15 @@
                             <img src="${product.image}" class="card-img-top" alt="${product.name}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text">${product.description}</p>
                                 <p class="card-text"><strong>Giá: </strong><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</p>
+                                <!-- Ẩn category -->
+                                <!-- <p class="card-text"><strong>Danh mục: </strong>${product.category}</p> -->
                                 <c:if test="${isLoggedIn}">
                                     <form method="POST" action="home.jsp">
                                         <input type="hidden" name="productId" value="${product.id}">
                                         <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
                                     </form>
-                                </c:if>
-                                <c:if test="${!isLoggedIn}">
-                                    <button class="btn btn-secondary" onclick="alert('Vui lòng đăng nhập trước khi thêm vào giỏ hàng.')">Thêm vào giỏ hàng</button>
                                 </c:if>
                             </div>
                         </div>

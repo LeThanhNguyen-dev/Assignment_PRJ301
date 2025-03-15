@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Customer;
 import model.Product;
 import utils.DBContext;
 
@@ -13,7 +12,7 @@ public class ProductDAO extends DBContext {
 
     public Product getProductById(int productId) {
         Product product = null;
-        String query = "SELECT * FROM Product WHERE id = ?";
+        String query = "SELECT * FROM products WHERE id = ?";
         try {
             PreparedStatement stmt = c.prepareStatement(query);
             stmt.setInt(1, productId);
@@ -26,7 +25,8 @@ public class ProductDAO extends DBContext {
                         rs.getString("description"),
                         rs.getString("image"),
                         rs.getDouble("price"),
-                        rs.getInt("quantity")
+                        rs.getInt("quantity"),
+                        rs.getString("category") // Thêm category vào constructor
                 );
             }
         } catch (SQLException e) {
@@ -37,7 +37,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> listAllProducts() {
         List<Product> productList = new ArrayList<>();
-        String query = "SELECT * FROM Product";
+        String query = "SELECT * FROM products";
         try {
             PreparedStatement stmt = c.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
@@ -49,7 +49,8 @@ public class ProductDAO extends DBContext {
                         rs.getString("description"),
                         rs.getString("image"),
                         rs.getDouble("price"),
-                        rs.getInt("quantity")
+                        rs.getInt("quantity"),
+                        rs.getString("category") // Thêm category vào constructor
                 );
                 productList.add(product);
             }
@@ -58,13 +59,12 @@ public class ProductDAO extends DBContext {
         }
         return productList;
     }
-    
-    
-    
-    public static void main(String[] args) {
-        CustomerDAO cs = new CustomerDAO();
 
-        List<Product> products = cs.listAllProducts();
+    // Sửa lại main để kiểm tra ProductDAO thay vì CustomerDAO
+    public static void main(String[] args) {
+        ProductDAO productDAO = new ProductDAO(); // Sửa từ CustomerDAO thành ProductDAO
+
+        List<Product> products = productDAO.listAllProducts();
 
         for (Product p : products) {
             System.out.println(p.toString());
@@ -74,10 +74,15 @@ public class ProductDAO extends DBContext {
         System.out.println("==================");
         System.out.println("==================");
 
-        //==================================================
-        var list = cs.listAll();
-        for (Customer customer : list) {
-            System.out.println(customer.toString());
+        // Nếu bạn muốn kiểm tra getProductById
+        Product product = productDAO.getProductById(1); // Ví dụ lấy sản phẩm có id = 1
+        if (product != null) {
+            System.out.println("Product with ID 1: " + product.toString());
+        } else {
+            System.out.println("No product found with ID 1");
         }
+
+        // Đóng kết nối sau khi sử dụng
+        productDAO.closeConnection();
     }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Objects;
 
 public class Product {
     private int id;
@@ -8,17 +9,19 @@ public class Product {
     private String image;
     private double price;
     private int quantity;
+    private String category; // Thêm thuộc tính category
 
     public Product() {
     }
 
-    public Product(int id, String name, String description, String image, double price, int quantity) {
+    public Product(int id, String name, String description, String image, double price, int quantity, String category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
         this.quantity = quantity;
+        this.category = category; // Khởi tạo category
     }
 
     public int getId() {
@@ -69,6 +72,14 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -78,6 +89,48 @@ public class Product {
                 ", image='" + image + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
+                ", category='" + category + '\'' +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id); 
+    
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Product other = (Product) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+            return false;
+        }
+        if (this.quantity != other.quantity) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.image, other.image)) {
+            return false;
+        }
+        return Objects.equals(this.category, other.category);
+    }
+    
+    
 }

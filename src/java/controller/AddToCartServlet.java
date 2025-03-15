@@ -6,6 +6,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -73,8 +74,8 @@ public class AddToCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int productId = Integer.parseInt(request.getParameter("productId"));
-        CustomerDAO productDAO = new CustomerDAO();
-        Product product = productDAO.getProductById(productId); // Sửa lại cho đúng cú pháp
+        ProductDAO productDAO = new ProductDAO();
+        Product product = productDAO.getProductById(productId); // Get product from DB
 
         if (product != null) {
             HttpSession session = request.getSession();
@@ -84,13 +85,21 @@ public class AddToCartServlet extends HttpServlet {
                 cart = new HashMap<>();
             }
 
-            cart.put(product, cart.getOrDefault(product, 0) + 1);
-            session.setAttribute("cart", cart);
-            session.setAttribute("cartSize", cart.values().stream().mapToInt(Integer::intValue).sum());
+            // Check if the product is already in the cart
+            cart.put(product, cart.getOrDefault(product, 0) + 1); // Add product or update quantity
+            session.setAttribute("cart", cart); // Update cart in session
+
+            // Update the total number of items in the cart
+            int cartSize = cart.values().stream().mapToInt(Integer::intValue).sum();
+            session.setAttribute("cartSize", cartSize);
+
+            // Optionally, set a message or redirect after adding to cart
+            request.setAttribute("message", "Product added to cart!");
         }
 
-        response.sendRedirect("home.jsp");
+        response.sendRedirect("home.jsp"); // Redirect to homepage or cart page
     }
+
 
     /** 
      * Returns a short description of the servlet.
