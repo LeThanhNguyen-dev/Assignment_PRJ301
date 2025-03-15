@@ -13,6 +13,10 @@ import dao.CustomerDAO;
 
 @WebServlet(name = "LoginControllerServlet", urlPatterns = {"/login"})
 public class LoginControllerServlet extends HttpServlet {
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -49,7 +53,7 @@ public class LoginControllerServlet extends HttpServlet {
                 deleteCookie(request, response, "CookiePassWord");
             }
 
-            response.sendRedirect("home.jsp");
+            response.sendRedirect("home");
         } else {
             request.setAttribute("error", "Invalid username or password!");
             request.getRequestDispatcher("login.jsp").forward(request, response);

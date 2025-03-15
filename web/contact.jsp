@@ -7,10 +7,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="model.Customer" %>
-<%
-    Customer customer = (Customer) session.getAttribute("session_Login");
-    boolean isLoggedIn = (customer != null);
-%>
+<c:set var="customer" value="${sessionScope.session_Login}"/>
+<c:set var="isLoggedIn" value="${customer != null}"/>
+
+<c:set var="productList" value="${requestScope.productList}"/>
+<c:set var="cart" value="${sessionScope.cart}"/>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -20,46 +21,25 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
-            /* Navbar Styles */
             .navbar {
                 padding: 1rem 0;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
-
             .navbar-brand {
                 font-size: 1.8rem;
                 font-weight: 700;
                 color: #fff !important;
-                transition: color 0.3s;
             }
-
-            .navbar-brand:hover {
-                color: #ddd !important;
-            }
-
             .navbar-nav {
                 gap: 1.5rem;
                 align-items: center;
             }
-
             .nav-link {
                 color: #fff !important;
                 font-weight: 500;
-                padding: 0.5rem 1rem !important;
-                transition: all 0.3s ease;
             }
-
             .nav-link:hover {
                 color: #ddd !important;
-                transform: translateY(-2px);
-            }
-
-            .nav-link i {
-                margin-right: 0.3rem;
-            }
-
-            .navbar-toggler {
-                border: none;
             }
 
             @media (max-width: 991px) {
@@ -69,12 +49,7 @@
                 }
             }
 
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f8f8f8;
-            }
+           
 
             .containers {
                 width: 80%;
@@ -138,43 +113,36 @@
         </style>
     </head>
     <body>
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="home.jsp">Perfume Store</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <a class="navbar-brand" href="home">Perfume Store</a>
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#products">Product</a></li>
-
-                        <% if (isLoggedIn) { %>
+                        <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="product.jsp">Products</a></li>
+                            <c:if test="${isLoggedIn}">
+                            <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
                             <li class="nav-item">
-                                <a class="nav-link" href="contact.jsp">Contact</a>
-                            </li>
-                            <li class="nav-item">
-                                <span class="nav-link text-warning">Hello, <%= customer.getName()%>!</span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="cart.jsp">
+                                <a class="nav-link position-relative" href="cart.jsp">
                                     <i class="fas fa-shopping-cart"></i> Cart
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
+                                    </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="logout">Logout</a> 
-                            </li>
-                        <% } else { %>
-                            <li class="nav-item">
-                                <a class="nav-link" href="login.jsp">Login</a>
-                            </li>
-                        <% } %>
+                            <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                            </c:if>
+                            <c:if test="${!isLoggedIn}">
+                            <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                            </c:if>
                     </ul>
                 </div>
             </div>
         </nav>
-
         <div class="containers">
             <h2>Liên Hệ</h2>
             <div class="contact-info">

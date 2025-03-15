@@ -16,24 +16,24 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Xóa session
+      
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        // Xóa cookie đăng nhập
+ 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("CookieUserName") || cookie.getName().equals("CookiePassWord")) {
-                    cookie.setMaxAge(0); // Xóa cookie
+                    cookie.setMaxAge(0); 
                     response.addCookie(cookie);
                 }
             }
         }
 
-        // Chuyển hướng về home.jsp
-        response.sendRedirect("home.jsp");
+     
+        response.sendRedirect("home");
     }
 }

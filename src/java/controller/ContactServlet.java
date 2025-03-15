@@ -14,6 +14,12 @@ import utils.EmailUtil;
 public class ContactServlet extends HttpServlet {
 
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
+ 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("contact.jsp");
+    }
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");

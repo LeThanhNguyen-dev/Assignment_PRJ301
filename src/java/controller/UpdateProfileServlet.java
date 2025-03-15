@@ -25,13 +25,11 @@ public class UpdateProfileServlet extends HttpServlet {
             return;
         }
 
-        // Lấy thông tin từ form
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
 
-        // Validate input
         if (name == null || phone == null || email == null || address == null ||
             name.trim().isEmpty() || phone.trim().isEmpty() || email.trim().isEmpty() || address.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng điền đầy đủ thông tin!");
@@ -45,7 +43,6 @@ public class UpdateProfileServlet extends HttpServlet {
             return;
         }
 
-        // Tạo object customer mới với thông tin cập nhật
         Customer updatedCustomer = new Customer(
             currentCustomer.getId(),
             currentCustomer.getUsername(),
@@ -57,17 +54,14 @@ public class UpdateProfileServlet extends HttpServlet {
         );
 
         CustomerDAO customerDAO = new CustomerDAO();
-        
-        // Kiểm tra email có bị trùng với user khác không
+
         if (!email.equals(currentCustomer.getEmail()) && customerDAO.isUsernameOrEmailExist(null, email)) {
             request.setAttribute("error", "Email đã được sử dụng bởi tài khoản khác!");
             request.getRequestDispatcher("editProfile.jsp").forward(request, response);
             return;
         }
 
-        // Cập nhật trong database
         if (updateCustomerInDB(customerDAO, updatedCustomer)) {
-            // Cập nhật session
             session.setAttribute("session_Login", updatedCustomer);
             request.setAttribute("message", "Cập nhật thông tin thành công!");
             request.getRequestDispatcher("profile.jsp").forward(request, response);

@@ -6,47 +6,145 @@
         <meta charset="UTF-8">
         <title>Register</title>
         <style>
+            body {
+                background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
             .container {
-                width: 400px;
+                width: 450px;
                 margin: 50px auto;
-                padding: 20px;
-                border: 3px solid black;
-                border-radius: 10px;
-                background-color: white;
-                color: black;
+                padding: 30px;
+                border: 1px solid #ffd700;
+                border-radius: 15px;
+                background-color: #1f1f1f;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                transition: transform 0.3s ease;
             }
+
+            .container:hover {
+                transform: translateY(-5px);
+            }
+
+            h2 {
+                text-align: center;
+                color: #ffd700;
+                margin-bottom: 25px;
+                font-weight: 600;
+            }
+
             .form-group {
-                margin-bottom: 15px;
+                margin-bottom: 20px;
+                position: relative;
             }
+
             label {
                 display: block;
-                margin-bottom: 5px;
+                margin-bottom: 8px;
+                color: #ffd700;
+                font-size: 14px;
+                font-weight: 500;
             }
+
             input {
                 width: 100%;
-                padding: 8px;
+                padding: 12px;
                 box-sizing: border-box;
-            }
-            .error {
-                color: red;
-                font-size: 12px;
-            }
-            button {
-                background-color: #333333;
-                color: gold;
-                padding: 10px 15px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-            button:hover {
-                background-color: gold;
-                color: #333333;
-            }
-            #sendOTP:disabled {
-                background-color: #000000;
+                border: 2px solid #4d4d4d;
+                border-radius: 8px;
+                font-size: 14px;
+                background-color: #2a2a2a;
                 color: #ffffff;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            input:focus {
+                outline: none;
+                border-color: #ffd700;
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            }
+
+            .error {
+                color: #ff4d4d;
+                font-size: 12px;
+                position: absolute;
+                bottom: -18px;
+                left: 0;
+            }
+
+            button {
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                color: #1a1a1a;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                width: 100%;
+                font-size: 16px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            button:hover {
+                background: linear-gradient(45deg, #ccac00, #ffd700);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            }
+
+            #sendOTP {
+                width: auto;
+                padding: 12px 20px; /* Tăng kích thước nút để cân đối với input */
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                position: absolute;
+                right: 0;
+                top: 32px;
+                font-size: 14px;
+            }
+
+            #sendOTP:hover {
+                background: linear-gradient(45deg, #ccac00, #ffd700);
+            }
+
+            #sendOTP:disabled {
+                background: #4d4d4d;
+                color: #999999;
                 cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+            .text-danger {
+                color: #ff4d4d;
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .text-success {
+                color: #ffd700;
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .mt-3 {
+                margin-top: 20px;
+                text-align: center;
+                color: #b3b3b3;
+            }
+
+            .mt-3 a {
+                color: #ffd700;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            .mt-3 a:hover {
+                color: #ccac00;
+                text-decoration: underline;
             }
         </style>
     </head>
@@ -93,8 +191,8 @@
             </p>
         </div>
 
+        <!-- Script giữ nguyên -->
         <script>
-            // Kiểm tra email hợp lệ để bật nút "Xác thực"
             document.getElementById('email').addEventListener('input', function () {
                 var email = this.value;
                 var sendOTPBtn = document.getElementById('sendOTP');
@@ -105,17 +203,16 @@
                 }
             });
 
-            // Gửi yêu cầu OTP qua AJAX
             document.getElementById('sendOTP').addEventListener('click', function () {
                 console.log("Time send mail " +new Date().getTime());
                 var email = document.getElementById('email').value;
-                var username = document.getElementById('username').value; // Lấy giá trị username
+                var username = document.getElementById('username').value;
                 fetch('sendOTP', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: 'email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username) // Gửi cả email và username
+                    body: 'email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username)
                 })
                         .then(response => response.json())
                         .then(data => {
@@ -130,7 +227,6 @@
                         });
             });
 
-            // Kiểm tra số điện thoại
             function validateForm() {
                 let phone = document.getElementById("phone").value;
                 let phoneError = document.getElementById("phoneError");
