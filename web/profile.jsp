@@ -14,24 +14,74 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
             .navbar {
-                padding: 1rem 0;
+                padding: 0.5rem 1rem;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
             .navbar-brand {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
                 font-weight: 700;
                 color: #fff !important;
+                margin-right: 1rem;
             }
             .navbar-nav {
-                gap: 1.5rem;
+                gap: 0.8rem;
                 align-items: center;
             }
             .nav-link {
                 color: #fff !important;
                 font-weight: 500;
+                padding: 0.5rem 0.8rem !important;
             }
             .nav-link:hover {
                 color: #ddd !important;
+            }
+            .cart-badge {
+                font-size: 0.7rem;
+                position: absolute;
+                top: 2px;
+                right: 5px;
+                background: red;
+                color: white;
+                padding: 1px 4px;
+                border-radius: 50%;
+            }
+            .search-form {
+                width: 25%;
+                margin: 0 1rem;
+            }
+            .search-form .input-group {
+                width: 100%;
+            }
+            .search-form .form-control {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.6rem;
+            }
+            .search-form .btn {
+                padding: 0.4rem 0.6rem;
+            }
+            .dropdown-toggle.nav-link {
+                color: #fff !important;
+            }
+            .dropdown-toggle.nav-link:hover {
+                color: #ddd !important;
+            }
+            .dropdown-menu {
+                margin-top: 0;
+                border-radius: 0.25rem;
+            }
+            .dropdown-item:hover {
+                background-color: #f8f9fa;
+            }
+            @media (max-width: 992px) {
+                .search-form {
+                    width: 20%;
+                }
+                .navbar-brand {
+                    font-size: 1.3rem;
+                }
+                .nav-link {
+                    padding: 0.4rem 0.6rem !important;
+                }
             }
             
             .profile-container {
@@ -42,6 +92,8 @@
                 border-radius: 8px;
                 box-shadow: 0 0 20px rgba(0,0,0,0.1);
             }
+            
+            
             .profile-info {
                 margin-bottom: 20px;
             }
@@ -77,35 +129,56 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="home">Perfume Store</a>
-                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
+    <div class="container">
+        <a class="navbar-brand" href="home">Perfume Store</a>
+
+        <form class="search-form" method="GET" action="search">
+            <div class="input-group">
+                <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="fas fa-search"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="product.jsp">Products</a></li>
-                            <c:if test="${isLoggedIn}">
-                            <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link position-relative" href="cart.jsp">
-                                    <i class="fas fa-shopping-cart"></i> Cart
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-                            </c:if>
-                            <c:if test="${!isLoggedIn}">
-                            <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
-                            </c:if>
-                    </ul>
-                </div>
             </div>
-        </nav>
+        </form>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Products
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                        <!-- For "All", don't specify a category parameter or use a special value -->
+                        <li><a class="dropdown-item" href="product.jsp">All</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=kid">Kid</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=man">Man</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=woman">Woman</a></li>
+                    </ul>
+                </li>
+                <c:if test="${isLoggedIn}">
+                    <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="cart.jsp">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                </c:if>
+                <c:if test="${!isLoggedIn}">
+                    <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                </c:if>
+            </ul>
+        </div>
+    </div>
+</nav>
 
         <div class="container profile-container">
             <h2 class="text-center mb-4">Thông Tin Cá Nhân</h2>

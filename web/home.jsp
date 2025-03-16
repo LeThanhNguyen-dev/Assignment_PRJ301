@@ -127,56 +127,56 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="home">Perfume Store</a>
+    <div class="container">
+        <a class="navbar-brand" href="home">Perfume Store</a>
 
-                <form class="search-form" method="GET" action="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
-                        <button class="btn btn-outline-light" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-
-                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
+        <form class="search-form" method="GET" action="search">
+            <div class="input-group">
+                <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="fas fa-search"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
-                        <!-- Sửa Products thành dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Products
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                                <li><a class="dropdown-item" href="product.jsp?category=all">All</a></li>
-                                <li><a class="dropdown-item" href="product.jsp?category=kid">Kid</a></li>
-                                <li><a class="dropdown-item" href="product.jsp?category=man">Man</a></li>
-                                <li><a class="dropdown-item" href="product.jsp?category=woman">Woman</a></li>
-                            </ul>
-                        </li>
-                        <c:if test="${isLoggedIn}">
-                            <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link position-relative" href="cart.jsp">
-                                    <i class="fas fa-shopping-cart"></i> Cart
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-                            </c:if>
-                            <c:if test="${!isLoggedIn}">
-                            <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
-                            </c:if>
-                    </ul>
-                </div>
             </div>
-        </nav>
+        </form>
+
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Products
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                        <!-- For "All", don't specify a category parameter or use a special value -->
+                        <li><a class="dropdown-item" href="product.jsp">All</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=kid">Kid</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=man">Man</a></li>
+                        <li><a class="dropdown-item" href="product.jsp?category=woman">Woman</a></li>
+                    </ul>
+                </li>
+                <c:if test="${isLoggedIn}">
+                    <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="cart.jsp">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                </c:if>
+                <c:if test="${!isLoggedIn}">
+                    <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                </c:if>
+            </ul>
+        </div>
+    </div>
+</nav>
 
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -203,20 +203,24 @@
             <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
             <div class="row">
                 <c:forEach var="product" items="${productList}">
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card">
-                            <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                            <div class="card-body">
+                    <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${product.name}</h5>
-                                <p class="card-text">${product.description}</p>
-                                <p class="card-text"><strong>Giá: </strong><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</p>
-                                <!-- Ẩn category -->
-                                <!-- <p class="card-text"><strong>Danh mục: </strong>${product.category}</p> -->
+                                <p class="card-text flex-grow-1">${product.description}</p>
+                                <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
                                 <c:if test="${isLoggedIn}">
-                                    <form method="POST" action="home.jsp">
-                                        <input type="hidden" name="productId" value="${product.id}">
-                                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                                    </form>
+                                    <div class="d-flex justify-content-between gap-2 mt-auto">
+                                        <form method="POST" action="buyNow.jsp" class="flex-fill">
+                                            <input type="hidden" name="productId" value="${product.id}">
+                                            <button type="submit" class="btn btn-success w-100">Mua hàng</button>
+                                        </form>
+                                        <form method="POST" action="home.jsp" class="flex-fill">
+                                            <input type="hidden" name="productId" value="${product.id}">
+                                            <button type="submit" class="btn btn-primary w-100">Thêm vào giỏ hàng</button>
+                                        </form>
+                                    </div>
                                 </c:if>
                             </div>
                         </div>
