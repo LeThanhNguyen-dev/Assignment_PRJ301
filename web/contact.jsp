@@ -146,7 +146,7 @@
                 border: 0;
             }
             .footer {
-                margin-top: 700px;
+                margin-top: 100px;
                 padding-top: 20px;
                 position: relative;
                 bottom: 0;

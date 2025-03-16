@@ -39,14 +39,19 @@
                 color: #ddd !important;
             }
             .cart-badge {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 position: absolute;
-                top: 2px;
-                right: 5px;
-                background: red;
+                top: -5px;
+                right: -10px;
+                background: #dc3545;
                 color: white;
-                padding: 1px 4px;
+                padding: 2px 6px;
                 border-radius: 50%;
+                line-height: 1;
+                font-weight: 600;
+                min-width: 18px;
+                text-align: center;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             }
             .search-form {
                 width: 25%;
@@ -62,19 +67,6 @@
             .search-form .btn {
                 padding: 0.4rem 0.6rem;
             }
-            .dropdown-toggle.nav-link {
-                color: #fff !important;
-            }
-            .dropdown-toggle.nav-link:hover {
-                color: #ddd !important;
-            }
-            .dropdown-menu {
-                margin-top: 0;
-                border-radius: 0.25rem;
-            }
-            .dropdown-item:hover {
-                background-color: #f8f9fa;
-            }
             @media (max-width: 992px) {
                 .search-form {
                     width: 20%;
@@ -87,38 +79,120 @@
                 }
             }
 
-            .cart-badge {
-                font-size: 0.75rem;
-                position: absolute;
-                top: -5px;
-                right: -10px;
-                background: #dc3545;
-                color: white;
-                padding: 2px 6px;
-                border-radius: 50%;
-                line-height: 1;
+            /* Style cho layout 2 cột */
+            .container-fluid {
+                padding: 0 15px;
+            }
+            .sidebar {
+                height: 100%;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-right: 1px solid #dee2e6;
+            }
+            .filter-section {
+                margin-bottom: 20px;
+            }
+            .filter-section h5 {
+                font-size: 1.1rem;
                 font-weight: 600;
-                min-width: 18px;
+                margin-bottom: 10px;
+                color: #343a40;
+            }
+            .category-buttons, .price-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .category-buttons .btn, .price-buttons .btn {
+                width: 100%;
+                text-align: left;
+                padding: 10px 15px;
+                font-size: 0.95rem;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+            .category-buttons .btn {
+                background-color: #fff;
+                border: 1px solid #ced4da;
+                color: #495057;
+            }
+            .category-buttons .btn:hover, .category-buttons .btn.active {
+                background-color: #007bff;
+                color: #fff;
+                border-color: #007bff;
+            }
+            .price-buttons .btn {
+                background-color: #fff;
+                border: 1px solid #ced4da;
+                color: #495057;
+            }
+            .price-buttons .btn:hover, .price-buttons .btn.active {
+                background-color: #28a745;
+                color: #fff;
+                border-color: #28a745;
+            }
+            .product-list {
+                padding: 20px;
+            }
+            @media (max-width: 768px) {
+                .sidebar {
+                    padding: 10px;
+                }
+                .category-buttons, .price-buttons {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .category-buttons .btn, .price-buttons .btn {
+                    width: auto;
+                    margin: 5px;
+                }
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .btn-buy, .btn-cart {
+                flex: 1;
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                font-weight: 500;
+                border-radius: 5px;
+                transition: all 0.3s ease;
                 text-align: center;
-                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                min-width: 0; 
+            }
+            .btn-buy {
+                background-color: #ff6b6b;
+                border: 1px solid #ff6b6b;
+                color: #fff;
+            }
+            .btn-buy:hover {
+                background-color: #ff8787;
+                border-color: #ff8787;
+                color: #fff;
+            }
+            .btn-cart {
+                background-color: #17a2b8;
+                border: 1px solid #17a2b8;
+                color: #fff;
+            }
+            .btn-cart:hover {
+                background-color: #1cc0d8;
+                border-color: #1cc0d8;
+                color: #fff;
             }
 
             html, body {
                 height: 100%;
-
             }
-
             body {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
             }
-
-            .container {
-                flex-grow: 1;
-                width: 70%;
-            }
-
             .footer {
                 margin-top: 20px;
                 padding-top: 20px;
@@ -128,13 +202,11 @@
             }
         </style>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="home">Perfume Store</a>
-
                 <form class="search-form" method="GET" action="search">
                     <div class="input-group">
                         <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
@@ -143,26 +215,14 @@
                         </button>
                     </div>
                 </form>
-
                 <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Products
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                                <!-- For "All", don't specify a category parameter or use a special value -->
-                                <li><a class="dropdown-item" href="product">All</a></li>
-                                <li><a class="dropdown-item" href="product?category=Kid">Kid</a></li>
-                                <li><a class="dropdown-item" href="product?category=Men">Man</a></li>
-                                <li><a class="dropdown-item" href="product?category=Women">Woman</a></li>
-                            </ul>
-                        </li>
-                        <c:if test="${isLoggedIn}">
+                        <li class="nav-item"><a class="nav-link" href="product">Products</a></li>
+                            <c:if test="${isLoggedIn}">
                             <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
                             <li class="nav-item">
                                 <a class="nav-link position-relative" href="cart.jsp">
@@ -170,9 +230,7 @@
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
                                         ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
                                     </span>
-
                                 </a>
-
                             </li>
                             <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
                             <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
@@ -185,38 +243,59 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <c:forEach var="product" items="${productList}">
-                    <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                        <div class="card w-100">
-                            <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${product.name}</h5>
-                                <p class="card-text flex-grow-1">${product.description}</p>
-                                <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
-                                <c:if test="${isLoggedIn}">
-                                    <div class="d-flex justify-content-between gap-2 mt-auto">
-                                        <form method="POST" action="buyProduct" class="flex-fill">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="btn btn-primary w-100">Mua ngay</button>
-                                        </form>
-
-                                        <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-product-id="${product.id}">
-                                            Thêm vào giỏ hàng
-                                        </button>
-
-                                    </div>
-                                </c:if>
-                            </div>
+                <div class="col-md-3 sidebar">
+                    <div class="filter-section">
+                        <h5>Danh mục</h5>
+                        <div class="category-buttons">
+                            <a href="product" class="btn">All</a>
+                            <a href="product?category=Men" class="btn">Man</a>
+                            <a href="product?category=Women" class="btn">Woman</a>
+                            <a href="product?category=Kid" class="btn">Kid</a>
                         </div>
                     </div>
-                </c:forEach>
-                <c:if test="${empty productList}">
-                    <div class="col-12 text-center">
-                        <p>Không có sản phẩm nào.</p>
+                    <div class="filter-section">
+                        <h5>Lọc theo giá</h5>
+                        <div class="price-buttons">
+                            <a href="product?priceRange=under500k" class="btn">Dưới 500K</a>
+                            <a href="product?priceRange=500k-1m" class="btn">500K - 1M</a>
+                            <a href="product?priceRange=over1m" class="btn">Trên 1M</a>
+                        </div>
                     </div>
-                </c:if>
+                </div>
+                <div class="col-md-9 product-list">
+                    <div class="row">
+                        <c:forEach var="product" items="${productList}">
+                            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                                <div class="card w-100">
+                                    <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">${product.name}</h5>
+                                        <p class="card-text flex-grow-1">${product.description}</p>
+                                        <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
+                                        <c:if test="${isLoggedIn}">
+                                            <div class="action-buttons">
+                                                <form method="POST" action="buyProduct" style="flex: 1;">
+                                                    <input type="hidden" name="productId" value="${product.id}">
+                                                    <button type="submit" class="btn btn-buy">Mua ngay</button>
+                                                </form>
+                                                <button type="button" class="btn btn-cart add-to-cart-btn" data-product-id="${product.id}">
+                                                    Thêm vào giỏ hàng
+                                                </button>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <c:if test="${empty productList}">
+                            <div class="col-12 text-center">
+                                <p>Không có sản phẩm nào. ${error}</p>
+                            </div>
+                        </c:if>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -229,7 +308,6 @@
             $(document).ready(function () {
                 $(".add-to-cart-btn").click(function () {
                     let productId = $(this).data("product-id");
-
                     $.ajax({
                         url: 'AddToCartServlet',
                         type: 'POST',
@@ -250,6 +328,5 @@
                 });
             });
         </script>
-
     </body>
 </html>

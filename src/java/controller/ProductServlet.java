@@ -12,11 +12,12 @@ import model.Product;
 
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
-    private ProductDAO productDAO; // Assume this is your data access object
+    private ProductDAO productDAO; 
 
     @Override
     public void init() throws ServletException {
-        productDAO = new ProductDAO(); // Initialize your DAO
+        productDAO = new ProductDAO();
+        productDAO.getAllProducts();
     }
 
     @Override

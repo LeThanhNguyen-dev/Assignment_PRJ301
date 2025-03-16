@@ -127,56 +127,43 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="home">Perfume Store</a>
-
-        <form class="search-form" method="GET" action="search">
-            <div class="input-group">
-                <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">
-                    <i class="fas fa-search"></i>
+            <div class="container">
+                <a class="navbar-brand" href="home">Perfume Store</a>
+                <form class="search-form" method="GET" action="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="query" placeholder="Tìm kiếm..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-            </div>
-        </form>
-
-        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Products
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                        <!-- For "All", don't specify a category parameter or use a special value -->
-                        <li><a class="dropdown-item" href="product.jsp">All</a></li>
-                        <li><a class="dropdown-item" href="product.jsp?category=kid">Kid</a></li>
-                        <li><a class="dropdown-item" href="product.jsp?category=man">Man</a></li>
-                        <li><a class="dropdown-item" href="product.jsp?category=woman">Woman</a></li>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="product">Products</a></li> <!-- Thay dropdown bằng liên kết thẳng -->
+                            <c:if test="${isLoggedIn}">
+                            <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" href="cart.jsp">
+                                    <i class="fas fa-shopping-cart"></i> Cart
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
+                                        ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                            </c:if>
+                            <c:if test="${!isLoggedIn}">
+                            <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
+                            </c:if>
                     </ul>
-                </li>
-                <c:if test="${isLoggedIn}">
-                    <li class="nav-item"><a class="nav-link" href="sendEmail">Contact</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="cart.jsp">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-                </c:if>
-                <c:if test="${!isLoggedIn}">
-                    <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>
-                </c:if>
-            </ul>
-        </div>
-    </div>
-</nav>
+                </div>
+            </div>
+        </nav>
 
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -189,7 +176,7 @@
                 <div class="carousel-item">
                     <img src="img/476498250_1622121185087076_4096243358621469653_n.png" class="d-block w-100" alt="Banner 2">
                 </div>
-                
+
             </div>
             <button class="carousel-control-prev" data-bs-target="#carouselExample" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
