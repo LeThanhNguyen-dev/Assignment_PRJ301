@@ -21,7 +21,7 @@
                 width: 900px;
                 height: 500px;
                 background-color: #1f1f1f;
-                border: 1px solid #ffd700;
+                border: 1px solid #9c1010;
                 border-radius: 15px;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                 overflow: hidden;
@@ -44,7 +44,7 @@
                 margin-bottom: 10px;
                 font-weight: 500;
                 font-size: 16px;
-                color: #ffd700;
+                color: #9c1010;
             }
 
             .login input[type="text"],
@@ -64,15 +64,15 @@
             .login input[type="text"]:focus,
             .login input[type="password"]:focus {
                 outline: none;
-                border-color: #ffd700;
-                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+                border-color: #9c1010;
+                box-shadow: 0 0 5px rgba(156, 152, 152, 0.3);
             }
 
             .login input[type="submit"] {
                 width: 100%;
                 padding: 12px;
-                background: linear-gradient(45deg, #ffd700, #ccac00);
-                color: #1a1a1a;
+                background: linear-gradient(45deg, #9c1010, #570808);
+                color: #7d7777;
                 border: none;
                 border-radius: 8px;
                 cursor: pointer;
@@ -82,15 +82,15 @@
             }
 
             .login input[type="submit"]:hover {
-                background: linear-gradient(45deg, #ccac00, #ffd700);
+                background: linear-gradient(45deg, #570808, #9c1010);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
             }
 
             .perfume-shop {
                 width: 50%;
-                background: linear-gradient(45deg, #ffd700, #ccac00);
-                color: #1a1a1a;
+                background: linear-gradient(45deg, #9c1010, #570808);
+                color: #7d7777;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -102,7 +102,7 @@
             }
 
             .perfume-shop:hover {
-                background: linear-gradient(45deg, #ccac00, #ffd700);
+                background: linear-gradient(45deg, #570808, #9c1010);
                 transform: scale(1.02);
             }
 
@@ -117,13 +117,13 @@
 
             .sign_up .link {
                 text-decoration: none;
-                color: #ffd700;
+                color: #9c1010;
                 font-weight: 500;
                 transition: color 0.3s ease;
             }
 
             .sign_up .link:hover {
-                color: #ccac00;
+                color: #570808;
                 text-decoration: underline;
             }
 
@@ -144,7 +144,7 @@
                 transform: translateY(-50%);
                 background: none;
                 border: none;
-                color: #ffd700;
+                color: #9c1010;
                 cursor: pointer;
                 font-size: 18px;
                 padding: 0;
@@ -156,7 +156,7 @@
             }
 
             .toggle-btn:hover {
-                color: #ccac00;
+                color: #570808;
             }
 
             .error-message {

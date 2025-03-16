@@ -12,7 +12,7 @@ public class ProductDAO extends DBContext {
 
     public Product getProductById(int productId) {
         Product product = null;
-        String query = "SELECT * FROM products WHERE id = ?";
+        String query = "SELECT * FROM Product WHERE id = ?";
         try {
             PreparedStatement stmt = c.prepareStatement(query);
             stmt.setInt(1, productId);
@@ -37,7 +37,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> listAllProducts() {
         List<Product> productList = new ArrayList<>();
-        String query = "SELECT * FROM products";
+        String query = "SELECT * FROM Product";
         try {
             PreparedStatement stmt = c.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
