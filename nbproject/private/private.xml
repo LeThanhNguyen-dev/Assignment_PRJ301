@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/controller/ProductServlet.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/dao/ProductDAO.java</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/product.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/home.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/contact.jsp</file>
-            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/profile.jsp</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/forgotPassword.jsp</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/registerSuccess.jsp</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/resetPassword.jsp</file>
         </group>
     </open-files>
 </project-private>

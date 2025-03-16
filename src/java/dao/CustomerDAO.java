@@ -1,13 +1,11 @@
 package dao;
 
-import com.sun.jdi.connect.spi.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Customer;
-import model.Product;
 import utils.DBContext;
 
 public class CustomerDAO extends DBContext {
@@ -48,6 +46,37 @@ public class CustomerDAO extends DBContext {
         return customer;
     }
 
+    // Thêm phương thức kiểm tra email tồn tại
+    public boolean isEmailExist(String email) {
+        String query = "SELECT COUNT(*) FROM Customer WHERE email = ?";
+        try {
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Thêm phương thức cập nhật mật khẩu
+    public boolean updatePassword(String email, String newPassword) {
+        String query = "UPDATE Customer SET password = ? WHERE email = ?";
+        try {
+            PreparedStatement stmt = c.prepareStatement(query);
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public boolean addCustomer(Customer customer) {
         String query = "INSERT INTO Customer (username, password, name, phone, email, address) VALUES (?, ?, ?, ?, ?, ?)";
 

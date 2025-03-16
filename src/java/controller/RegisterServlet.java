@@ -6,9 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Customer;
 import dao.CustomerDAO;
-import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
@@ -29,7 +29,6 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // Lấy thông tin từ form
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
@@ -53,15 +52,12 @@ public class RegisterServlet extends HttpServlet {
         }
 
         Customer newCustomer = new Customer(0, username, password, name, phone, submittedEmail, address);
-
         boolean added = customerDAO.addCustomer(newCustomer);
 
         if (added) {
-            // Xóa OTP khỏi session sau khi đăng ký thành công
             session.removeAttribute("otp");
             session.removeAttribute("otpEmail");
-            request.setAttribute("message", "Registration successful! Please login.");
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("registerSuccess.jsp"); 
         } else {
             request.setAttribute("error", "Registration failed. Please try again.");
             request.getRequestDispatcher("signup.jsp").forward(request, response);
