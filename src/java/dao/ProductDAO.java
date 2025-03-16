@@ -86,7 +86,29 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-
+    
+    public Product getProductByID(int id) {
+    String query = "SELECT * FROM Product WHERE id = ?";
+    try (PreparedStatement stmt = c.prepareStatement(query)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new Product(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("image"),
+                    rs.getDouble("price"),
+                    rs.getInt("quantity"),
+                    rs.getString("category")
+                );
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy sản phẩm theo ID: " + e.getMessage());
+    }
+    return null;
+}
     // Test
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();

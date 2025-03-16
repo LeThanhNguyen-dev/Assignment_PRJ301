@@ -3,6 +3,7 @@ package model;
 import java.util.Objects;
 
 public class Product {
+
     private int id;
     private String name;
     private String description;
@@ -82,21 +83,21 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", category='" + category + '\'' +
-                '}';
+        return "Product{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", description='" + description + '\''
+                + ", image='" + image + '\''
+                + ", price=" + price
+                + ", quantity=" + quantity
+                + ", category='" + category + '\''
+                + '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id); 
-    
+        return Objects.hash(id);
+
     }
 
     @Override
@@ -104,33 +105,11 @@ public class Product {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Product other = (Product) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
-            return false;
-        }
-        if (this.quantity != other.quantity) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.description, other.description)) {
-            return false;
-        }
-        if (!Objects.equals(this.image, other.image)) {
-            return false;
-        }
-        return Objects.equals(this.category, other.category);
+        Product other = (Product) obj;
+        return this.id == other.id; // So sánh chỉ theo ID, tránh lỗi HashMap
     }
-    
-    
+
 }

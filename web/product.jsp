@@ -87,6 +87,22 @@
                 }
             }
 
+            .cart-badge {
+                font-size: 0.75rem;
+                position: absolute;
+                top: -5px;
+                right: -10px;
+                background: #dc3545;
+                color: white;
+                padding: 2px 6px;
+                border-radius: 50%;
+                line-height: 1;
+                font-weight: 600;
+                min-width: 18px;
+                text-align: center;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            }
+
             html, body {
                 height: 100%;
 
@@ -111,6 +127,8 @@
                 width: 100%;
             }
         </style>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -149,10 +167,12 @@
                             <li class="nav-item">
                                 <a class="nav-link position-relative" href="cart.jsp">
                                     <i class="fas fa-shopping-cart"></i> Cart
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
                                         ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
                                     </span>
+
                                 </a>
+
                             </li>
                             <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
                             <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
@@ -177,14 +197,15 @@
                                 <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
                                 <c:if test="${isLoggedIn}">
                                     <div class="d-flex justify-content-between gap-2 mt-auto">
-                                        <form method="POST" action="buyNow.jsp" class="flex-fill">
+                                        <form method="POST" action="buyProduct" class="flex-fill">
                                             <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="btn btn-success w-100">Mua hàng</button>
+                                            <button type="submit" class="btn btn-primary w-100">Mua ngay</button>
                                         </form>
-                                        <form method="POST" action="home.jsp" class="flex-fill">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="btn btn-primary w-100">Thêm vào giỏ hàng</button>
-                                        </form>
+
+                                        <button type="button" class="btn btn-primary w-100 add-to-cart-btn" data-product-id="${product.id}">
+                                            Thêm vào giỏ hàng
+                                        </button>
+
                                     </div>
                                 </c:if>
                             </div>
@@ -204,5 +225,31 @@
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".add-to-cart-btn").click(function () {
+                    let productId = $(this).data("product-id");
+
+                    $.ajax({
+                        url: 'AddToCartServlet',
+                        type: 'POST',
+                        data: {productId: productId},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.cartSize !== undefined) {
+                                $(".cart-badge").text(response.cartSize);
+                                alert("✅ Đã thêm vào giỏ hàng thành công!");
+                            } else {
+                                alert("Lỗi: không nhận được thông tin giỏ hàng.");
+                            }
+                        },
+                        error: function () {
+                            alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
+                        }
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>
