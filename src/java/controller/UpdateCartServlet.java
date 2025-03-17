@@ -19,20 +19,38 @@ public class UpdateCartServlet extends HttpServlet {
         Map<Product, Integer> cart = (Map<Product, Integer>) session.getAttribute("cart");
 
         if (cart != null) {
-            for (Product product : cart.keySet()) {
-                String quantityParam = request.getParameter("quantity_" + product.getId());
-                if (quantityParam != null) {
-                    int newQuantity = Integer.parseInt(quantityParam);
-                    if (newQuantity > 0) {
-                        cart.put(product, newQuantity);
+            try {
+                for (Product product : cart.keySet()) {
+                    String quantityParam = request.getParameter("quantity_" + product.getId());
+                    
+                    if (quantityParam != null) {
+                        try {
+                            int newQuantity = Integer.parseInt(quantityParam);
+                            if (newQuantity > 0) {
+                                cart.put(product, newQuantity);
+                            } else {
+                                cart.remove(product); // Xóa nếu số lượng = 0
+                            }
+                        } catch (NumberFormatException e) {
+                            System.err.println("Lỗi: Số lượng không hợp lệ cho sản phẩm " + product.getId());
+                        }
                     }
                 }
-            }
-            session.setAttribute("cart", cart);
-            int cartSize = cart.values().stream().mapToInt(Integer::intValue).sum();
-            session.setAttribute("cartSize", cartSize);
-        }
 
-        response.sendRedirect("cart.jsp");
+                session.setAttribute("cart", cart);
+
+                // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
+                int cartSize = cart.values().stream().mapToInt(Integer::intValue).sum();
+                session.setAttribute("cartSize", cartSize);
+
+                response.sendRedirect("cart.jsp"); // Reload lại trang giỏ hàng
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("error.jsp"); // Chuyển hướng đến trang lỗi nếu có sự cố
+            }
+        } else {
+            response.sendRedirect("cart.jsp"); // Nếu giỏ hàng trống, vẫn reload lại trang
+        }
     }
 }

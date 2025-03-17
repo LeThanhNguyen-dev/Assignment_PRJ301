@@ -1,3 +1,5 @@
+
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -137,6 +139,7 @@
                         </button>
                     </div>
                     <div class="text-danger mt-2" id="search-error" style="display: none; font-size: 14px;"></div>
+
                 </form>
                 <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -150,7 +153,7 @@
                             <li class="nav-item">
                                 <a class="nav-link position-relative" href="cart.jsp">
                                     <i class="fas fa-shopping-cart"></i> Cart
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
+                                    <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
                                         ${sessionScope.cartSize != null ? sessionScope.cartSize : 0}
                                     </span>
                                 </a>
@@ -200,23 +203,20 @@
                                 <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
                                 <c:if test="${isLoggedIn}">
                                     <div class="d-flex justify-content-between gap-2 mt-auto">
-                                        <form method="POST" action="buyNow.jsp" class="flex-fill">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="btn btn-success w-100">Mua hàng</button>
-                                        </form>
-                                        <form method="POST" action="home.jsp" class="flex-fill">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="btn btn-primary w-100">Thêm vào giỏ hàng</button>
-                                        </form>
+                                        <!-- Nút BUY: Chuyển hướng đến trang thanh toán -->
+                                        <a href="checkout?productId=${product.id}" class="btn btn-success w-100">BUY</a>
+
+                                        <!-- Nút Thêm vào giỏ hàng: AJAX thêm sản phẩm vào giỏ -->
+                                        <button class="btn btn-primary w-100 add-to-cart" data-id="${product.id}">
+                                            <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                                        </button>
                                     </div>
                                 </c:if>
+
                             </div>
                         </div>
                     </div>
                 </c:forEach>
-                <c:if test="${empty productList}">
-                    <div class="col-12 text-center"><p>Không có sản phẩm nào.</p></div>
-                </c:if>
             </div>
         </div>
 
@@ -226,6 +226,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+
+
             document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".search-form").addEventListener("submit", function (event) {
                     let queryInput = document.querySelector("input[name='query']");
@@ -240,6 +242,39 @@
                     }
                 });
             });
+
+
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lắng nghe sự kiện click trên tất cả nút "Thêm vào giỏ hàng"
+                document.querySelectorAll(".add-to-cart").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let productId = this.getAttribute("data-id");
+                        addToCart(productId);
+                    });
+                });
+            });
+
+            function addToCart(productId) {
+                fetch('AddToCartServlet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({'productId': productId})
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Server response:", data); // Debug
+
+                            if (data.cartSize !== undefined) {
+                                document.getElementById('cart-badge').textContent = data.cartSize;
+                            } else {
+                                alert("Có lỗi xảy ra khi thêm vào giỏ hàng!");
+                            }
+                        })
+                        .catch(error => console.error('Lỗi:', error));
+            }
         </script>
+
     </body>
 </html>
