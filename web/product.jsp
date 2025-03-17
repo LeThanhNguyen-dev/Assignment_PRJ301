@@ -184,7 +184,7 @@
                 border-color: #1cc0d8;
                 color: #fff;
             }
-            
+
             /* Other Styles */
             .product-card {
                 transition: transform 0.3s;
@@ -222,6 +222,7 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
+                    <div class="text-danger mt-2" id="search-error" style="display: none; font-size: 14px;"></div>
                 </form>
                 <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -335,6 +336,22 @@
                     });
                 });
             });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelector(".search-form").addEventListener("submit", function (event) {
+                    let queryInput = document.querySelector("input[name='query']");
+                    let errorDiv = document.getElementById("search-error");
+
+                    if (!queryInput.value.trim()) {
+                        event.preventDefault(); // Ngăn không cho form submit
+                        errorDiv.textContent = "Vui lòng nhập từ khóa tìm kiếm!";
+                        errorDiv.style.display = "block"; // Hiển thị thông báo lỗi
+                    } else {
+                        errorDiv.style.display = "none"; // Ẩn thông báo lỗi nếu nhập hợp lệ
+                    }
+                });
+            });
+
         </script>
     </body>
 </html>

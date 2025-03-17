@@ -71,11 +71,10 @@ public class ProductDAO extends DBContext {
         }
         return categories;
     }
-    
+
     public int getTotalProducts() {
         String sql = "SELECT COUNT(*) FROM Product";
-        try (PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -118,13 +117,41 @@ public class ProductDAO extends DBContext {
         return null;
     }
 
+    public List<Product> getProductsByQuery(String query) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM Product WHERE name LIKE ?";
+
+        try (PreparedStatement stmt = c.prepareStatement(sql)) {
+            stmt.setString(1, "%" + query + "%"); // Tìm kiếm tên chứa từ khóa
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product(
+                            rs.getInt("productId"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("image"),
+                            rs.getDouble("price"),
+                            rs.getInt("categoryId")
+                    );
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi tìm sản phẩm theo tên: " + e.getMessage());
+        }
+        return products;
+    }
+
     // Test
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
-        List<Product> products = dao.getAllProducts();
+        List<Product> products = dao.getProductsByQuery("a");
         for (Product p : products) {
             System.out.println(p);
         }
+        
+        
         dao.closeConnection();
     }
 }
