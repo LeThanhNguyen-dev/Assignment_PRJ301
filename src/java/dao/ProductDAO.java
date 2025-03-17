@@ -13,21 +13,23 @@ public class ProductDAO extends DBContext {
     // Lấy sản phẩm theo danh mục
     public List<Product> getProductsByCategory(String category) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM Product WHERE category = ? OR ? = ''";
+        String query = "SELECT p.* FROM Product p "
+                + "JOIN Category c ON p.categoryId = c.categoryId "
+                + "WHERE c.name = ? OR ? = ''";
         try (PreparedStatement stmt = c.prepareStatement(query)) {
             stmt.setString(1, category);
             stmt.setString(2, category);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Product product = new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getString("image"),
-                        rs.getDouble("price"),
-                        rs.getInt("quantity"),
-                        rs.getString("category")
+                            rs.getInt("productId"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("image"),
+                            rs.getDouble("price"),
+                            rs.getInt("categoryId")
                     );
+
                     products.add(product);
                 }
             }
@@ -41,17 +43,15 @@ public class ProductDAO extends DBContext {
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Product";
-        try (PreparedStatement stmt = c.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = c.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Product product = new Product(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getString("image"),
-                    rs.getDouble("price"),
-                    rs.getInt("quantity"),
-                    rs.getString("category")
+                        rs.getInt("productId"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("image"),
+                        rs.getDouble("price"),
+                        rs.getInt("categoryId")
                 );
                 products.add(product);
             }
@@ -65,8 +65,7 @@ public class ProductDAO extends DBContext {
     public List<String> getAllCategories() {
         List<String> categories = new ArrayList<>();
         String query = "SELECT DISTINCT category FROM Product";
-        try (PreparedStatement stmt = c.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = c.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 categories.add(rs.getString("category"));
             }
@@ -86,29 +85,29 @@ public class ProductDAO extends DBContext {
             }
         }
     }
-    
+
     public Product getProductByID(int id) {
-    String query = "SELECT * FROM Product WHERE id = ?";
-    try (PreparedStatement stmt = c.prepareStatement(query)) {
-        stmt.setInt(1, id);
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return new Product(
-                    rs.getInt("id"),
-                    rs.getString("name"),
-                    rs.getString("description"),
-                    rs.getString("image"),
-                    rs.getDouble("price"),
-                    rs.getInt("quantity"),
-                    rs.getString("category")
-                );
+        String query = "SELECT * FROM Product WHERE productId = ?";
+        try (PreparedStatement stmt = c.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Product(
+                            rs.getInt("productId"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("image"),
+                            rs.getDouble("price"),
+                            rs.getInt("categoryId")
+                    );
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy sản phẩm theo ID: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Lỗi khi lấy sản phẩm theo ID: " + e.getMessage());
+        return null;
     }
-    return null;
-}
+
     // Test
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();

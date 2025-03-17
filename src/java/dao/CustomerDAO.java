@@ -27,7 +27,7 @@ public class CustomerDAO extends DBContext {
 
             if (rs.next()) {
                 customer = new Customer(
-                        rs.getInt("id"),
+                        rs.getInt("customerId"),
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("name"),
@@ -99,7 +99,7 @@ public class CustomerDAO extends DBContext {
     }
 
     public boolean deleteCustomer(int id) {
-        String query = "DELETE FROM Customer WHERE id = ?";
+        String query = "DELETE FROM Customer WHERE customerId = ?";
 
         try {
             PreparedStatement stmt = c.prepareStatement(query);
@@ -124,7 +124,7 @@ public class CustomerDAO extends DBContext {
 
             while (rs.next()) {
                 Customer customer = new Customer(
-                        rs.getInt("id"),
+                        rs.getInt("customerId"),
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("name"),

@@ -9,20 +9,18 @@ public class Product {
     private String description;
     private String image;
     private double price;
-    private int quantity;
-    private String category; // Thêm thuộc tính category
+    private int categoryId; // Thêm thuộc tính category
 
     public Product() {
     }
 
-    public Product(int id, String name, String description, String image, double price, int quantity, String category) {
+    public Product(int id, String name, String description, String image, double price, int categoryId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
-        this.quantity = quantity;
-        this.category = category; // Khởi tạo category
+        this.categoryId = categoryId; // Khởi tạo category
     }
 
     public int getId() {
@@ -65,20 +63,12 @@ public class Product {
         this.price = price;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -89,15 +79,13 @@ public class Product {
                 + ", description='" + description + '\''
                 + ", image='" + image + '\''
                 + ", price=" + price
-                + ", quantity=" + quantity
-                + ", category='" + category + '\''
+                + ", category='" + categoryId + '\''
                 + '}';
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
-
     }
 
     @Override
@@ -111,5 +99,4 @@ public class Product {
         Product other = (Product) obj;
         return this.id == other.id; // So sánh chỉ theo ID, tránh lỗi HashMap
     }
-
 }
