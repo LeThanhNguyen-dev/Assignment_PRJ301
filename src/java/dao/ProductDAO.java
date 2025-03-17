@@ -10,7 +10,6 @@ import utils.DBContext;
 
 public class ProductDAO extends DBContext {
 
-    // Lấy sản phẩm theo danh mục
     public List<Product> getProductsByCategory(String category) {
         List<Product> products = new ArrayList<>();
         String query = "SELECT p.* FROM Product p "
@@ -39,7 +38,6 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    // Lấy tất cả sản phẩm
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Product";
@@ -61,7 +59,6 @@ public class ProductDAO extends DBContext {
         return products;
     }
 
-    // Lấy danh sách category duy nhất
     public List<String> getAllCategories() {
         List<String> categories = new ArrayList<>();
         String query = "SELECT DISTINCT category FROM Product";
@@ -73,6 +70,19 @@ public class ProductDAO extends DBContext {
             System.out.println("Lỗi khi lấy danh sách category: " + e.getMessage());
         }
         return categories;
+    }
+    
+    public int getTotalProducts() {
+        String sql = "SELECT COUNT(*) FROM Product";
+        try (PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     // Đóng kết nối

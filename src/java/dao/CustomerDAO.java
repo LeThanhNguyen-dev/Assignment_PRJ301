@@ -45,6 +45,19 @@ public class CustomerDAO extends DBContext {
 
         return customer;
     }
+    
+    public int getTotalCustomers() {
+        String sql = "SELECT COUNT(*) FROM Customer";
+        try (PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     // Thêm phương thức kiểm tra email tồn tại
     public boolean isEmailExist(String email) {

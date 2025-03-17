@@ -9,13 +9,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
+import model.Admin;
 import dao.CustomerDAO;
+import dao.AdminDAO;
 
 @WebServlet(name = "LoginControllerServlet", urlPatterns = {"/login"})
 public class LoginControllerServlet extends HttpServlet {
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     @Override
@@ -25,11 +29,20 @@ public class LoginControllerServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberme");
-        
 
         if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
             request.setAttribute("error", "Username and password cannot be empty!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        AdminDAO adminDAO = new AdminDAO();
+        Admin admin = adminDAO.login(username, password);
+        if (admin != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("session_Admin", admin);
+            adminDAO.closeConnection(); 
+            response.sendRedirect("adminDashboard.jsp"); 
             return;
         }
 
@@ -53,7 +66,8 @@ public class LoginControllerServlet extends HttpServlet {
                 deleteCookie(request, response, "CookiePassWord");
             }
 
-            response.sendRedirect("home");
+            customerDAO.closeConnection(); 
+            response.sendRedirect("home"); 
         } else {
             request.setAttribute("error", "Invalid username or password!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
