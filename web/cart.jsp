@@ -10,36 +10,149 @@
         <title>Shopping Cart</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            .cart-container {
-                max-width: 1200px;
-                margin: 20px auto;
-                padding: 20px;
+            body {
+                background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+                color: #ffffff;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                padding-top: 70px;
             }
+
+            .cart-container {
+                max-width: 1000px;
+                margin: 0 auto;
+                background: #1f1f1f;
+                padding: 40px;
+                border: 1px solid #ffd700;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                transition: transform 0.3s ease;
+            }
+
+            .cart-container:hover {
+                transform: translateY(-5px);
+            }
+
+            h2 {
+                color: #ffd700;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 30px;
+                text-transform: uppercase;
+            }
+
+            .table {
+                background: #2a2a2a;
+                border: none;
+                color: #ffffff;
+            }
+
+            .cart-header th {
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                color: #1a1a1a;
+                font-weight: 600;
+                padding: 15px;
+                text-transform: uppercase;
+                border: none;
+            }
+
+            .cart-item td {
+                vertical-align: middle;
+                padding: 20px;
+                border-bottom: 1px solid #4d4d4d;
+            }
+
             .cart-item img {
                 max-width: 100px;
-                max-height: 100px;
-                object-fit: cover;
-                display: block;
-                margin: 0 auto;
+                border-radius: 10px;
+                border: 1px solid #ffd700;
+                transition: transform 0.3s ease;
             }
-            .table td {
-                vertical-align: middle;
+
+            .cart-item img:hover {
+                transform: scale(1.1);
             }
+
+            .cart-item td:nth-child(2) {
+                color: #ffd700;
+                font-weight: 500;
+            }
+
             .quantity-input {
                 width: 80px;
-                margin: 0 auto;
+                background: #2a2a2a;
+                border: 2px solid #4d4d4d;
+                color: #ffffff;
+                text-align: center;
+                border-radius: 8px;
+                transition: border-color 0.3s ease;
             }
-            .cart-header {
-                background-color: #f8f9fa;
+
+            .quantity-input:focus {
+                border-color: #ffd700;
+                outline: none;
+                box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
             }
+
+            .btn-danger {
+                background: #ff4d4d;
+                border: none;
+                font-weight: 500;
+                padding: 8px 15px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-danger:hover {
+                background: #e63939;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+            }
+
             .cart-footer {
-                margin-top: 20px;
+                margin-top: 30px;
                 text-align: right;
             }
-            .empty-cart {
-                text-align: center;
-                color: #6c757d;
-                margin-top: 20px;
+
+            .cart-footer h4 {
+                color: #ffd700;
+                font-weight: 600;
+            }
+
+            .cart-footer h4 span {
+                color: #ff4d4d;
+            }
+
+            .cart-footer .btn {
+                padding: 12px 25px;
+                font-weight: 500;
+                border-radius: 8px;
+                margin-left: 15px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-warning {
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                border: none;
+                color: #1a1a1a;
+            }
+
+            .btn-warning:hover {
+                background: linear-gradient(45deg, #ccac00, #ffd700);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            }
+
+            .btn-primary {
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                border: none;
+                color: #1a1a1a;
+            }
+
+            .btn-primary:hover {
+                background: linear-gradient(45deg, #ccac00, #ffd700);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
             }
         </style>
     </head>
@@ -69,9 +182,13 @@
                                 <td>${product.name}</td>
                                 <td class="price" data-price="${product.price}">${product.price} VNĐ</td>
                                 <td>
-                                    <input type="number" name="quantity_${product.id}" class="form-control quantity-input" 
-                                           value="${quantity}" min="1" data-product-id="${product.id}">
+                                    <form action="UpdateCartServlet" method="post" class="update-cart-form">
+                                        <input type="hidden" name="productId" value="${product.id}">
+                                        <input type="number" name="quantity" class="form-control quantity-input" 
+                                               value="${quantity}" min="1" data-product-id="${product.id}" onchange="this.form.submit();">
+                                    </form>
                                 </td>
+
                                 <td id="total_${product.id}">${product.price * quantity} VNĐ</td>
                                 <td class="action-buttons">
                                     <button type="submit" formaction="removeFromCart?productId=${product.id}" 
@@ -98,27 +215,29 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            $(document).ready(function () {
-                // Lắng nghe sự kiện thay đổi số lượng
-                $(".quantity-input").on("input", function () {
-                    let productId = $(this).data("product-id");
-                    let quantity = parseInt($(this).val());
-                    let price = parseFloat($(this).closest("tr").find(".price").data("price"));
 
-                    // Tính tổng tiền của sản phẩm
-                    let productTotal = price * quantity;
-                    $("#total_" + productId).text(productTotal + " VNĐ");
 
-                    // Tính lại tổng tiền giỏ hàng
-                    let cartTotal = 0;
-                    $(".quantity-input").each(function () {
-                        let qty = parseInt($(this).val());
-                        let prc = parseFloat($(this).closest("tr").find(".price").data("price"));
-                        cartTotal += qty * prc;
-                    });
-                    $("#cartTotal").text(cartTotal + " VNĐ");
-                });
-            });
+                   $(document).ready(function () {
+                       // Lắng nghe sự kiện thay đổi số lượng
+                       $(".quantity-input").on("input", function () {
+                           let productId = $(this).data("product-id");
+                           let quantity = parseInt($(this).val());
+                           let price = parseFloat($(this).closest("tr").find(".price").data("price"));
+
+                           // Tính tổng tiền của sản phẩm
+                           let productTotal = price * quantity;
+                           $("#total_" + productId).text(productTotal + " VNĐ");
+
+                           // Tính lại tổng tiền giỏ hàng
+                           let cartTotal = 0;
+                           $(".quantity-input").each(function () {
+                               let qty = parseInt($(this).val());
+                               let prc = parseFloat($(this).closest("tr").find(".price").data("price"));
+                               cartTotal += qty * prc;
+                           });
+                           $("#cartTotal").text(cartTotal + " VNĐ");
+                       });
+                   });
         </script>
     </body>
 </html>
