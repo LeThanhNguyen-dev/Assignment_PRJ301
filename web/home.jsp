@@ -191,7 +191,7 @@
             <div class="row">
                 <c:forEach var="product" items="${productList}">
                     <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                        <div class="card w-100">
+                        <div class="card w-100 product-card">
                             <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${product.name}</h5>
