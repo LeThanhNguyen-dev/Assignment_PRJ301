@@ -162,7 +162,7 @@
                 border-radius: 5px;
                 transition: all 0.3s ease;
                 text-align: center;
-                min-width: 0; 
+                min-width: 0;
             }
             .btn-buy {
                 background-color: #ff6b6b;
@@ -249,18 +249,18 @@
                     <div class="filter-section">
                         <h5>Danh mục</h5>
                         <div class="category-buttons">
-                            <a href="product" class="btn">All</a>
-                            <a href="product?category=Men" class="btn">Man</a>
-                            <a href="product?category=Women" class="btn">Woman</a>
-                            <a href="product?category=Kid" class="btn">Kid</a>
+                            <a href="product" class="btn ${empty param.category && empty param.priceRange ? 'active' : ''}">All</a>
+                            <a href="product?category=Men" class="btn ${param.category == 'Men' ? 'active' : ''}">Man</a>
+                            <a href="product?category=Women" class="btn ${param.category == 'Women' ? 'active' : ''}">Woman</a>
+                            <a href="product?category=Kid" class="btn ${param.category == 'Kid' ? 'active' : ''}">Kid</a>
                         </div>
                     </div>
                     <div class="filter-section">
                         <h5>Lọc theo giá</h5>
                         <div class="price-buttons">
-                            <a href="product?priceRange=under500k" class="btn">Dưới 500K</a>
-                            <a href="product?priceRange=500k-1m" class="btn">500K - 1M</a>
-                            <a href="product?priceRange=over1m" class="btn">Trên 1M</a>
+                            <a href="product?priceRange=under500k" class="btn ${param.priceRange == 'under500k' ? 'active' : ''}">Dưới 500K</a>
+                            <a href="product?priceRange=500k-1m" class="btn ${param.priceRange == '500k-1m' ? 'active' : ''}">500K - 1M</a>
+                            <a href="product?priceRange=over1m" class="btn ${param.priceRange == 'over1m' ? 'active' : ''}">Trên 1M</a>
                         </div>
                     </div>
                 </div>
