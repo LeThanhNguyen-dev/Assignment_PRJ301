@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Random;
 import utils.EmailUtil;
 
 /**
@@ -33,12 +32,13 @@ public class SendOTPServlet extends HttpServlet {
         }
 
         // Tạo mã OTP ngẫu nhiên
-        String otp = generateOTP();
+        String otp = EmailUtil.generateOTP();
 
         // Lưu OTP và email vào session
         HttpSession session = request.getSession();
         session.setAttribute("otp", otp);
         session.setAttribute("otpEmail", email);
+        session.setMaxInactiveInterval(300); // OTP hết hạn sau 5 phút
 
         // Gửi OTP qua email
         try {
@@ -51,13 +51,9 @@ public class SendOTPServlet extends HttpServlet {
         } catch (Exception e) {
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"error\",\"message\":\"Gửi OTP thất bại. Vui lòng thử lại.\"}");
-        } 
+        }
 
     }
 
-    private String generateOTP() {
-        Random random = new Random();
-        int otp = 100000 + random.nextInt(900000); // Tạo mã OTP 6 chữ số
-        return String.valueOf(otp);
-    }
+    
 }

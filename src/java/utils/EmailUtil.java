@@ -11,6 +11,7 @@ package utils;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.util.Properties;
+import java.util.Random;
 
 public class EmailUtil {
 
@@ -38,5 +39,11 @@ public class EmailUtil {
         message.setSubject(subject);
         message.setText(messageText);
         Transport.send(message);
+    }
+    
+    public static String generateOTP() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000); // Tạo mã OTP 6 chữ số
+        return String.valueOf(otp);
     }
 }
