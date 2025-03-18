@@ -5,31 +5,33 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px; 
         }
 
         .login-container {
             display: flex;
             width: 900px;
             height: 500px;
-            background-color: #1f1f1f;
-            border: 1px solid #9c1010;
+            background: #ffffff;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .login-container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
 
         .login {
@@ -38,13 +40,14 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            background: #ffffff;
         }
 
         .login label {
             margin-bottom: 10px;
             font-weight: 500;
             font-size: 16px;
-            color: #9c1010;
+            color: #333;
         }
 
         .login input[type="text"],
@@ -52,27 +55,28 @@
             padding: 12px;
             margin-bottom: 20px;
             width: 100%;
-            border: 2px solid #4d4d4d;
+            border: 2px solid #ccc;
             border-radius: 8px;
-            background-color: #2a2a2a;
-            color: #ffffff;
+            background-color: #f5f5f5;
+            color: #333;
             font-size: 14px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .login input[type="text"]:focus,
         .login input[type="password"]:focus {
             outline: none;
-            border-color: #9c1010;
-            box-shadow: 0 0 5px rgba(156, 152, 152, 0.3);
+            border-color: #d4af37; /* Vàng nhạt */
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
         }
 
         .login input[type="submit"] {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(45deg, #9c1010, #570808);
-            color: #7d7777;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #333;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -82,15 +86,15 @@
         }
 
         .login input[type="submit"]:hover {
-            background: linear-gradient(45deg, #570808, #9c1010);
+            background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
         .perfume-shop {
             width: 50%;
-            background: linear-gradient(45deg, #9c1010, #570808);
-            color: #7d7777;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -102,7 +106,7 @@
         }
 
         .perfume-shop:hover {
-            background: linear-gradient(45deg, #570808, #9c1010);
+            background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: scale(1.02);
         }
 
@@ -112,18 +116,18 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            color: #b3b3b3;
+            color: #666;
         }
 
         .sign_up .link {
             text-decoration: none;
-            color: #9c1010;
+            color: #d4af37;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .sign_up .link:hover {
-            color: #570808;
+            color: #c0a062;
             text-decoration: underline;
         }
 
@@ -131,6 +135,7 @@
             display: inline;
             font-size: 14px;
             margin-left: 5px;
+            color: #333;
         }
 
         .password-toggle {
@@ -144,7 +149,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #9c1010;
+            color: #666;
             cursor: pointer;
             font-size: 18px;
             padding: 0;
@@ -153,14 +158,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: color 0.3s ease;
         }
 
         .toggle-btn:hover {
-            color: #570808;
+            color: #d4af37;
         }
 
         .error-message {
-            color: #ff4d4d;
+            color: #dc3545;
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
@@ -173,7 +179,7 @@
         }
 
         .success-message {
-            color: #00cc00;
+            color: #28a745;
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
@@ -185,14 +191,14 @@
         }
 
         .forgot-password a {
-            color: #9c1010;
+            color: #d4af37;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .forgot-password a:hover {
-            color: #570808;
+            color: #c0a062;
             text-decoration: underline;
         }
     </style>
@@ -200,7 +206,7 @@
 <body>
     <div class="login-container">
         <div class="perfume-shop">
-            Perfume Shop
+            <i class="fas fa-spray-can"></i> Perfume Shop
         </div>
         <div class="login">
             <form action="login" method="POST" onsubmit="return validateForm()">
@@ -210,7 +216,7 @@
                 <label>Password:</label>
                 <div class="password-toggle">
                     <input type="password" name="password" id="password" value="${cookie.CookiePassWord.value}" required />
-                    <button type="button" class="toggle-btn" onclick="togglePassword()">👁️</button>
+                    <button type="button" class="toggle-btn" onclick="togglePassword()"><i class="fas fa-eye"></i></button>
                 </div>
 
                 <input type="checkbox" name="rememberme" id="rememberme" value="ON" ${cookie.CookieUserName != null ? 'checked' : ''} />
@@ -233,13 +239,15 @@
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
-            const toggleBtn = document.querySelector('.toggle-btn');
+            const toggleBtn = document.querySelector('.toggle-btn i');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleBtn.innerHTML = '👁️‍🗨️'; 
+                toggleBtn.classList.remove('fa-eye');
+                toggleBtn.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                toggleBtn.innerHTML = '👁️';
+                toggleBtn.classList.remove('fa-eye-slash');
+                toggleBtn.classList.add('fa-eye');
             }
         }
 
@@ -256,7 +264,6 @@
             return true;
         }
 
-        // Xóa thông báo lỗi khi người dùng bắt đầu nhập
         document.getElementById('username').addEventListener('input', function() {
             document.querySelector('.error-message').classList.remove('show');
         });

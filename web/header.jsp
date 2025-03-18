@@ -2,14 +2,15 @@
 <c:set var="customer" value="${sessionScope.session_Login}"/>
 <c:set var="isLoggedIn" value="${customer != null}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
     .new-header {
-        background: linear-gradient(45deg, #9c1010, #570808);
+        background: linear-gradient(90deg, #f5f5f5, #d3d3d3);
         padding: 15px 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         position: fixed;
         top: 0;
         left: 0;
@@ -19,13 +20,14 @@
     }
 
     .new-header:hover {
-        background: linear-gradient(45deg, #570808, #9c1010);
+        background: linear-gradient(90deg, #e0e0e0, #c0c0c0);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     }
 
     .new-logo {
         font-size: 28px;
         font-weight: 700;
-        color: #ffffff;
+        color: #333;
         text-transform: uppercase;
         display: flex;
         align-items: center;
@@ -34,7 +36,12 @@
 
     .new-logo i {
         font-size: 32px;
-        color: #ffd700;
+        color: #d4af37; /* Vàng nh?t sang tr?ng */
+        transition: color 0.3s ease;
+    }
+
+    .new-logo:hover i {
+        color: #c0a062; /* Vàng ??m h?n khi hover */
     }
 
     .new-nav-menu {
@@ -44,7 +51,7 @@
     }
 
     .new-nav-menu a {
-        color: #ffffff;
+        color: #333;
         text-decoration: none;
         font-size: 16px;
         font-weight: 500;
@@ -58,12 +65,18 @@
     }
 
     .new-nav-menu a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #ffd700;
+        background-color: rgba(212, 175, 55, 0.1); /* Vàng nh?t trong su?t */
+        color: #d4af37; /* Vàng sang tr?ng */
+        transform: translateY(-2px);
     }
 
     .new-nav-menu i {
         font-size: 18px;
+        transition: color 0.3s ease;
+    }
+
+    .new-nav-menu a:hover i {
+        color: #d4af37;
     }
 
     .new-cart-badge {
@@ -71,10 +84,15 @@
         position: absolute;
         top: 2px;
         right: 5px;
-        background: #dc3545;
+        background: #dc3545; /* ?? cho badge */
         color: white;
         padding: 2px 6px;
         border-radius: 50%;
+        transition: transform 0.3s ease;
+    }
+
+    .new-nav-menu a:hover .new-cart-badge {
+        transform: scale(1.1);
     }
 
     .new-search-bar {
@@ -85,32 +103,34 @@
 
     .new-search-bar input {
         padding: 8px 40px 8px 15px;
-        border: 2px solid #4d4d4d;
+        border: 2px solid #ccc;
         border-radius: 20px;
-        background-color: #2a2a2a;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #333;
         font-size: 14px;
         width: 200px;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .new-search-bar input:focus {
         outline: none;
-        border-color: #9c1010;
-        box-shadow: 0 0 5px rgba(156, 16, 16, 0.5);
+        border-color: #d4af37; /* Vàng nh?t khi focus */
+        box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
         width: 250px;
     }
 
     .new-search-bar i {
         position: absolute;
         right: 15px;
-        color: #9c1010;
+        color: #666;
         font-size: 16px;
         cursor: pointer;
+        transition: color 0.3s ease;
     }
 
     .new-search-bar i:hover {
-        color: #ffd700;
+        color: #d4af37;
     }
 
     .new-search-error {
@@ -118,6 +138,12 @@
         font-size: 14px;
         display: none;
         margin-top: 5px;
+        transition: opacity 0.3s ease;
+    }
+
+    .new-search-error.show {
+        display: block;
+        opacity: 1;
     }
 
     @media (max-width: 768px) {
@@ -156,7 +182,7 @@
         <a href="product"><i class="fas fa-box-open"></i> Products</a>
         <c:if test="${isLoggedIn}">
             <a href="sendEmail"><i class="fas fa-envelope"></i> Contact</a>
-            <a href="cart.jsp">
+            <a href="cart.jsp" class="position-relative">
                 <i class="fas fa-shopping-cart"></i> Cart
                 <span class="new-cart-badge">${sessionScope.cartSize != null ? sessionScope.cartSize : 0}</span>
             </a>
@@ -175,9 +201,9 @@
         const errorDiv = document.getElementById('newSearchError');
 
         if (!searchValue.trim()) {
-            errorDiv.style.display = 'block';
+            errorDiv.classList.add('show');
         } else {
-            errorDiv.style.display = 'none';
+            errorDiv.classList.remove('show');
             window.location.href = 'search?query=' + encodeURIComponent(searchValue);
         }
     }

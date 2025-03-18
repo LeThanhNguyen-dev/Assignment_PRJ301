@@ -9,227 +9,351 @@
 
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Danh Sách Sản Phẩm | Perfume Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container-fluid {
-            padding: 0 15px;
-        }
-        .sidebar {
-            height: 100%;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-right: 1px solid #dee2e6;
-        }
-        .filter-section {
-            margin-bottom: 20px;
-        }
-        .filter-section h5 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #343a40;
-        }
-        .category-buttons, .price-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .category-buttons .btn, .price-buttons .btn {
-            width: 100%;
-            text-align: left;
-            padding: 10px 15px;
-            font-size: 0.95rem;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-        .category-buttons .btn {
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            color: #495057;
-        }
-        .category-buttons .btn:hover, .category-buttons .btn.active {
-            background-color: #007bff;
-            color: #fff;
-            border-color: #007bff;
-        }
-        .price-buttons .btn {
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            color: #495057;
-        }
-        .price-buttons .btn:hover, .price-buttons .btn.active {
-            background-color: #28a745;
-            color: #fff;
-            border-color: #28a745;
-        }
-        .product-list {
-            padding: 20px;
-        }
-        @media (max-width: 768px) {
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Danh Sách Sản Phẩm | Perfume Store</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            body {
+                background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
+                color: #333;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                padding-top: 80px; /* Đẩy nội dung xuống để tránh bị header che */
+                display: flex;
+                flex-direction: column;
+            }
+
+            .container-fluid {
+                padding: 0 15px;
+                flex-grow: 1;
+            }
+
             .sidebar {
-                padding: 10px;
+                height: 100%;
+                padding: 15px;
+                background: #ffffff;
+                border-right: 2px solid #ccc;
+                border-radius: 0 15px 15px 0;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                max-width: 200px; /* Giới hạn bề ngang sidebar */
             }
+
+            .filter-section {
+                margin-bottom: 20px;
+            }
+
+            .filter-section h5 {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .filter-section h5 i {
+                color: #d4af37;
+                transition: color 0.3s ease;
+            }
+
+            .filter-section h5:hover i {
+                color: #c0a062;
+            }
+
             .category-buttons, .price-buttons {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
             }
+
             .category-buttons .btn, .price-buttons .btn {
-                width: auto;
-                margin: 5px;
+                padding: 8px 10px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                background: #f5f5f5;
+                border: 2px solid #ccc;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
-        }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .btn-buy, .btn-cart {
-            flex: 1;
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            text-align: center;
-            min-width: 0;
-        }
-        .btn-buy {
-            background-color: #ff6b6b;
-            border: 1px solid #ff6b6b;
-            color: #fff;
-        }
-        .btn-buy:hover {
-            background-color: #ff8787;
-            border-color: #ff8787;
-            color: #fff;
-        }
-        .btn-cart {
-            background-color: #17a2b8;
-            border: 1px solid #17a2b8;
-            color: #fff;
-        }
-        .btn-cart:hover {
-            background-color: #1cc0d8;
-            border-color: #1cc0d8;
-            color: #fff;
-        }
+            .category-buttons .btn:hover, .category-buttons .btn.active,
+            .price-buttons .btn:hover, .price-buttons .btn.active {
+                background: linear-gradient(45deg, #d4af37, #c0a062);
+                color: #333;
+                border-color: #d4af37;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
+            }
 
-        .product-card {
-            transition: transform 0.3s;
-        }
-        .product-card:hover {
-            transform: scale(1.05);
-        }
+            .category-buttons .btn i, .price-buttons .btn i {
+                font-size: 0.9rem;
+                color: #666;
+                transition: color 0.3s ease;
+            }
 
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .footer {
-            margin-top: 20px;
-            padding-top: 20px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 sidebar">
-                <div class="filter-section">
-                    <h5>Danh mục</h5>
-                    <div class="category-buttons">
-                        <a href="product" class="btn ${empty param.category && empty param.priceRange ? 'active' : ''}">All</a>
-                        <a href="product?category=Men" class="btn ${param.category == 'Men' ? 'active' : ''}">Man</a>
-                        <a href="product?category=Women" class="btn ${param.category == 'Women' ? 'active' : ''}">Woman</a>
-                        <a href="product?category=Kid" class="btn ${param.category == 'Kid' ? 'active' : ''}">Kid</a>
+            .category-buttons .btn:hover i, .category-buttons .btn.active i,
+            .price-buttons .btn:hover i, .price-buttons .btn.active i {
+                color: #333;
+            }
+
+            .product-list {
+                padding: 20px;
+            }
+
+            .product-card {
+                background: #ffffff;
+                border: 2px solid #ccc;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .product-card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+                border-color: #d4af37;
+            }
+
+            .product-card img {
+                border-radius: 8px 8px 0 0;
+                height: 200px; /* Giảm chiều cao ảnh để cân bằng layout */
+                object-fit: cover;
+            }
+
+            .card-body {
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+            }
+
+            .card-title {
+                color: #d4af37;
+                font-weight: 500;
+                margin-bottom: 10px;
+                font-size: 1.1rem;
+            }
+
+            .card-text {
+                color: #666;
+                font-size: 0.9rem;
+            }
+
+            .card-text strong {
+                color: #333;
+            }
+
+            .action-buttons {
+                display: flex;
+                justify-content: space-between; /* Để hai nút cách đều nhau */
+                gap: 10px; /* Khoảng cách giữa hai nút */
+                margin-top: auto;
+                padding: 10px 0;
+            }
+
+            .btn-buy, .btn-cart {
+                width: 50%; /* Đảm bảo cả hai nút có cùng kích thước */
+                padding: 10px;
+                font-size: 0.9rem;
+                font-weight: 500;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                text-align: center;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                height: 40px; /* Đảm bảo cùng chiều cao */
+            }
+
+            .btn-buy {
+                background: linear-gradient(45deg, #d4af37, #c0a062);
+                color: #333;
+            }
+
+            .btn-buy:hover {
+                background: linear-gradient(45deg, #c0a062, #d4af37);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            }
+
+            .btn-cart {
+                background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
+                color: #333;
+            }
+
+            .btn-cart:hover {
+                background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            }
+
+
+            .btn-cart {
+                background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
+                color: #333;
+            }
+
+            .btn-cart:hover {
+                background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+                color: #333;
+            }
+
+            .btn-buy i, .btn-cart i {
+                font-size: 0.9rem;
+            }
+
+            .footer {
+                background: linear-gradient(90deg, #e0e0e0, #c0c0c0);
+                color: #333;
+                text-align: center;
+                padding: 20px 0;
+                margin-top: 40px;
+                width: 100%;
+                box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    padding: 10px;
+                    border-radius: 15px;
+                    margin-bottom: 20px;
+                    max-width: 100%; /* Full width trên mobile */
+                }
+                .category-buttons .btn, .price-buttons .btn {
+                    padding: 6px 8px;
+                    font-size: 0.85rem;
+                }
+                .product-card img {
+                    height: 150px; /* Giảm chiều cao ảnh trên mobile */
+                }
+                .btn-buy, .btn-cart {
+                    padding: 8px 12px; /* Chuẩn hóa padding trên mobile */
+                    font-size: 0.85rem;
+                    height: 36px; /* Đặt chiều cao cố định trên mobile */
+                    max-width: 130px; /* Giảm chiều rộng tối đa trên mobile */
+                }
+                .action-buttons {
+                    gap: 10px; /* Giảm khoảng cách trên mobile */
+                }
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 sidebar"> <!-- Giữ bề ngang hẹp -->
+                    <div class="filter-section">
+                        <h5><i class="fas fa-filter"></i> Danh mục</h5>
+                        <div class="category-buttons">
+                            <a href="product" class="btn ${empty param.category && empty param.priceRange ? 'active' : ''}">
+                                <i class="fas fa-globe"></i> All
+                            </a>
+                            <a href="product?category=Men" class="btn ${param.category == 'Men' ? 'active' : ''}">
+                                <i class="fas fa-male"></i> Man
+                            </a>
+                            <a href="product?category=Women" class="btn ${param.category == 'Women' ? 'active' : ''}">
+                                <i class="fas fa-female"></i> Woman
+                            </a>
+                            <a href="product?category=Kid" class="btn ${param.category == 'Kid' ? 'active' : ''}">
+                                <i class="fas fa-child"></i> Kid
+                            </a>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h5><i class="fas fa-money-bill-wave"></i> Lọc theo giá</h5>
+                        <div class="price-buttons">
+                            <a href="product?priceRange=under500k" class="btn ${param.priceRange == 'under500k' ? 'active' : ''}">
+                                <i class="fas fa-coins"></i> Dưới 500K
+                            </a>
+                            <a href="product?priceRange=500k-1m" class="btn ${param.priceRange == '500k-1m' ? 'active' : ''}">
+                                <i class="fas fa-wallet"></i> 500K - 1M
+                            </a>
+                            <a href="product?priceRange=over1m" class="btn ${param.priceRange == 'over1m' ? 'active' : ''}">
+                                <i class="fas fa-money-check-alt"></i> Trên 1M
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div class="filter-section">
-                    <h5>Lọc theo giá</h5>
-                    <div class="price-buttons">
-                        <a href="product?priceRange=under500k" class="btn ${param.priceRange == 'under500k' ? 'active' : ''}">Dưới 500K</a>
-                        <a href="product?priceRange=500k-1m" class="btn ${param.priceRange == '500k-1m' ? 'active' : ''}">500K - 1M</a>
-                        <a href="product?priceRange=over1m" class="btn ${param.priceRange == 'over1m' ? 'active' : ''}">Trên 1M</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9 product-list">
-                <div class="row">
-                    <c:forEach var="product" items="${productList}">
-                        <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                            <div class="card w-100 product-card">
-                                <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">${product.name}</h5>
-                                    <p class="card-text flex-grow-1">${product.description}</p>
-                                    <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
-                                    <c:if test="${isLoggedIn}">
-                                        <div class="action-buttons">
-                                            <form method="POST" action="buyProduct" style="flex: 1;">
-                                                <input type="hidden" name="productId" value="${product.id}">
-                                                <button type="submit" class="btn btn-buy">Mua ngay</button>
-                                            </form>
-                                            <button type="button" class="btn btn-cart add-to-cart-btn" data-product-id="${product.id}">
-                                                Thêm vào giỏ hàng
-                                            </button>
-                                        </div>
-                                    </c:if>
+                <div class="col-md-10 product-list"> <!-- Tăng để chứa 4 sản phẩm/hàng -->
+                    <div class="row">
+                        <c:forEach var="product" items="${productList}">
+                            <div class="col-md-3 mb-4 d-flex align-items-stretch"> <!-- Đổi từ col-md-4 sang col-md-3 để hiển thị 4 sản phẩm/hàng -->
+                                <div class="card w-100 product-card">
+                                    <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">${product.name}</h5>
+                                        <p class="card-text flex-grow-1">${product.description}</p>
+                                        <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
+                                        <c:if test="${isLoggedIn}">
+                                            <div class="action-buttons">
+                                                <form method="POST" action="buyProduct" class="w-100"> <!-- Đảm bảo form chiếm toàn bộ chiều rộng -->
+                                                    <input type="hidden" name="productId" value="${product.id}">
+                                                    <button type="submit" class="btn btn-buy w-100"> <!-- Thêm w-100 để nút chiếm toàn bộ chiều rộng -->
+                                                        <i class="fas fa-shopping-bag"></i> Mua ngay
+                                                    </button>
+                                                </form>
+                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" data-product-id="${product.id}"> <!-- Thêm w-100 để nút chiếm toàn bộ chiều rộng -->
+                                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                                </button>
+                                            </div>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                    <c:if test="${empty productList}">
-                        <div class="col-12 text-center">
-                            <p>Không có sản phẩm nào. ${error}</p>
-                        </div>
-                    </c:if>
+                        </c:forEach>
+                        <c:if test="${empty productList}">
+                            <div class="col-12 text-center">
+                                <p style="color: #666;">Không có sản phẩm nào. ${error}</p>
+                            </div>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer class="bg-dark text-white text-center py-3">
-        <p>© 2025 Perfume Store. Copyright nhung chu be dan.</p>
-    </footer>
+        <footer class="footer">
+            <p>© 2025 Perfume Store. Copyright nhung chu be dan.</p>
+        </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".add-to-cart-btn").click(function () {
-                let productId = $(this).data("product-id");
-                $.ajax({
-                    url: 'AddToCartServlet',
-                    type: 'POST',
-                    data: {productId: productId},
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.cartSize !== undefined) {
-                            $(".new-cart-badge").text(response.cartSize);
-                            alert("✅ Đã thêm vào giỏ hàng thành công!");
-                        } else {
-                            alert("Lỗi: không nhận được thông tin giỏ hàng.");
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".add-to-cart-btn").click(function () {
+                    let productId = $(this).data("product-id");
+                    $.ajax({
+                        url: 'AddToCartServlet',
+                        type: 'POST',
+                        data: {productId: productId},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.cartSize !== undefined) {
+                                $(".new-cart-badge").text(response.cartSize);
+                                alert("✅ Đã thêm vào giỏ hàng thành công!");
+                            } else {
+                                alert("Lỗi: không nhận được thông tin giỏ hàng.");
+                            }
+                        },
+                        error: function () {
+                            alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
                         }
-                    },
-                    error: function () {
-                        alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
-                    }
+                    });
                 });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

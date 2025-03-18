@@ -10,46 +10,64 @@
     <meta charset="UTF-8">
     <title>Shopping Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
+            color: #333;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            padding-top: 80px; /* Đẩy nội dung xuống để tránh bị header che */
         }
 
         .cart-container {
             max-width: 1000px;
-            margin: 0 auto;
-            background: #1f1f1f;
+            margin: 40px auto;
+            background: #ffffff;
             padding: 40px;
-            border: 1px solid #ffd700;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .cart-container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
-            color: #ffd700;
-            font-weight: 600;
+            color: #333;
+            font-weight: 700;
             text-align: center;
             margin-bottom: 30px;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: #d4af37;
+            font-size: 28px;
+            transition: color 0.3s ease;
+        }
+
+        h2:hover i {
+            color: #c0a062;
         }
 
         .table {
-            background: #2a2a2a;
+            background: #f5f5f5;
             border: none;
-            color: #ffffff;
+            color: #333;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .cart-header th {
-            background: linear-gradient(45deg, #ffd700, #ccac00);
-            color: #1a1a1a;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #333;
             font-weight: 600;
             padding: 15px;
             text-transform: uppercase;
@@ -59,13 +77,13 @@
         .cart-item td {
             vertical-align: middle;
             padding: 20px;
-            border-bottom: 1px solid #4d4d4d;
+            border-bottom: 1px solid #ccc;
         }
 
         .cart-item img {
             max-width: 100px;
             border-radius: 10px;
-            border: 1px solid #ffd700;
+            border: 2px solid #d4af37;
             transition: transform 0.3s ease;
         }
 
@@ -74,28 +92,29 @@
         }
 
         .cart-item td:nth-child(2) {
-            color: #ffd700;
+            color: #d4af37;
             font-weight: 500;
         }
 
         .quantity-input {
             width: 80px;
-            background: #2a2a2a;
-            border: 2px solid #4d4d4d;
-            color: #ffffff;
+            background: #ffffff;
+            border: 2px solid #ccc;
+            color: #333;
             text-align: center;
             border-radius: 8px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .quantity-input:focus {
-            border-color: #ffd700;
+            border-color: #d4af37;
             outline: none;
-            box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
         }
 
         .btn-danger {
-            background: #ff4d4d;
+            background: #dc3545;
             border: none;
             font-weight: 500;
             padding: 8px 15px;
@@ -104,61 +123,72 @@
         }
 
         .btn-danger:hover {
-            background: #e63939;
+            background: #c82333;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
         }
 
         .cart-footer {
             margin-top: 30px;
             text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
         }
 
         .cart-footer h4 {
-            color: #ffd700;
+            color: #333;
             font-weight: 600;
+            margin: 0;
         }
 
         .cart-footer h4 span {
-            color: #ff4d4d;
+            color: #d4af37;
         }
 
         .cart-footer .btn {
             padding: 12px 25px;
             font-weight: 500;
             border-radius: 8px;
-            margin-left: 15px;
             transition: all 0.3s ease;
         }
 
         .btn-warning {
-            background: linear-gradient(45deg, #ffd700, #ccac00);
+            background: linear-gradient(45deg, #d4af37, #c0a062);
             border: none;
-            color: #1a1a1a;
+            color: #333;
         }
 
         .btn-warning:hover {
-            background: linear-gradient(45deg, #ccac00, #ffd700);
+            background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #ffd700, #ccac00);
+            background: linear-gradient(45deg, #d4af37, #c0a062);
             border: none;
-            color: #1a1a1a;
+            color: #333;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(45deg, #ccac00, #ffd700);
+            background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container cart-container">
-        <h2>🛒 Your Shopping Cart</h2>
+        <h2><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h2>
 
         <form action="updateCart" method="post" id="cartForm">
             <table class="table table-bordered text-center">

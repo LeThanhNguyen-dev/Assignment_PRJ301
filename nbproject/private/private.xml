@@ -4,19 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/home.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/adminDashboard.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/login.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/orderConfirmation.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/checkOUT.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/forgotPassword.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/signup.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/viewOrders.jsp</file>
             <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/contact.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/admin.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/registerSuccess.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/cart.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/editProfile.jsp</file>
-            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/src/java/utils/EmailUtil.java</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/product.jsp</file>
         </group>
     </open-files>
 </project-private>
