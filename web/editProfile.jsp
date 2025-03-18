@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="header.jsp" %>
 
 <c:set var="customer" value="${sessionScope.session_Login}"/>
 <c:set var="isLoggedIn" value="${customer != null}"/>
@@ -11,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chỉnh Sửa Thông Tin | Perfume Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .edit-container {
             max-width: 600px;
@@ -30,27 +30,6 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="home.jsp">Perfume Store</a>
-            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="home.jsp">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="product.jsp">Products</a></li>
-                    <c:if test="${isLoggedIn}">
-                        <li class="nav-item"><a class="nav-link" href="contact.jsp">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="cart.jsp"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-                        <li class="nav-item"><a class="nav-link text-warning" href="profile.jsp">${customer.name}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
-                    </c:if>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container edit-container">
         <h2 class="text-center mb-4">Chỉnh Sửa Thông Tin Cá Nhân</h2>
         
