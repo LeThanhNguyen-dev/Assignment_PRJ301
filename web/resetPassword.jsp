@@ -4,9 +4,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Reset Password</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%); /* Gradient nền giống các trang khác */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -14,57 +15,82 @@
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .container {
             width: 400px;
             padding: 40px;
-            background-color: #1f1f1f;
-            border: 1px solid #9c1010;
+            background-color: #ffffff; /* Nền trắng */
+            border: 2px solid #ccc; /* Viền giống các trang khác */
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Shadow nhẹ */
             transition: transform 0.3s ease;
         }
+
         .container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
+
         h2 {
-            color: #9c1010;
+            color: #333; /* Màu chữ giống các trang khác */
             text-align: center;
             margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+
+        h2 i {
+            color: #d4af37; /* Màu icon vàng nhạt */
+            font-size: 28px;
+            transition: color 0.3s ease;
+        }
+
+        h2:hover i {
+            color: #c0a062; /* Hover đổi màu */
+        }
+
         p {
-            color: #b3b3b3;
+            color: #666; /* Màu chữ xám nhạt */
             text-align: center;
             margin-bottom: 20px;
         }
+
         label {
-            color: #9c1010;
+            color: #333; /* Màu chữ giống các trang khác */
             font-weight: 500;
             font-size: 16px;
         }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0 20px;
-            border: 2px solid #4d4d4d;
+            border: 2px solid #ccc; /* Viền giống các trang khác */
             border-radius: 8px;
-            background-color: #2a2a2a;
-            color: #ffffff;
+            background-color: #f5f5f5; /* Nền xám nhạt */
+            color: #333;
             font-size: 14px;
             box-sizing: border-box;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+
         input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #9c1010;
-            box-shadow: 0 0 5px rgba(156, 152, 152, 0.3);
+            border-color: #d4af37; /* Viền vàng nhạt khi focus */
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
+
         button[type="submit"] {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(45deg, #9c1010, #570808);
-            color: #7d7777;
+            background: linear-gradient(45deg, #d4af37, #c0a062); /* Gradient vàng nhạt */
+            color: #333;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -72,11 +98,13 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
+
         button[type="submit"]:hover {
-            background: linear-gradient(45deg, #570808, #9c1010);
+            background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
+
         .error-message {
             color: #ff4d4d;
             text-align: center;
@@ -85,28 +113,32 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         .error-message.show {
             opacity: 1;
         }
+
         .back-link {
             text-align: center;
             margin-top: 15px;
         }
+
         .back-link a {
-            color: #9c1010;
+            color: #d4af37; /* Màu link vàng nhạt */
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
+
         .back-link a:hover {
-            color: #570808;
+            color: #c0a062; /* Hover đổi màu */
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Reset Your Password</h2>
+        <h2><i class="fas fa-key"></i> Reset Your Password</h2>
         <p>Enter the OTP sent to your email and your new password.</p>
         <form action="resetPassword" method="POST">
             <label for="otp">OTP:</label>
