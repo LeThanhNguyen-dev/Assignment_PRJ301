@@ -144,7 +144,7 @@
                 }
             }
 
-            DecimalFormat df = new DecimalFormat("#,### VN?");
+            DecimalFormat df = new DecimalFormat("#,### VN");
             String formattedTotal = df.format(cartTotal);
         %>
 
@@ -175,7 +175,7 @@
             <div class="mb-3 form-group">
                 <label for="paymentMethod">Payment Method</label>
                 <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                    <option value="credit_card">Credit Card</option>
+                    <option value="vnpay">VNPAY</option>
                     <option value="cod">Cash on Delivery</option>
                     <option value="paypal">PayPal</option>
                 </select>
@@ -184,6 +184,7 @@
             <div class="text-end">
                 <h4>Total: <span><%= formattedTotal %></span></h4>
                 <button type="submit" class="btn btn-success">Confirm Order</button>
+                <input type="hidden" name="totalBill" value="<%=cartTotal%>">
             </div>
         </form>
     </div>

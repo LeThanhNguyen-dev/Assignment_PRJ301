@@ -1,102 +1,138 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-
 <%
-  // Xóa giỏ hàng trong session
-    session.removeAttribute("cart"); // Xóa danh sách sản phẩm
-    session.setAttribute("cartSize", 0); // Đặt số lượng về 0
+    // Kiểm tra trạng thái từ request
+    String status = request.getParameter("status");
+
+    if ("fail".equals(status)) {
+        session.setAttribute("cartSize", session.getAttribute("cartSize")); // Giữ nguyên giỏ hàng
+    } else {
+        // Xóa giỏ hàng trong session nếu đơn hàng thành công
+        session.removeAttribute("cart");
+        session.setAttribute("cartSize", 0);
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Order Confirmation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title><%= "fail".equals(status) ? "Order Failed" : "Order Confirmation"%></title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+                color: #ffffff;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
 
-        .confirmation-container {
-            max-width: 600px;
-            background: #222;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-            border: 2px solid rgba(255, 215, 0, 0.8);
-        }
+            .confirmation-container {
+                max-width: 600px;
+                background: #222;
+                padding: 40px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+                border: 2px solid <%= "fail".equals(status) ? "rgba(255, 0, 0, 0.8)" : "rgba(255, 215, 0, 0.8)"%>;
+            }
 
-        .confirmation-icon {
-            font-size: 80px;
-            color: #ffd700;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-            animation: popUp 0.6s ease-in-out;
-        }
+            .confirmation-icon {
+                font-size: 80px;
+                text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+                animation: popUp 0.6s ease-in-out;
+            }
 
-        @keyframes popUp {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); }
-        }
+            @keyframes popUp
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            80% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+            }
 
-        h1 {
-            font-size: 26px;
-            font-weight: bold;
-            color: #ffd700;
-            margin-top: 15px;
-        }
 
-        p {
-            font-size: 18px;
-            color: #ccc;
-            margin-top: 10px;
-        }
+            h1 {
+                font-size: 26px;
+                font-weight: bold;
+                margin-top: 15px;
+            }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #ffd700, #ccac00);
-            color: #000;
-            font-weight: bold;
-            padding: 12px 20px;
-            font-size: 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
+            p {
+                font-size: 18px;
+                color: #ccc;
+                margin-top: 10px;
+            }
 
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #ffdf00, #e6b800);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
-    <div class="confirmation-container">
-        <div class="confirmation-icon">✔️</div>
-        <h1 class="mt-4">Order Placed Successfully!</h1>
-        <p class="mt-3">Thank you for your purchase. Your order has been confirmed.</p>
-        <a href="home" class="btn btn-primary mt-4">Back to Home</a>
-    </div>
+            .btn-primary {
+                background: linear-gradient(45deg, #ffd700, #ccac00);
+                color: #000;
+                font-weight: bold;
+                padding: 12px 20px;
+                font-size: 18px;
+                border-radius: 8px;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+            }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            .btn-primary:hover {
+                background: linear-gradient(45deg, #ffdf00, #e6b800);
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+                transform: scale(1.05);
+            }
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Cập nhật số lượng giỏ hàng về 0
-        let cartBadge = document.getElementById("cart-badge");
-        if (cartBadge) {
-            cartBadge.textContent = "0";
-        }
-    });
-    </script>
+            .fail {
+                color: #ff4d4d;
+                text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            }
 
-</body>
+            .success {
+                color: #00ffea; /* Màu xanh sáng */
+                text-shadow: 0 0 10px rgba(0, 255, 234, 0.8); /* Hiệu ứng phát sáng */
+            }
+
+            .fail-btn {
+                background: linear-gradient(45deg, #ff4d4d, #cc0000);
+            }
+
+            .fail-btn:hover {
+                background: linear-gradient(45deg, #ff6666, #e60000);
+                box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="confirmation-container">
+            <% if ("fail".equals(status)) { %>
+            <div class="confirmation-icon fail">❌</div>
+            <h1 class="mt-4 fail">Order Failed!</h1>
+            <p class="mt-3">Something went wrong. Please try again.</p>
+            <a href="checkOut.jsp" class="btn btn-primary fail-btn mt-4">Try Again</a>
+            <% } else { %>
+            <div class="confirmation-icon success">✔️</div>
+            <h1 class="mt-4 success">Order Placed Successfully!</h1>
+            <p class="mt-3">Thank you for your purchase. Your order has been confirmed.</p>
+            <a href="home" class="btn btn-primary mt-4">Back to Home</a>
+            <% }%>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let cartBadge = document.getElementById("cart-badge");
+                if (cartBadge) {
+                    cartBadge.textContent = <%= "fail".equals(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
+                }
+            });
+        </script>
+    </body>
 </html>

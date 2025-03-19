@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
+
     private int orderId;
     private int customerId;
     private Date orderDate;
@@ -14,8 +15,17 @@ public class Order {
     private List<OrderDetail> orderDetails;
 
     public Order() {
-        this.orderDate = new Date();  
-        this.status = "Processing"; 
+        this.orderDate = new Date();
+        this.status = "Processing";
+    }
+
+    public Order(int customerId, double totalAmount, String shippingAddress, String voucherCode) {
+        this.customerId = customerId;
+        this.totalAmount = totalAmount;
+        this.status = "Processing";
+        this.shippingAddress = shippingAddress;
+        this.voucherCode = voucherCode;
+        this.orderDate = new Date();
     }
 
     public Order(int customerId, double totalAmount, String status, String shippingAddress, String voucherCode) {
@@ -24,7 +34,7 @@ public class Order {
         this.status = status;
         this.shippingAddress = shippingAddress;
         this.voucherCode = voucherCode;
-        this.orderDate = new Date(); 
+        this.orderDate = new Date();
     }
 
     public int getOrderId() {
@@ -94,19 +104,17 @@ public class Order {
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
-    
-    
 
     @Override
     public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", customerId=" + customerId +
-                ", orderDate=" + orderDate +
-                ", totalAmount=" + totalAmount +
-                ", status='" + status + '\'' +
-                ", shippingAddress='" + shippingAddress + '\'' +
-                ", voucherCode='" + voucherCode + '\'' +
-                '}';
+        return "Order{"
+                + "orderId=" + orderId
+                + ", customerId=" + customerId
+                + ", orderDate=" + orderDate
+                + ", totalAmount=" + totalAmount
+                + ", status='" + status + '\''
+                + ", shippingAddress='" + shippingAddress + '\''
+                + ", voucherCode='" + voucherCode + '\''
+                + '}';
     }
 }

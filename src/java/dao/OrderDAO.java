@@ -15,11 +15,10 @@ public class OrderDAO {
         this.connection = dbContext.c;
     }
 
-    // Method to add a new Order
-    public boolean addOrder(Order order) {
+    public int addOrder(Order order) {
         String query = "INSERT INTO [Order] (customerId, totalAmount, status, shippingAddress, voucherCode) "
-                     + "VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+                + "VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, order.getCustomerId());
             ps.setDouble(2, order.getTotalAmount());
             ps.setString(3, order.getStatus());
@@ -27,10 +26,31 @@ public class OrderDAO {
             ps.setString(5, order.getVoucherCode());
 
             int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1); // Trả về orderId
+                    }
+                }
+            }
+            return -1; // Trả về -1 nếu không có khóa được sinh ra
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1; // Trả về -1 nếu có lỗi
+        }
+    }
+
+    public boolean updateOrderStatus(int orderId, String newStatus) {
+        String query = "UPDATE [Order] SET status = ? WHERE orderId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, orderId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi
         }
     }
 
@@ -68,7 +88,7 @@ public class OrderDAO {
     // Method to update an existing Order
     public boolean updateOrder(Order order) {
         String query = "UPDATE [Order] SET customerId = ?, totalAmount = ?, status = ?, shippingAddress = ?, voucherCode = ? "
-                     + "WHERE orderId = ?";
+                + "WHERE orderId = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, order.getCustomerId());
             ps.setDouble(2, order.getTotalAmount());
@@ -111,5 +131,4 @@ public class OrderDAO {
         return order;
     }
 
-   
 }
