@@ -225,6 +225,58 @@
                 width: 100%;
                 box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
             }
+            .image-container {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .card-img-top {
+                transition: opacity 0.3s ease;
+                width: 100%;
+                height: auto;
+            }
+
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                display: flex;
+                align-items: flex-end; /* Đẩy button xuống dưới */
+                padding-bottom: 0px; /* Tùy chỉnh khoảng cách nếu cần */
+            }
+            .image-container:hover .overlay {
+                opacity: 1;
+            }
+
+            .overlay .view-detail {
+                color: white;
+                font-size: 18px;
+                text-decoration: none;
+                padding: 10px 0; /* Chỉ giữ padding trên/dưới, bỏ padding trái/phải */
+                background-color: #d4af37;
+                border-radius: 0px;
+                opacity: 1;
+                width: 100%; /* Chiều dài bằng ảnh */
+                text-align: center; /* Canh giữa chữ trong button */
+                box-sizing: border-box; /* Đảm bảo padding không làm vượt kích thước */
+                opacity: 0.7;
+                transition: opacity 0.3s ease;
+                z-index: 1;
+            }
+
+            .image-container:hover .card-img-top {
+                opacity: 0.3; /* Ảnh mờ khi hover */
+            }
+
+            .image-container:hover .overlay {
+                opacity: 1; /* Hiển thị overlay khi hover */
+            }
+
 
             @media (max-width: 768px) {
                 .sidebar {
@@ -249,6 +301,7 @@
                 .action-buttons {
                     gap: 10px; /* Giảm khoảng cách trên mobile */
                 }
+
             }
         </style>
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -289,25 +342,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10 product-list"> <!-- Tăng để chứa 4 sản phẩm/hàng -->
+                <div class="col-md-10 product-list">
                     <div class="row">
                         <c:forEach var="product" items="${productList}">
-                            <div class="col-md-3 mb-4 d-flex align-items-stretch"> <!-- Đổi từ col-md-4 sang col-md-3 để hiển thị 4 sản phẩm/hàng -->
+                            <div class="col-md-3 mb-4 d-flex align-items-stretch">
                                 <div class="card w-100 product-card">
-                                    <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}">
+                                    <div class="image-container">
+                                        <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}">
+                                        <div class="overlay">
+                                            <a href="#" class="view-detail" data-product-id="${product.id}">Xem chi tiết</a>
+                                        </div>
+                                    </div>
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">${product.name}</h5>
                                         <p class="card-text flex-grow-1">${product.description}</p>
                                         <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
                                         <c:if test="${isLoggedIn}">
                                             <div class="action-buttons">
-                                                <form method="POST" action="buyProduct" class="w-100"> <!-- Đảm bảo form chiếm toàn bộ chiều rộng -->
+                                                <form method="POST" action="buyProduct" class="w-100">
                                                     <input type="hidden" name="productId" value="${product.id}">
-                                                    <button type="submit" class="btn btn-buy w-100"> <!-- Thêm w-100 để nút chiếm toàn bộ chiều rộng -->
+                                                    <button type="submit" class="btn btn-buy w-100">
                                                         <i class="fas fa-shopping-bag"></i> Mua ngay
                                                     </button>
                                                 </form>
-                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" data-product-id="${product.id}"> <!-- Thêm w-100 để nút chiếm toàn bộ chiều rộng -->
+                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" data-product-id="${product.id}">
                                                     <i class="fas fa-cart-plus"></i> Thêm vào giỏ
                                                 </button>
                                             </div>
@@ -352,6 +410,17 @@
                             alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
                         }
                     });
+                });
+            });
+        </script>
+
+        <script>
+            document.querySelectorAll('.view-detail').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-product-id');
+                    // Redirect tới trang chi tiết sản phẩm
+                    window.location.href = `detail?productId=${productId}`;
                 });
             });
         </script>
