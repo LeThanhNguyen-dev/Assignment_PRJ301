@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="customer" value="${sessionScope.session_Login}"/>
 <c:set var="isLoggedIn" value="${customer != null}"/>
@@ -36,12 +37,12 @@
 
     .new-logo i {
         font-size: 32px;
-        color: #d4af37; /* Vàng nh?t sang tr?ng */
+        color: #d4af37; /* VÃ ng nh?t sang tr?ng */
         transition: color 0.3s ease;
     }
 
     .new-logo:hover i {
-        color: #c0a062; /* Vàng ??m h?n khi hover */
+        color: #c0a062; /* VÃ ng ??m h?n khi hover */
     }
 
     .new-nav-menu {
@@ -65,8 +66,8 @@
     }
 
     .new-nav-menu a:hover {
-        background-color: rgba(212, 175, 55, 0.1); /* Vàng nh?t trong su?t */
-        color: #d4af37; /* Vàng sang tr?ng */
+        background-color: rgba(212, 175, 55, 0.1); /* VÃ ng nh?t trong su?t */
+        color: #d4af37; /* VÃ ng sang tr?ng */
         transform: translateY(-2px);
     }
 
@@ -115,7 +116,7 @@
 
     .new-search-bar input:focus {
         outline: none;
-        border-color: #d4af37; /* Vàng nh?t khi focus */
+        border-color: #d4af37; /* VÃ ng nh?t khi focus */
         box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
         width: 250px;
     }
@@ -144,6 +145,7 @@
     .new-search-error.show {
         display: block;
         opacity: 1;
+        margin-right: 10px; 
     }
 
     @media (max-width: 768px) {
@@ -161,22 +163,24 @@
         }
     }
 
-    /* ??y n?i dung xu?ng ?? không b? header che */
+    /* ??y n?i dung xu?ng ?? khÃ´ng b? header che */
     body {
         padding-top: 80px;
     }
 </style>
 
 <header class="new-header">
-    <div class="new-logo">
-        <i class="fas fa-spray-can"></i>
-        Perfume Store
-    </div>
+    <a href="home" style="text-decoration: none">
+        <div class="new-logo">
+            <i class="fas fa-spray-can"></i>
+            Perfume Store
+        </div>
+    </a>
     <div class="new-nav-menu">
         <div class="new-search-bar">
-            <input type="text" placeholder="Tìm ki?m..." id="newSearchInput" name="search">
+            <div class="new-search-error" id="newSearchError">Please enter a search keyword!</div>
+            <input type="text" placeholder="Search..." id="newSearchInput" name="search">
             <i class="fas fa-search" onclick="performNewSearch()"></i>
-            <div class="new-search-error" id="newSearchError">Vui lòng nh?p t? khóa tìm ki?m!</div>
         </div>
         <a href="home"><i class="fas fa-home"></i> Home</a>
         <a href="product"><i class="fas fa-box-open"></i> Products</a>
@@ -208,7 +212,7 @@
         }
     }
 
-    document.getElementById('newSearchInput').addEventListener('keypress', function(e) {
+    document.getElementById('newSearchInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             performNewSearch();
         }

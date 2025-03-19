@@ -38,8 +38,8 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         try {
             String subject = "Reset Password";
-            String message = String.format("Your OTP to reset password is: %s\nRegards,\nPerfume Nhung Chu Be Dan.",
-                    otp);
+            String message = EmailUtil.createProfessionalEmail(otp, "Reset Password");
+
             EmailUtil.sendEmail(email, subject, message);
             // Chuyển hướng đến trang reset password
             response.sendRedirect("resetPassword.jsp");

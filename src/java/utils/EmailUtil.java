@@ -37,13 +37,39 @@ public class EmailUtil {
         message.setFrom(new InternetAddress(FROM));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         message.setSubject(subject);
-        message.setText(messageText);
+        message.setContent(messageText, "text/html; charset=utf-8");
         Transport.send(message);
     }
-    
+
     public static String generateOTP() {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000); // Tạo mã OTP 6 chữ số
         return String.valueOf(otp);
+    }
+
+    public static String createProfessionalEmail(String otp, String title) {
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }"
+                + ".container { background-color: white; padding: 20px; text-align: center; border-radius: 10px; }"
+                + ".logo { font-size: 24px; font-weight: bold; color: #cd2653; }"
+                + ".otp { font-size: 36px; font-weight: bold; margin: 20px 0; letter-spacing: 5px; }"
+                + ".warning { font-size: 14px; color: #666; }"
+                + ".footer { margin-top: 20px; font-size: 12px; color: #999; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='container'>"
+                + "<div class='logo'>Perfume Nhung Chu Be Dan</div>"
+                + "<h2>" + title + "</h2>"
+                + "<p>Here is your OTP:</p>"
+                + "<div class='otp'>" + otp + "</div>"
+                + "<p class='warning'>If this request did not come from you, change your account password immediately to prevent further unauthorized access.</p>"
+                + "</div>"
+                + "<div class='footer'>Perfume Nhung Chu Be</div>"
+                + "</body>"
+                + "</html>";
     }
 }

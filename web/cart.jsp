@@ -231,7 +231,7 @@
 
             <div class="cart-footer">
                 <h4>Total: <span id="cartTotal">${cartTotal} VNĐ</span></h4>
-                <a href="updateCart" class="btn btn-warning btn-lg">Update Cart</a>
+                <a href="product" class="btn btn-warning btn-lg">Shopping</a>
                 <a href="checkOUT.jsp" class="btn btn-primary btn-lg">Proceed to Checkout</a>
             </div>
 

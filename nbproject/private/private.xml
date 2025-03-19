@@ -2,17 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/web/profile.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/controller/UpdateProfileServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/controller/ProfileServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/dao/CustomerDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/dao/AdminDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/model/Customer.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/dao/OrderDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/src/java/dao/OrderDetailDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/web/header.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Assignment_PRJ301/web/product.jsp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -43,8 +43,7 @@ public class SendOTPServlet extends HttpServlet {
         // Gửi OTP qua email
         try {
             String subject = "Perfume Nhung Chu Be Dan";
-            String message = String.format("Dear %s,\nYour OTP is: %s\nRegards,\nPerfume Nhung Chu Be Dan.",
-                    username, otp);
+            String message = EmailUtil.createProfessionalEmail(otp, "Verify email");
             EmailUtil.sendEmail(email, subject, message);
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"success\",\"message\":\"Mã OTP đã được gửi đến email của bạn.\"}");

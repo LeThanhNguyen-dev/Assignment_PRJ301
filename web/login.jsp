@@ -100,6 +100,7 @@
             align-items: center;
             font-size: 60px;
             font-weight: 700;
+            padding: 0px 30px;
             height: 100%;
             border-radius: 0 15px 15px 0;
             transition: all 0.3s ease;
