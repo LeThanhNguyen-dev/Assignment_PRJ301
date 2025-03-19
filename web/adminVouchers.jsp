@@ -4,13 +4,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý sản phẩm</title>
+    <title>Quản lý voucher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%); /* Gradient nền giống các trang khác */
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
             min-height: 100vh;
             padding-top: 20px;
             display: flex;
@@ -35,13 +35,13 @@
         }
 
         h2 i {
-            color: #d4af37; /* Màu icon vàng nhạt */
+            color: #d4af37;
             font-size: 28px;
             transition: color 0.3s ease;
         }
 
         h2:hover i {
-            color: #c0a062; /* Hover đổi màu */
+            color: #c0a062;
         }
 
         .form-container {
@@ -66,18 +66,18 @@
         .form-container input {
             border: 2px solid #ccc;
             border-radius: 8px;
-            background-color: #f5f5f5; /* Nền xám nhạt */
+            background-color: #f5f5f5;
             color: #333;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .form-container input:focus {
-            border-color: #d4af37; /* Viền vàng nhạt khi focus */
+            border-color: #d4af37;
             box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
 
         .form-container .btn-primary {
-            background: linear-gradient(45deg, #d4af37, #c0a062); /* Gradient vàng nhạt */
+            background: linear-gradient(45deg, #d4af37, #c0a062);
             border: none;
             color: #333;
             padding: 10px 20px;
@@ -93,7 +93,7 @@
         }
 
         .form-container .btn-secondary {
-            background: linear-gradient(45deg, #e0e0e0, #c0c0c0); /* Gradient xám nhạt */
+            background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
             border: none;
             color: #333;
             padding: 10px 20px;
@@ -122,7 +122,7 @@
         }
 
         .table thead {
-            background: linear-gradient(45deg, #d4af37, #c0a062); /* Gradient vàng nhạt */
+            background: linear-gradient(45deg, #d4af37, #c0a062);
             color: #333;
         }
 
@@ -133,11 +133,11 @@
         }
 
         .table tbody tr:hover {
-            background-color: #f5f5f5; /* Nền xám nhạt khi hover */
+            background-color: #f5f5f5;
         }
 
         .table .btn-warning {
-            background: linear-gradient(45deg, #f39c12, #e67e22); /* Gradient cam cho nút Sửa */
+            background: linear-gradient(45deg, #f39c12, #e67e22);
             border: none;
             color: #333;
             padding: 8px 15px;
@@ -153,7 +153,7 @@
         }
 
         .table .btn-danger {
-            background: linear-gradient(45deg, #ff4d4d, #e63946); /* Gradient đỏ cho nút Xóa */
+            background: linear-gradient(45deg, #ff4d4d, #e63946);
             border: none;
             color: #fff;
             padding: 8px 15px;
@@ -188,66 +188,54 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2><i class="fas fa-box"></i> Quản lý sản phẩm</h2>
+        <h2><i class="fas fa-ticket-alt"></i> Quản lý voucher</h2>
 
-        <!-- Form thêm/sửa sản phẩm -->
+        <!-- Form thêm/sửa voucher -->
         <div class="form-container">
-            <form action="adminProduct" method="post" class="mb-4">
-                <input type="hidden" name="action" value="${product != null ? 'update' : 'add'}">
-                <input type="hidden" name="id" value="${product != null ? product.id : ''}">
+            <form action="admin/vouchers" method="post" class="mb-4">
+                <input type="hidden" name="action" value="${voucher != null ? 'update' : 'add'}">
+                <input type="hidden" name="id" value="${voucher != null ? voucher.id : ''}">
                 <div class="mb-3">
-                    <label>Tên sản phẩm:</label>
-                    <input type="text" name="name" class="form-control" value="${product != null ? product.name : ''}" required>
+                    <label>Mã voucher:</label>
+                    <input type="text" name="code" class="form-control" value="${voucher != null ? voucher.code : ''}" required>
                 </div>
                 <div class="mb-3">
-                    <label>Mô tả:</label>
-                    <input type="text" name="description" class="form-control" value="${product != null ? product.description : ''}" required>
+                    <label>Giảm giá (%):</label>
+                    <input type="number" step="0.01" name="discount" class="form-control" value="${voucher != null ? voucher.discount : ''}" required>
                 </div>
                 <div class="mb-3">
-                    <label>Hình ảnh:</label>
-                    <input type="text" name="image" class="form-control" value="${product != null ? product.image : ''}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Giá:</label>
-                    <input type="number" step="0.01" name="price" class="form-control" value="${product != null ? product.price : ''}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Danh mục (Category ID):</label>
-                    <input type="number" name="categoryId" class="form-control" value="${product != null ? product.categoryId : ''}" required>
+                    <label>Ngày hết hạn:</label>
+                    <input type="date" name="expiryDate" class="form-control" value="${voucher != null ? voucher.expiryDate : ''}" required>
                 </div>
                 <div class="d-flex gap-3">
-                    <button type="submit" class="btn btn-primary">${product != null ? 'Cập nhật' : 'Thêm mới'}</button>
-                    <a href="adminProduct" class="btn btn-secondary">Hủy</a>
+                    <button type="submit" class="btn btn-primary">${voucher != null ? 'Cập nhật' : 'Thêm mới'}</button>
+                    <a href="${pageContext.request.contextPath}/admin/vouchers" class="btn btn-secondary">Hủy</a>
                 </div>
             </form>
         </div>
 
-        <!-- Danh sách sản phẩm -->
+        <!-- Danh sách voucher -->
         <div class="table-container">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Tên</th>
-                        <th>Mô tả</th>
-                        <th>Hình ảnh</th>
-                        <th>Giá</th>
-                        <th>Danh mục</th>
+                        <th>Mã voucher</th>
+                        <th>Giảm giá (%)</th>
+                        <th>Ngày hết hạn</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="product" items="${products}">
+                    <c:forEach var="voucher" items="${vouchers}">
                         <tr>
-                            <td>${product.id}</td>
-                            <td>${product.name}</td>
-                            <td>${product.description}</td>
-                            <td>${product.image}</td>
-                            <td>${product.price}</td>
-                            <td>${product.categoryId}</td>
+                            <td>${voucher.id}</td>
+                            <td>${voucher.code}</td>
+                            <td>${voucher.discount}</td>
+                            <td>${voucher.expiryDate}</td>
                             <td>
-                                <a href="adminProduct?action=edit&id=${product.id}" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="adminProduct?action=delete&id=${product.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                                <a href="${pageContext.request.contextPath}/admin/vouchers?action=edit&id=${voucher.id}" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="${pageContext.request.contextPath}/admin/vouchers?action=delete&id=${voucher.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa voucher này?')">Xóa</a>
                             </td>
                         </tr>
                     </c:forEach>
