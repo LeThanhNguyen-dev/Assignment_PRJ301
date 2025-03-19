@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,7 +9,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
+import model.Order;
+import model.OrderDetail;
 import dao.CustomerDAO;
+import dao.OrderDAO;
+import dao.OrderDetailDAO;
 
 @WebServlet(name = "UpdateProfileServlet", urlPatterns = {"/updateProfile"})
 public class UpdateProfileServlet extends HttpServlet {
@@ -16,10 +21,11 @@ public class UpdateProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
+            System.out.println("do Pót Update Sẻvlet ");
         HttpSession session = request.getSession();
         Customer currentCustomer = (Customer) session.getAttribute("session_Login");
-        
+
         if (currentCustomer == null) {
             response.sendRedirect("login.jsp");
             return;
@@ -64,6 +70,8 @@ public class UpdateProfileServlet extends HttpServlet {
         if (updateCustomerInDB(customerDAO, updatedCustomer)) {
             session.setAttribute("session_Login", updatedCustomer);
             request.setAttribute("message", "Cập nhật thông tin thành công!");
+
+
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Cập nhật thông tin thất bại!");
@@ -72,8 +80,8 @@ public class UpdateProfileServlet extends HttpServlet {
     }
 
     private boolean updateCustomerInDB(CustomerDAO customerDAO, Customer customer) {
-        String query = "UPDATE Customer SET name = ?, phone = ?, email = ?, address = ? WHERE id = ?";
-        
+        String query = "UPDATE Customer SET name = ?, phone = ?, email = ?, address = ? WHERE customerId = ?";
+
         try {
             java.sql.PreparedStatement stmt = customerDAO.c.prepareStatement(query);
             stmt.setString(1, customer.getName());
@@ -81,7 +89,7 @@ public class UpdateProfileServlet extends HttpServlet {
             stmt.setString(3, customer.getEmail());
             stmt.setString(4, customer.getAddress());
             stmt.setInt(5, customer.getId());
-            
+
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (java.sql.SQLException e) {
@@ -89,4 +97,7 @@ public class UpdateProfileServlet extends HttpServlet {
             return false;
         }
     }
+
+    
+    
 }

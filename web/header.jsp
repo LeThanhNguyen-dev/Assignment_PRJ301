@@ -186,7 +186,7 @@
                 <i class="fas fa-shopping-cart"></i> Cart
                 <span class="new-cart-badge">${sessionScope.cartSize != null ? sessionScope.cartSize : 0}</span>
             </a>
-            <a href="profile.jsp"><i class="fas fa-user"></i> ${customer.name}</a>
+            <a href="profile"><i class="fas fa-user"></i> ${customer.name}</a>
             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </c:if>
         <c:if test="${!isLoggedIn}">
