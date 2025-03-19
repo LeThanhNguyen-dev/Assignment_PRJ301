@@ -45,19 +45,19 @@
                 animation: popUp 0.6s ease-in-out;
             }
 
-            @keyframes popUp
-            0% {
-                transform: scale(0);
-                opacity: 0;
+            @keyframes popUp {
+                0% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                80% {
+                    transform: scale(1.2);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                }
             }
-            80% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-            }
-
 
             h1 {
                 font-size: 26px;
