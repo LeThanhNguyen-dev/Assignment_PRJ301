@@ -222,7 +222,9 @@
                                         <th>Ngày đặt</th>
                                         <th>Tổng tiền</th>
                                         <th>Trạng thái</th>
-                                        <th>Chi tiết</th>
+                                        
+                                        <th>Địa chỉ</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -232,7 +234,9 @@
                                             <td>${order.orderDate}</td>
                                             <td>${order.totalAmount} VNĐ</td>
                                             <td>${order.status}</td>
-                                            <td><a href="orderDetail.jsp?orderId=${order.orderId}" class="btn btn-info">Xem chi tiết</a></td>
+                                            <td>${order.shippingAddress}</td>
+
+                                            
                                         </tr>
                                     </c:forEach>
                                 </tbody>

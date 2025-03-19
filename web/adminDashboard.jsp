@@ -93,7 +93,7 @@
         <div class="sidebar">
             <h2>Admin Panel</h2>
             <a href="${pageContext.request.contextPath}/adminDashboard">Dashboard</a>
-            <a href="${pageContext.request.contextPath}/admin/products">Manage Products</a>
+            <a href="${pageContext.request.contextPath}/adminProduct">Manage Products</a>
             <a href="${pageContext.request.contextPath}/admin/customers">Manage Customers</a>
             <a href="${pageContext.request.contextPath}/admin/orders">Manage Orders</a>
             <a href="${pageContext.request.contextPath}/admin/vouchers">Manage Vouchers</a>

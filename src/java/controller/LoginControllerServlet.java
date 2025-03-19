@@ -42,7 +42,7 @@ public class LoginControllerServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("session_Admin", admin);
             adminDAO.closeConnection(); 
-            response.sendRedirect("adminDashboard.jsp"); 
+            response.sendRedirect("adminDashboard"); 
             return;
         }
 

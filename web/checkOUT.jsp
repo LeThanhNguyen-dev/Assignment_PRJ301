@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <%@ page import="model.Customer, model.Product, java.text.DecimalFormat, java.util.Map" %>
 <%@ include file="header.jsp" %>
 
@@ -15,7 +15,7 @@
             color: #333;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding-top: 80px; /* Đẩy nội dung xuống để tránh bị header che */
+            padding-top: 80px; /* ??y n?i dung xu?ng ?? tr�nh b? header che */
         }
 
         .checkout-container {
@@ -144,7 +144,7 @@
                 }
             }
 
-            DecimalFormat df = new DecimalFormat("#,### VNĐ");
+            DecimalFormat df = new DecimalFormat("#,### VN?");
             String formattedTotal = df.format(cartTotal);
         %>
 
