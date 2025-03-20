@@ -80,6 +80,20 @@ public class OrderDetailDAO {
             return false;
         }
     }
+    
+    public boolean deleteOrderDetailsByOrderId(int orderId) {
+        String query = "DELETE FROM OrderDetail WHERE orderId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, orderId);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Deleted " + rowsAffected + " order details for order ID: " + orderId);
+            return rowsAffected >= 0; // Trả về true nếu không có lỗi
+        } catch (SQLException e) {
+            System.err.println("Error deleting order details for order ID " + orderId + ": " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public boolean deleteOrderDetail(int orderDetailId) {
         String query = "DELETE FROM OrderDetail WHERE orderDetailId = ?";

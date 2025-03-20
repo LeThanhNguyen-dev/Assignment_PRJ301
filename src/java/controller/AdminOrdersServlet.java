@@ -15,7 +15,7 @@ import model.Customer;
 import model.Order;
 import model.OrderDetail;
 
-@WebServlet("/admin/orders")
+@WebServlet("/adminOrders")
 public class AdminOrdersServlet extends HttpServlet {
     private OrderDAO orderDAO;
     private OrderDetailDAO orderDetailDAO;

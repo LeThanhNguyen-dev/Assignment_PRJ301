@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import dao.CustomerDAO;
-
+import dao.OrderDAO;
 import dao.ProductDAO;
 
 @WebServlet(name = "AdminDashboardServlet", urlPatterns = {"/adminDashboard"})
@@ -26,22 +26,30 @@ public class AdminDashboardServlet extends HttpServlet {
         // Khởi tạo DAO
         CustomerDAO customerDAO = new CustomerDAO();
         ProductDAO productDAO = new ProductDAO();
+        OrderDAO orderDAO = new OrderDAO();
 
         // Lấy dữ liệu
         int totalCustomers = customerDAO.getTotalCustomers();
         int totalProducts = productDAO.getTotalProducts();
+        int totalOrders = orderDAO.getTotalOrders();
+        double totalRevenue = orderDAO.getTotalRevenue();
 
         // Debugging - In ra giá trị
         System.out.println("Total Customers: " + totalCustomers);
         System.out.println("Total Products: " + totalProducts);
+        System.out.println("Total Orders: " + totalOrders);
+        System.out.println("Total Revenue: " + totalRevenue);
 
         // Đặt dữ liệu vào request
         request.setAttribute("totalCustomers", totalCustomers);
         request.setAttribute("totalProducts", totalProducts);
+        request.setAttribute("totalOrders", totalOrders);
+        request.setAttribute("totalRevenue", totalRevenue);
 
         // Đóng kết nối
         customerDAO.closeConnection();
         productDAO.closeConnection();
+   
 
         // Forward đến JSP
         request.getRequestDispatcher("adminDashboard.jsp").forward(request, response);
@@ -57,17 +65,22 @@ public class AdminDashboardServlet extends HttpServlet {
     public String getServletInfo() {
         return "Admin Dashboard Servlet";
     }
+
     public static void main(String[] args) {
-       CustomerDAO customerDAO = new CustomerDAO();
+        CustomerDAO customerDAO = new CustomerDAO();
         ProductDAO productDAO = new ProductDAO();
+        OrderDAO orderDAO = new OrderDAO();
 
         // Lấy dữ liệu
         int totalCustomers = customerDAO.getTotalCustomers();
         int totalProducts = productDAO.getTotalProducts();
+        int totalOrders = orderDAO.getTotalOrders();
+        double totalRevenue = orderDAO.getTotalRevenue();
 
         // Debugging - In ra giá trị
         System.out.println("Total Customers: " + totalCustomers);
-        System.out.println("Total Products: " + totalProducts); 
+        System.out.println("Total Products: " + totalProducts);
+        System.out.println("Total Orders: " + totalOrders);
+        System.out.println("Total Revenue: " + totalRevenue);
     }
 }
-

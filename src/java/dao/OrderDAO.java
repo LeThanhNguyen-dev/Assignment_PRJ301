@@ -117,6 +117,33 @@ public class OrderDAO {
             return false;
         }
     }
+    
+    public int getTotalOrders() {
+        String query = "SELECT COUNT(*) AS totalOrders FROM [Order]";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalOrders");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Trả về 0 nếu có lỗi hoặc không có đơn hàng
+    }
+
+    // Phương thức mới: Tính tổng tiền từ tất cả đơn hàng
+    public double getTotalRevenue() {
+        String query = "SELECT SUM(totalAmount) AS totalRevenue FROM [Order]";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("totalRevenue");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0; // Trả về 0 nếu có lỗi hoặc không có doanh thu
+    }
 
     // Helper method to map a ResultSet row to an Order object
     private Order mapResultSetToOrder(ResultSet rs) throws SQLException {

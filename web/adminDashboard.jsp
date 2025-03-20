@@ -12,66 +12,67 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%); /* Gradient nền giống các trang khác */
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        .container {
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid #ccc;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
-            min-height: calc(100vh - 60px); /* Trừ chiều cao footer */
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .sidebar {
-            width: 250px;
-            background: #ffffff; /* Nền trắng */
-            border-right: 2px solid #ccc; /* Viền giống các trang khác */
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar h2 {
-            margin-top: 0;
+        .navbar h2 {
+            margin: 0;
             font-size: 24px;
-            color: #333; /* Màu chữ giống các trang khác */
-            text-align: center;
+            color: #333;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 10px;
         }
 
-        .sidebar h2 i {
-            color: #d4af37; /* Màu icon vàng nhạt */
+        .navbar h2 i {
+            color: #d4af37;
             transition: color 0.3s ease;
         }
 
-        .sidebar h2:hover i {
-            color: #c0a062; /* Hover đổi màu */
+        .navbar h2:hover i {
+            color: #c0a062;
         }
 
-        .sidebar a {
+        .navbar-menu {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-menu a {
             color: #333;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px;
-            margin: 10px 0;
+            gap: 8px;
+            padding: 10px 15px;
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
         }
 
-        .sidebar a:hover {
-            background: linear-gradient(45deg, #d4af37, #c0a062); /* Gradient vàng nhạt */
-            color: #333;
+        .navbar-menu a:hover {
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
         }
 
-        .sidebar a i {
+        .navbar-menu a i {
             font-size: 18px;
         }
 
@@ -88,6 +89,7 @@
             justify-content: space-between;
             align-items: center;
             border-radius: 8px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
@@ -100,16 +102,16 @@
         }
 
         .header h1 i {
-            color: #d4af37; /* Màu icon vàng nhạt */
+            color: #d4af37;
             transition: color 0.3s ease;
         }
 
         .header h1:hover i {
-            color: #c0a062; /* Hover đổi màu */
+            color: #c0a062;
         }
 
         .header .logout {
-            color: #ff4d4d; /* Màu đỏ cho logout */
+            color: #ff4d4d;
             text-decoration: none;
             font-weight: 500;
             font-size: 16px;
@@ -129,13 +131,12 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 20px;
         }
 
         .card {
             background-color: #ffffff;
             padding: 20px;
-            border: 2px solid #ccc; /* Viền giống các trang khác */
+            border: 2px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             text-align: center;
@@ -145,7 +146,7 @@
         .card:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-            border-color: #d4af37; /* Viền vàng nhạt khi hover */
+            border-color: #d4af37;
         }
 
         .card h3 {
@@ -159,37 +160,39 @@
         }
 
         .card h3 i {
-            color: #d4af37; /* Màu icon vàng nhạt */
+            color: #d4af37;
             transition: color 0.3s ease;
         }
 
         .card:hover h3 i {
-            color: #c0a062; /* Hover đổi màu */
+            color: #c0a062;
         }
 
         .card p {
             font-size: 24px;
             margin: 0;
-            color: #d4af37; /* Màu số liệu vàng nhạt */
+            color: #d4af37;
         }
 
         @media (max-width: 768px) {
-            .container {
+            .navbar {
                 flex-direction: column;
+                align-items: flex-start;
             }
-            .sidebar {
+            .navbar-menu {
+                flex-direction: column;
                 width: 100%;
-                border-right: none;
-                border-bottom: 2px solid #ccc;
+                margin-top: 10px;
             }
-            .main-content {
-                padding: 15px;
+            .navbar-menu a {
+                width: 100%;
+                justify-content: flex-start;
             }
             .header h1 {
                 font-size: 24px;
             }
             .dashboard-cards {
-                grid-template-columns: 1fr; /* 1 cột trên mobile */
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -199,40 +202,39 @@
         <c:redirect url="${pageContext.request.contextPath}/login" />
     </c:if>
 
-    <div class="container">
-        <div class="sidebar">
-            <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
+    <div class="navbar">
+        <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
+        <div class="navbar-menu">
             <a href="${pageContext.request.contextPath}/adminDashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="${pageContext.request.contextPath}/adminProduct"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="${pageContext.request.contextPath}/admin/customers"><i class="fas fa-users"></i> Manage Customers</a>
-            <a href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="${pageContext.request.contextPath}/admin/vouchers"><i class="fas fa-ticket-alt"></i> Manage Vouchers</a>
+            <a href="${pageContext.request.contextPath}/adminCustomers"><i class="fas fa-users"></i> Manage Customers</a>
+            <a href="${pageContext.request.contextPath}/adminOrders"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+            <a href="${pageContext.request.contextPath}/adminVouchers"><i class="fas fa-ticket-alt"></i> Manage Vouchers</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-handshake"></i> Welcome, ${sessionScope.session_Admin.name}</h1>
+            <a href="${pageContext.request.contextPath}/logout" class="logout">Logout</a>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h1><i class="fas fa-handshake"></i> Welcome, ${sessionScope.session_Admin.name}</h1>
-                <a href="${pageContext.request.contextPath}/logout" class="logout">Logout</a>
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3><i class="fas fa-users"></i> Total Customers</h3>
+                <p>${requestScope.totalCustomers}</p>
             </div>
-
-            <div class="dashboard-cards">
-                <div class="card">
-                    <h3><i class="fas fa-users"></i> Total Customers</h3>
-                    <p>${requestScope.totalCustomers}</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-shopping-cart"></i> Total Orders</h3>
-                    <p>${requestScope.totalOrders}</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-box"></i> Total Products</h3>
-                    <p>${requestScope.totalProducts}</p>
-                </div>
-                <div class="card">
-                    <h3><i class="fas fa-dollar-sign"></i> Total Revenue</h3>
-                    <p>${requestScope.totalRevenue} $</p>
-                </div>
+            <div class="card">
+                <h3><i class="fas fa-shopping-cart"></i> Total Orders</h3>
+                <p>${requestScope.totalOrders}</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-box"></i> Total Products</h3>
+                <p>${requestScope.totalProducts}</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-dollar-sign"></i> Total Revenue</h3>
+                <p>${requestScope.totalRevenue} $</p>
             </div>
         </div>
     </div>

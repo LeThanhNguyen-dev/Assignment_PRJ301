@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import model.Voucher;
 
-@WebServlet("/admin/vouchers")
+@WebServlet("/adminVouchers")
 public class AdminVouchersServlet extends HttpServlet {
     private VoucherDAO voucherDAO;
 
