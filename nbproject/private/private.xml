@@ -12,6 +12,12 @@
             <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/dao/OrderDAO.java</file>
             <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/dao/OrderDetailDAO.java</file>
             <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/dao/CartDAO.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/controller/payment/ajaxServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/controller/payment/PaymentReturnServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/cart.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/checkOut.jsp</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/src/java/controller/CheckoutServlet.java</file>
+            <file>file:/C:/Users/ADMIN/Desktop/Assignment_PRJ301/web/adminDashboard.jsp</file>
         </group>
     </open-files>
 </project-private>

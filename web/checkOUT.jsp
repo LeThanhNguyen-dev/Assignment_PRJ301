@@ -1,4 +1,3 @@
-
 <%@ page import="model.Customer, model.Product, java.text.DecimalFormat, java.util.Map" %>
 <%@ include file="header.jsp" %>
 

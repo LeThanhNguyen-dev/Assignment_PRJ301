@@ -131,6 +131,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
+            margin-bottom: 30px;
         }
 
         .card {
@@ -174,6 +175,140 @@
             color: #d4af37;
         }
 
+        /* Enhanced Bar Chart Styles */
+        .bar-chart {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            padding: 25px;
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-chart::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: glow 10s infinite;
+        }
+
+        @keyframes glow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .bar-chart h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bar-chart h2 i {
+            color: #d4af37;
+            font-size: 28px;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 400px; /* Tăng chiều cao để nhãn hiển thị rõ */
+            position: relative;
+            z-index: 1;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(212, 175, 55, 0.1),
+                rgba(212, 175, 55, 0.1) 1px,
+                transparent 1px,
+                transparent 20px
+            );
+            padding: 10px 10px 40px 10px; /* Thêm padding dưới để nhãn có chỗ hiển thị */
+            border-radius: 10px;
+        }
+
+        .bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 100px; /* Tăng chiều rộng để nhãn vừa */
+        }
+
+        .bar {
+            width: 70px;
+            background: linear-gradient(135deg, #d4af37, #a88b2e);
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.4s ease;
+            animation: grow 1s ease-out;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes grow {
+            0% { height: 0; }
+            100% { height: inherit; }
+        }
+
+        .bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        .bar:hover {
+            background: linear-gradient(135deg, #e6c34a, #c0a062);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .bar span {
+            position: absolute;
+            top: -35px;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .bar:hover span {
+            transform: scale(1.1);
+        }
+
+        .bar-label {
+            margin-top: 10px; /* Khoảng cách từ cột xuống nhãn */
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -193,6 +328,35 @@
             }
             .dashboard-cards {
                 grid-template-columns: 1fr;
+            }
+            .chart-container {
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+                padding: 20px;
+            }
+            .bar-wrapper {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin: 20px 0;
+            }
+            .bar {
+                width: 70%;
+                height: 50px !important; /* Chiều cao cố định cho cột ngang */
+                border-radius: 10px 0 0 10px;
+            }
+            .bar span {
+                top: 50%;
+                transform: translateY(-50%);
+                right: -60px;
+                left: auto;
+            }
+            .bar-label {
+                margin-top: 0;
+                margin-left: 10px;
+                text-align: left;
             }
         }
     </style>
@@ -235,6 +399,37 @@
             <div class="card">
                 <h3><i class="fas fa-dollar-sign"></i> Total Revenue</h3>
                 <p>${requestScope.totalRevenue} $</p>
+            </div>
+        </div>
+
+        <!-- Enhanced Bar Chart -->
+        <div class="bar-chart">
+            <h2><i class="fas fa-chart-bar"></i> Statistics Overview</h2>
+            <div class="chart-container">
+                <div class="bar-wrapper">
+                    <div class="bar" style="height: ${requestScope.totalCustomers / 10}px;">
+                        <span>${requestScope.totalCustomers}</span>
+                    </div>
+                    <div class="bar-label">Customers</div>
+                </div>
+                <div class="bar-wrapper">
+                    <div class="bar" style="height: ${requestScope.totalOrders / 10}px;">
+                        <span>${requestScope.totalOrders}</span>
+                    </div>
+                    <div class="bar-label">Orders</div>
+                </div>
+                <div class="bar-wrapper">
+                    <div class="bar" style="height: ${requestScope.totalProducts / 10}px;">
+                        <span>${requestScope.totalProducts}</span>
+                    </div>
+                    <div class="bar-label">Products</div>
+                </div>
+                <div class="bar-wrapper">
+                    <div class="bar" style="height: ${requestScope.totalRevenue / 100}px;">
+                        <span>${requestScope.totalRevenue}$</span>
+                    </div>
+                    <div class="bar-label">Revenue</div>
+                </div>
             </div>
         </div>
     </div>

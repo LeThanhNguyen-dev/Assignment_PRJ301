@@ -43,7 +43,7 @@ public class PaymentReturnServlet extends HttpServlet {
             EmailUtil.sendEmail(cus.getEmail(), subject, EmailUtil.createOrderStatusMessage(status));
             resp.setContentType("application/json");
             resp.getWriter().write("{\"status\":\"success\",\"message\":\"Mã OTP đã được gửi đến email của bạn.\"}");
-            resp.sendRedirect("orderConfirmation.jsp?status=" + status + "\"");
+            resp.sendRedirect("orderConfirmation.jsp?status=" + status );
 
         } catch (Exception e) {
             resp.setContentType("application/json");

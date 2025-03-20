@@ -29,6 +29,7 @@ import java.util.TimeZone;
 import model.Customer;
 import model.Order;
 
+
 @WebServlet("/payment")
 public class ajaxServlet extends HttpServlet {
 
