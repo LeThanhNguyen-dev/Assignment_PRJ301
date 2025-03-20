@@ -11,6 +11,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Customer;
+import utils.EmailUtil;
 
 /**
  *
@@ -24,14 +27,27 @@ public class PaymentReturnServlet extends HttpServlet {
         String vnp_ResponseCode = req.getParameter("vnp_ResponseCode");  // Lấy mã phản hồi từ VNPAY
         String vnp_TxnRef = req.getParameter("vnp_TxnRef");  // Mã đơn hàng
         OrderDAO orderDAO = new OrderDAO();
-        System.out.println("doget");
-
+        HttpSession session = req.getSession();
+        Customer cus = (Customer) session.getAttribute("session_Login");
+        String status;
         if ("00".equals(vnp_ResponseCode)) { // "00" là mã thành công của VNPAY
+            status = "Completed";
             orderDAO.updateOrderStatus(Integer.parseInt(vnp_TxnRef), "Completed");
-            resp.sendRedirect("orderConfirmation.jsp?status");
         } else {
+            status = "Failed";
             orderDAO.updateOrderStatus(Integer.parseInt(vnp_TxnRef), "Failed");
-            resp.sendRedirect("orderConfirmation.jsp?status=fail");
+        }
+
+        try {
+            String subject = "Perfume Nhung Chu Be Dan";
+            EmailUtil.sendEmail(cus.getEmail(), subject, EmailUtil.createOrderStatusMessage(status));
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"status\":\"success\",\"message\":\"Mã OTP đã được gửi đến email của bạn.\"}");
+            resp.sendRedirect("orderConfirmation.jsp?status=" + status + "\"");
+
+        } catch (Exception e) {
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"status\":\"error\",\"message\":\"Gửi OTP thất bại. Vui lòng thử lại.\"}");
         }
     }
 }

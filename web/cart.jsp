@@ -180,7 +180,7 @@
 
         .empty-cart {
             text-align: center;
-            color: #666;
+            color: red;
             font-size: 18px;
             margin-top: 20px;
         }

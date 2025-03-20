@@ -8,10 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
-import java.util.Random;
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
 import utils.EmailUtil;
 
 @WebServlet(name = "ForgotPasswordServlet", urlPatterns = {"/forgotPassword"})
@@ -38,7 +34,7 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         try {
             String subject = "Reset Password";
-            String message = EmailUtil.createProfessionalEmail(otp, "Reset Password");
+            String message = EmailUtil.createMessageOTP(otp, "Reset Password");
 
             EmailUtil.sendEmail(email, subject, message);
             // Chuyển hướng đến trang reset password

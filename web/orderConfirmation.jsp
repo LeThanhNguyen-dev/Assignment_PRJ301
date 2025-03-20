@@ -111,7 +111,7 @@
     </head>
     <body>
         <div class="confirmation-container">
-            <% if ("fail".equals(status)) { %>
+            <% if ("failed".equalsIgnoreCase(status)) { %>
             <div class="confirmation-icon fail">❌</div>
             <h1 class="mt-4 fail">Order Failed!</h1>
             <p class="mt-3">Something went wrong. Please try again.</p>
@@ -130,7 +130,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 let cartBadge = document.getElementById("cart-badge");
                 if (cartBadge) {
-                    cartBadge.textContent = <%= "fail".equals(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
+                    cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
                 }
             });
         </script>

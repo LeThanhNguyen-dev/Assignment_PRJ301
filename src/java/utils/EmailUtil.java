@@ -47,7 +47,7 @@ public class EmailUtil {
         return String.valueOf(otp);
     }
 
-    public static String createProfessionalEmail(String otp, String title) {
+    public static String createMessageOTP(String otp, String title) {
         return "<!DOCTYPE html>"
                 + "<html>"
                 + "<head>"
@@ -67,6 +67,38 @@ public class EmailUtil {
                 + "<p>Here is your OTP:</p>"
                 + "<div class='otp'>" + otp + "</div>"
                 + "<p class='warning'>If this request did not come from you, change your account password immediately to prevent further unauthorized access.</p>"
+                + "</div>"
+                + "<div class='footer'>Perfume Nhung Chu Be</div>"
+                + "</body>"
+                + "</html>";
+    }
+
+    public static String createOrderStatusMessage(String status) {
+        // Xác định nội dung dựa trên trạng thái đơn hàng
+        String message;
+        if ("completed".equalsIgnoreCase(status)) {
+            message = "<p>Thank you for your order! Your order has been processed successfully.</p>";
+        } else {
+            message = "<p>Thank you for your order! However, your order has not been completed yet. Please contact us for more details.</p>";
+        }
+
+        // Trả về email dưới dạng HTML
+        return "<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }"
+                + ".container { background-color: white; padding: 20px; text-align: center; border-radius: 10px; }"
+                + ".logo { font-size: 24px; font-weight: bold; color: #cd2653; }"
+                + ".message { font-size: 18px; margin: 20px 0; }"
+                + ".footer { margin-top: 20px; font-size: 12px; color: #999; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='container'>"
+                + "<div class='logo'>Perfume Nhung Chu Be Dan</div>"
+                + "<h2>Order Confirmation</h2>"
+                + "<div class='message'>" + message + "</div>"
                 + "</div>"
                 + "<div class='footer'>Perfume Nhung Chu Be</div>"
                 + "</body>"

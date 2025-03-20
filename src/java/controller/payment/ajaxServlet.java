@@ -41,8 +41,13 @@ public class ajaxServlet extends HttpServlet {
         String bankCode = req.getParameter("bankCode");
 
         System.out.println("vao");
-        
+
         double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
+
+        if (amountDouble == 0) {
+            resp.sendRedirect("cart.jsp");
+            return;
+        }
 
         OrderDAO dao = new OrderDAO();
         HttpSession session = req.getSession();
