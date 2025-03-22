@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/web/header.jsp</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/src/java/controller/payment/PaymentReturnServlet.java</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/src/java/controller/payment/Config.java</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/src/java/utils/DBContext.java</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/web/checkOut.jsp</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/web/cart.jsp</file>
-            <file>file:/E:/Learning/NetBeansProjects/Assignment_PRJ301/src/java/controller/CheckoutServlet.java</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/src/java/controller/ProductDetailServlet.java</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/home.jsp</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/src/java/utils/DBContext.java</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/web/admin.jsp</file>
+            <file>file:/C:/Users/ACER/Desktop/PRJ301/Assignment_PRJ301/src/java/utils/EmailUtil.java</file>
         </group>
     </open-files>
 </project-private>
