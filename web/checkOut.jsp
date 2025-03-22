@@ -14,7 +14,7 @@
             color: #333;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding-top: 80px; /* ??y n?i dung xu?ng ?? tránh b? header che */
+            padding-top: 80px; 
         }
 
         .checkout-container {

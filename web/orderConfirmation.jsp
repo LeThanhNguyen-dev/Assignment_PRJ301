@@ -128,10 +128,10 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                let cartBadge = document.getElementById("cart-badge");
-                if (cartBadge) {
-                    cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
-                }
+            let cartBadge = document.getElementById("cart-badge");
+                    if (cartBadge) {
+            cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "${sessionScope.cart.size()}" : "0"%>;
+//                    cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
             });
         </script>
     </body>

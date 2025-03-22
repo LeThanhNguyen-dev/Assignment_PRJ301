@@ -32,6 +32,8 @@ public class PaymentReturnServlet extends HttpServlet {
         String status;
         if ("00".equals(vnp_ResponseCode)) { // "00" là mã thành công của VNPAY
             status = "Completed";
+            session.removeAttribute("cartItems");
+            session.setAttribute("cartTotal", 0);
             orderDAO.updateOrderStatus(Integer.parseInt(vnp_TxnRef), "Completed");
         } else {
             status = "Failed";
@@ -43,7 +45,7 @@ public class PaymentReturnServlet extends HttpServlet {
             EmailUtil.sendEmail(cus.getEmail(), subject, EmailUtil.createOrderStatusMessage(status));
             resp.setContentType("application/json");
             resp.getWriter().write("{\"status\":\"success\",\"message\":\"Mã OTP đã được gửi đến email của bạn.\"}");
-            resp.sendRedirect("orderConfirmation.jsp?status=" + status );
+            resp.sendRedirect("orderConfirmation.jsp?status=" + status);
 
         } catch (Exception e) {
             resp.setContentType("application/json");

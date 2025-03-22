@@ -27,14 +27,9 @@ public class CheckoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.removeAttribute("cartItems");
-        session.setAttribute("cartTotal", 0);
+        
 
-        // Chuyển hướng đến trang xác nhận thành công
-//        response.sendRedirect("orderConfirmation.jsp");
-
-          request.getRequestDispatcher("payment").forward(request, response);
+        request.getRequestDispatcher("payment").forward(request, response);
 
     }
 
