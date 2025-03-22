@@ -8,7 +8,6 @@ public class Voucher {
     private double discount;
     private Date expiryDate;
 
-    // Constructor
     public Voucher(int id, String code, double discount, Date expiryDate) {
         this.id = id;
         this.code = code;

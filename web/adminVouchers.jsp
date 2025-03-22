@@ -168,6 +168,28 @@
             box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
         }
 
+        /* Style cho thông báo lỗi */
+        .alert-error {
+            background: #ff4d4d;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style cho thông báo thành công */
+        .alert-success {
+            background: #28a745;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -190,9 +212,23 @@
     <div class="container mt-5">
         <h2><i class="fas fa-ticket-alt"></i> Quản lý voucher</h2>
 
+        <!-- Hiển thị thông báo thành công nếu có -->
+        <c:if test="${not empty success}">
+            <div class="alert-success">
+                ${success}
+            </div>
+        </c:if>
+
+        <!-- Hiển thị thông báo lỗi nếu có -->
+        <c:if test="${not empty error}">
+            <div class="alert-error">
+                ${error}
+            </div>
+        </c:if>
+
         <!-- Form thêm/sửa voucher -->
         <div class="form-container">
-            <form action="admin/vouchers" method="post" class="mb-4">
+            <form action="adminVouchers" method="post" class="mb-4">
                 <input type="hidden" name="action" value="${voucher != null ? 'update' : 'add'}">
                 <input type="hidden" name="id" value="${voucher != null ? voucher.id : ''}">
                 <div class="mb-3">
@@ -209,7 +245,7 @@
                 </div>
                 <div class="d-flex gap-3">
                     <button type="submit" class="btn btn-primary">${voucher != null ? 'Cập nhật' : 'Thêm mới'}</button>
-                    <a href="${pageContext.request.contextPath}/admin/vouchers" class="btn btn-secondary">Hủy</a>
+                    <a href="${pageContext.request.contextPath}/adminVouchers" class="btn btn-secondary">Hủy</a>
                 </div>
             </form>
         </div>
@@ -234,8 +270,8 @@
                             <td>${voucher.discount}</td>
                             <td>${voucher.expiryDate}</td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/admin/vouchers?action=edit&id=${voucher.id}" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="${pageContext.request.contextPath}/admin/vouchers?action=delete&id=${voucher.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa voucher này?')">Xóa</a>
+                                <a href="${pageContext.request.contextPath}/adminVouchers?action=edit&id=${voucher.id}" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="${pageContext.request.contextPath}/adminVouchers?action=delete&id=${voucher.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa voucher này?')">Xóa</a>
                             </td>
                         </tr>
                     </c:forEach>
