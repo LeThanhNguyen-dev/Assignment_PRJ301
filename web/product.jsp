@@ -387,7 +387,7 @@
         <footer class="footer">
             <p>© 2025 Perfume Store. Copyright nhung chu be dan.</p>
         </footer>
-
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             $(document).ready(function () {
@@ -414,13 +414,133 @@
             });
         </script>
 
+
+        <!-- Modal cho Chi Tiết Sản Phẩm -->
+        <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 800px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productDetailModalLabel">Chi Tiết Sản Phẩm</h5>
+                        <!-- Bỏ button Đóng -->
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img id="modalProductImage" src="" class="img-fluid" alt="Hình ảnh sản phẩm" style="max-height: 400px; object-fit: cover;">
+                            </div>
+                            <div class="col-md-6">
+                                <h5 id="modalProductName"></h5>
+                                <p id="modalProductDescription"></p>
+                                <p><strong>Giá: </strong><span id="modalProductPrice"></span> VNĐ</p>
+                                <p><strong>Thương hiệu: </strong><span id="modalProductBrand"></span></p>
+                                <p><strong>Chất liệu: </strong><span id="modalProductMaterial"></span></p>
+                                <p><strong>Trọng lượng: </strong><span id="modalProductWeight"></span> kg</p>
+                                <p><strong>Kích thước: </strong><span id="modalProductDimensions"></span></p>
+                                <p><strong>Tồn kho: </strong><span id="modalProductStock"></span></p>
+                                <!-- Thêm ô chọn số lượng -->
+                                <c:if test="${isLoggedIn}">
+                                    <div class="mb-3">
+                                        <label for="quantityInput" class="form-label"><strong>Số lượng:</strong></label>
+                                        <input type="number" id="quantityInput" class="form-control w-50" min="1" value="1">
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <form method="POST" action="buyProduct" class="d-inline">
+                                            <input type="hidden" name="productId" id="modalProductId">
+                                            <input type="hidden" name="quantity" id="buyQuantity">
+                                            <button type="submit" class="btn btn-buy" style="width: 150px;"><i class="fas fa-shopping-bag"></i> Mua ngay</button>
+                                        </form>
+                                        <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style="width: 150px;"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
+                                    </div>
+                                </c:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
-            document.querySelectorAll('.view-detail').forEach(link => {
-                link.addEventListener('click', function (e) {
+            $(document).ready(function () {
+                // Xử lý sự kiện khi nhấn "Xem chi tiết"
+                $('.view-detail').click(function (e) {
                     e.preventDefault();
-                    const productId = this.getAttribute('data-product-id');
-                    // Redirect tới trang chi tiết sản phẩm
-                    window.location.href = `detail?productId=${productId}`;
+                    const productId = $(this).data('product-id');
+
+                    // Gửi yêu cầu AJAX để lấy chi tiết sản phẩm
+                    $.ajax({
+                        url: 'ProductDetailServlet',
+                        type: 'GET',
+                        data: {productId: productId},
+                        dataType: 'json',
+                        success: function (response) {
+                            // Kiểm tra nếu có lỗi
+                            if (response.error) {
+                                alert(response.error);
+                                return;
+                            }
+
+                            // Điền dữ liệu từ ProductDetailDTO
+                            $('#modalProductImage').attr('src', response.image);
+                            $('#modalProductName').text(response.name);
+                            $('#modalProductDescription').text(response.description);
+                            $('#modalProductPrice').text(response.price);
+                            $('#modalProductId').val(response.productId);
+                            $('#modalProductBrand').text(response.brand || 'Không có thông tin');
+                            $('#modalProductMaterial').text(response.material || 'Không có thông tin');
+                            $('#modalProductWeight').text(response.weight || 'Không có thông tin');
+                            $('#modalProductDimensions').text(response.dimensions || 'Không có thông tin');
+                            $('#modalProductStock').text(response.stock || '0');
+
+                            // Hiển thị modal
+                            $('#productDetailModal').modal('show');
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi lấy chi tiết sản phẩm!');
+                        }
+                    });
+                });
+
+                // Xử lý nút "Thêm vào giỏ" trong modal
+                $('#modalAddToCartBtn').click(function () {
+                    let productId = $('#modalProductId').val();
+                    $.ajax({
+                        url: 'AddToCartServlet',
+                        type: 'POST',
+                        data: {productId: productId},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.cartSize !== undefined) {
+                                $('.new-cart-badge').text(response.cartSize);
+                                alert('✅ Đã thêm vào giỏ hàng thành công!');
+                            } else {
+                                alert('Lỗi: không nhận được thông tin giỏ hàng.');
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!');
+                        }
+                    });
+                });
+
+                // Xử lý nút "Thêm vào giỏ" trên card sản phẩm
+                $('.add-to-cart-btn').click(function () {
+                    let productId = $(this).data('product-id');
+                    $.ajax({
+                        url: 'AddToCartServlet',
+                        type: 'POST',
+                        data: {productId: productId},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.cartSize !== undefined) {
+                                $('.new-cart-badge').text(response.cartSize);
+                                alert('✅ Đã thêm vào giỏ hàng thành công!');
+                            } else {
+                                alert('Lỗi: không nhận được thông tin giỏ hàng.');
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!');
+                        }
+                    });
                 });
             });
         </script>

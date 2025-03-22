@@ -22,7 +22,7 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("checkOut.jsp");
+        response.sendRedirect("checkOUT.jsp");
     }
 
     @Override

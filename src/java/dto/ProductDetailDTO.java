@@ -1,26 +1,56 @@
-package model;
+package dto;
 
-public class ProductDetail {
-
-    // Các thuộc tính của bảng ProductDetail
+public class ProductDetailDTO {
     private int productId;
+    private String name;
+    private String description;
+    private String image;
+    private double price;
     private int stock;
     private String brand;
     private String material;
     private double weight;
     private String dimensions;
 
-    // Constructor
-    public ProductDetail() {
-    }
-
-
+    // Getters và Setters
     public int getProductId() {
         return productId;
     }
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public int getStock() {
@@ -65,7 +95,7 @@ public class ProductDetail {
 
     @Override
     public String toString() {
-        return "ProductDetail{" + "productId=" + productId + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", weight=" + weight + ", dimensions=" + dimensions + '}';
+        return "ProductDetailDTO{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", image=" + image + ", price=" + price + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", weight=" + weight + ", dimensions=" + dimensions + '}';
     }
     
 }

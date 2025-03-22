@@ -1,5 +1,6 @@
 package dao;
 
+import dto.ProductDetailDTO;
 import java.sql.*;
 import model.ProductDetail;
 import utils.DBContext;
@@ -34,4 +35,41 @@ public class ProductDetailDAO extends DBContext {
 
         return productDetail;
     }
+    public ProductDetailDTO getProductDetailsById(int productId) {
+        ProductDetailDTO productDetailDTO = null;
+        String query = "SELECT p.productId, p.name, p.description, p.image, p.price, " +
+                      "pd.stock, pd.brand, pd.material, pd.weight, pd.dimensions " +
+                      "FROM Product p " +
+                      "LEFT JOIN ProductDetail pd ON p.productId = pd.productId " +
+                      "WHERE p.productId = ?";
+
+        try {
+             PreparedStatement ps = c.prepareStatement(query);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                productDetailDTO = new ProductDetailDTO();
+                productDetailDTO.setProductId(rs.getInt("productId"));
+                productDetailDTO.setName(rs.getString("name"));
+                productDetailDTO.setDescription(rs.getString("description"));
+                productDetailDTO.setImage(rs.getString("image"));
+                productDetailDTO.setPrice(rs.getDouble("price"));
+                productDetailDTO.setStock(rs.getInt("stock"));
+                productDetailDTO.setBrand(rs.getString("brand"));
+                productDetailDTO.setMaterial(rs.getString("material"));
+                productDetailDTO.setWeight(rs.getDouble("weight"));
+                productDetailDTO.setDimensions(rs.getString("dimensions"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return productDetailDTO;
+    }
+    public static void main(String[] args) {
+        ProductDetailDAO ptd = new ProductDetailDAO();
+        
+        System.out.println(ptd.getProductDetailsById(5).toString());
+    }
+            
 }
