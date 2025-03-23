@@ -4,18 +4,24 @@
  */
 package model;
 
+import dao.CartDAO;
+import java.util.ArrayList;
+
 /**
  *
  * @author Admin
  */
 public class Customer {
-        private int id;
-        private String username, password, name, phone, email, address;
+
+    private int id;
+    private String username, password, name, phone, email, address;
+    private ArrayList<CartItem> cart;
 
     public Customer() {
     }
 
     public Customer(int id, String username, String password, String name, String phone, String email, String address) {
+        CartDAO dao = new CartDAO();
         this.id = id;
         this.username = username;
         this.password = password;
@@ -23,6 +29,7 @@ public class Customer {
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.cart = dao.getCartByCustomerId(id);
     }
 
     public String getUsername() {
@@ -40,8 +47,6 @@ public class Customer {
     public void setPassword(String password) {
         this.password = password;
     }
-
-   
 
     public int getId() {
         return id;
@@ -83,12 +88,28 @@ public class Customer {
         this.address = address;
     }
 
+    public ArrayList<CartItem> getCart() {
+        return cart;
+    }
+
+    public void setCart(ArrayList<CartItem> cart) {
+        this.cart = cart;
+    }
+
+    public void resetCart() {
+        CartDAO dao = new CartDAO();
+        dao.deleteCartByCustomerId(id);
+        this.cart.clear();
+    }
+
+    public void updateCart() {
+        CartDAO dao = new CartDAO();
+        this.cart = dao.getCartByCustomerId(id);
+    }
+
     @Override
     public String toString() {
         return "Customer{" + "id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", phone=" + phone + ", email=" + email + ", address=" + address + '}';
     }
 
-    
-        
-        
 }

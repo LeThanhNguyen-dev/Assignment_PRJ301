@@ -95,7 +95,7 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public Product getProductByID(int id) {
+    public Product getProductById(int id) {
         String query = "SELECT * FROM Product WHERE productId = ?";
         try (PreparedStatement stmt = c.prepareStatement(query)) {
             stmt.setInt(1, id);
@@ -185,11 +185,8 @@ public class ProductDAO extends DBContext {
     // Test
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
-        List<Product> products = dao.getProductsByQuery("a");
-        for (Product p : products) {
-            System.out.println(p);
-        }
-
+        System.out.println(dao.getProductById(1));
+        
         dao.closeConnection();
     }
 }

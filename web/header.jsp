@@ -80,7 +80,7 @@
         color: #d4af37;
     }
 
-    .new-cart-badge {
+    .cart-badge {
         font-size: 0.7rem;
         position: absolute;
         top: 2px;
@@ -92,7 +92,7 @@
         transition: transform 0.3s ease;
     }
 
-    .new-nav-menu a:hover .new-cart-badge {
+    .new-nav-menu a:hover .cart-badge {
         transform: scale(1.1);
     }
 
@@ -186,9 +186,9 @@
         <a href="product"><i class="fas fa-box-open"></i> Products</a>
         <c:if test="${isLoggedIn}">
             <a href="sendEmail"><i class="fas fa-envelope"></i> Contact</a>
-            <a href="cart.jsp" class="position-relative">
+            <a href="CartServlet" class="position-relative">
     <i class="fas fa-shopping-cart"></i> Cart
-    <span class="new-cart-badge">${sessionScope.cartItemCount != null ? sessionScope.cartItemCount : 0}</span>
+    <span class="cart-badge">${customer.cart.size()}</span>
 </a>
             <a href="profile"><i class="fas fa-user"></i> ${customer.name}</a>
             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>

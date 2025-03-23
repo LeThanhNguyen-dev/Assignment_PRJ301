@@ -2,16 +2,16 @@ package model;
 
 import dao.ProductDAO;
 
+public class CartItem {
 
-public class Cart {
     private int customerId;
     private int productId;
     private int quantity;
 
-    public Cart() {
+    public CartItem() {
     }
 
-    public Cart(int customerId, int productId, int quantity) {
+    public CartItem(int customerId, int productId, int quantity) {
         this.customerId = customerId;
         this.productId = productId;
         this.quantity = quantity;
@@ -44,18 +44,24 @@ public class Cart {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
     }
-public double getTotalPrice(ProductDAO productDAO) {
-    Product product = productDAO.getProductByID(this.productId);
-    return product.getPrice() * this.quantity;
-}
+
+    public double getTotalPrice() {
+        ProductDAO dao = new ProductDAO();
+        Product product = dao.getProductById(this.productId);
+        return product.getPrice() * this.quantity;
+    }
+
+    public Product getProductById() {
+        ProductDAO dao = new ProductDAO();
+        return dao.getProductById(productId);
+    }
 
     @Override
     public String toString() {
-        return "Cart{" +
-                "customerId=" + customerId +
-                ", productId=" + productId +
-                ", quantity=" + quantity +
-                '}';
+        return "CartItem{"
+                + "customerId=" + customerId
+                + ", productId=" + productId
+                + ", quantity=" + quantity
+                + '}';
     }
 }
-    

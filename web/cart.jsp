@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="model.Product" %>
+<%@ page import="dao.ProductDAO" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,6 @@
                 min-height: 100vh;
                 padding-top: 80px;
             }
-
             .cart-container {
                 max-width: 1000px;
                 margin: 40px auto;
@@ -30,12 +29,10 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
                 transition: all 0.3s ease;
             }
-
             .cart-container:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
             }
-
             h2 {
                 color: #333;
                 font-weight: 700;
@@ -47,17 +44,14 @@
                 justify-content: center;
                 gap: 10px;
             }
-
             h2 i {
                 color: #d4af37;
                 font-size: 28px;
                 transition: color 0.3s ease;
             }
-
             h2:hover i {
                 color: #c0a062;
             }
-
             .table {
                 background: #f5f5f5;
                 border: none;
@@ -65,7 +59,6 @@
                 border-radius: 8px;
                 overflow: hidden;
             }
-
             .cart-header th {
                 background: linear-gradient(45deg, #d4af37, #c0a062);
                 color: #333;
@@ -74,29 +67,24 @@
                 text-transform: uppercase;
                 border: none;
             }
-
             .cart-item td {
                 vertical-align: middle;
                 padding: 20px;
                 border-bottom: 1px solid #ccc;
             }
-
             .cart-item img {
                 max-width: 100px;
                 border-radius: 10px;
                 border: 2px solid #d4af37;
                 transition: transform 0.3s ease;
             }
-
             .cart-item img:hover {
                 transform: scale(1.1);
             }
-
             .cart-item td:nth-child(2) {
                 color: #d4af37;
                 font-weight: 500;
             }
-
             .quantity-input {
                 width: 80px;
                 background: #ffffff;
@@ -107,13 +95,11 @@
                 transition: all 0.3s ease;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             }
-
             .quantity-input:focus {
                 border-color: #d4af37;
                 outline: none;
                 box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
             }
-
             .btn-danger {
                 background: #dc3545;
                 border: none;
@@ -122,13 +108,11 @@
                 border-radius: 8px;
                 transition: all 0.3s ease;
             }
-
             .btn-danger:hover {
                 background: #c82333;
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
             }
-
             .cart-footer {
                 margin-top: 30px;
                 text-align: right;
@@ -137,48 +121,40 @@
                 align-items: center;
                 gap: 15px;
             }
-
             .cart-footer h4 {
                 color: #333;
                 font-weight: 600;
                 margin: 0;
             }
-
             .cart-footer h4 span {
                 color: #d4af37;
             }
-
             .cart-footer .btn {
                 padding: 12px 25px;
                 font-weight: 500;
                 border-radius: 8px;
                 transition: all 0.3s ease;
             }
-
             .btn-warning {
                 background: linear-gradient(45deg, #d4af37, #c0a062);
                 border: none;
                 color: #333;
             }
-
             .btn-warning:hover {
                 background: linear-gradient(45deg, #c0a062, #d4af37);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
             }
-
             .btn-primary {
                 background: linear-gradient(45deg, #d4af37, #c0a062);
                 border: none;
                 color: #333;
             }
-
             .btn-primary:hover {
                 background: linear-gradient(45deg, #c0a062, #d4af37);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
             }
-
             .empty-cart {
                 text-align: center;
                 color: red;
@@ -188,84 +164,103 @@
         </style>
     </head>
     <body>
-       <body>
-                   
-        
-    <div class="container cart-container">
-        <h2><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h2>
-        <form action="${pageContext.request.contextPath}/updateCart" method="post" id="cartForm">
-            <table class="table table-bordered text-center">
-                <thead class="cart-header">
-                    <tr>
-                        <th>Product</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:set var="cartTotal" value="0"/>
-                    <c:forEach var="entry" items="${sessionScope.cart}" varStatus="loop">
-                        <c:set var="product" value="${entry.key}"/>
-                        <c:set var="quantity" value="${entry.value}"/>
-                        <tr class="cart-item">
-                            <td><img src="${product.image}" alt="${product.name}"></td>
-                            <td>${product.name}</td>
-                            <td class="price" data-price="${product.price}">${product.price} VNĐ</td>
-                            <td>
-                                <input type="hidden" name="productId_${loop.index}" value="${product.id}">
-                                <input type="number" name="quantity_${loop.index}" class="form-control quantity-input" 
-                                       value="${quantity}" min="1" data-product-id="${product.id}" onchange="this.form.submit();">
-                            </td>
-                            <td id="total_${product.id}">${product.price * quantity} VNĐ</td>
-                            <td class="action-buttons">
-                                <button type="submit" formaction="removeFromCart?productId=${product.id}" 
-                                        class="btn btn-danger btn-sm">Remove</button>
-                            </td>
+        <div class="container cart-container">
+            <h2><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h2>
+            <form action="${pageContext.request.contextPath}/updateCart" method="post" id="cartForm">
+                <table class="table table-bordered text-center">
+                    <thead class="cart-header">
+                        <tr>
+                            <th>Product</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
                         </tr>
-                        <c:set var="cartTotal" value="${cartTotal + (product.price * quantity)}"/>
-                    </c:forEach>
-                </tbody>
-            </table>
-            <div class="cart-footer">
-                <h4>Total: <span id="cartTotal">${cartTotal} VNĐ</span></h4>
-                <a href="${pageContext.request.contextPath}/product" class="btn btn-warning btn-lg">Continue Shopping</a>
-                <a href="${pageContext.request.contextPath}/checkOut.jsp" class="btn btn-primary btn-lg">Proceed to Checkout</a>
-            </div>
-            <c:if test="${empty sessionScope.cart}">
-                <p class="empty-cart">Your cart is empty. Add some products to get started!</p>
-            </c:if>
-        </form>
-    </div>
+                    </thead>
+                    <tbody>
+                        <c:set var="cartTotal" value="0"/>
+                        <c:forEach var="entry" items="${cartItems}" varStatus="loop">
+                            <c:set var="product" value="${productsInCart[loop.index]}"/>
+                            <c:set var="quantity" value="${entry.quantity}"/>
+                            <tr class="cart-item">
+                                <td><img src="${product.image}" alt="${product.name}"></td>
+                                <td>${product.name}</td>
+                                <td class="price" data-price="${product.price}">${product.price} VNĐ</td>
+                                <td>
+                                    <input type="hidden" name="productId_${loop.index}" value="${product.id}">
+                                    <input type="number" name="quantity_${loop.index}" class="form-control quantity-input" 
+                                           value="${quantity}" min="1" data-product-id="${product.id}">
+                                </td>
+                                <td id="total_${product.id}">${product.price * quantity} VNĐ</td>
+                                <td class="action-buttons">
+                                    <form id="deleteForm-${product.id}" onsubmit="submitDelete(event, ${customer.id}, ${product.id}); return false;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <c:set var="cartTotal" value="${cartTotal + (product.price * quantity)}"/>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                <div class="cart-footer">
+                    <h4>Total: <span id="cartTotal">${cartTotal} VNĐ</span></h4>
+                    <button type="submit" name="action" value="continue" class="btn btn-warning btn-lg">Continue Shopping</button>
+                    <button type="submit" name="action" value="checkout" class="btn btn-primary btn-lg">Proceed to Checkout</button>
+                </div>
+                <c:if test="${empty customer.cart}">
+                    <p class="empty-cart">Your cart is empty. Add some products to get started!</p>
+                </c:if>
+            </form>
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-                                             $(document).ready(function () {
-        // Cập nhật badge từ session khi trang load
-        let cartItemCount = <%= session.getAttribute("cartItemCount") != null ? session.getAttribute("cartItemCount") : 0 %>;
-        $('.new-cart-badge').text(cartItemCount);
+                                        $(document).ready(function () {
+                                            // Cập nhật badge từ customer.cart khi trang load
+                                            let cartItemCount = ${customer.cart != null ? customer.cart.size() : 0};
+                                            $('.new-cart-badge').text(cartItemCount);
 
-        // Cập nhật tổng tiền khi thay đổi số lượng
-        $(".quantity-input").on("input", function () {
-            let productId = $(this).data("product-id");
-            let quantity = parseInt($(this).val()) || 0;
-            let price = parseFloat($(this).closest("tr").find(".price").data("price"));
+                                            // Cập nhật tổng tiền khi thay đổi số lượng (client-side)
+                                            $(".quantity-input").on("input", function () {
+                                                let productId = $(this).data("product-id");
+                                                let quantity = parseInt($(this).val()) || 0;
+                                                let price = parseFloat($(this).closest("tr").find(".price").data("price"));
 
-            let productTotal = price * quantity;
-            $("#total_" + productId).text(productTotal + " VNĐ");
+                                                let productTotal = price * quantity;
+                                                $("#total_" + productId).text(productTotal + " VNĐ");
 
-            let cartTotal = 0;
-            $(".quantity-input").each(function () {
-                let qty = parseInt($(this).val()) || 0;
-                let prc = parseFloat($(this).closest("tr").find(".price").data("price"));
-                cartTotal += qty * prc;
-            });
-            $("#cartTotal").text(cartTotal + " VNĐ");
-        });
-    });
-                </script>
+                                                let cartTotal = 0;
+                                                $(".quantity-input").each(function () {
+                                                    let qty = parseInt($(this).val()) || 0;
+                                                    let prc = parseFloat($(this).closest("tr").find(".price").data("price"));
+                                                    cartTotal += qty * prc;
+                                                });
+                                                $("#cartTotal").text(cartTotal + " VNĐ");
+                                            });
+                                        });
+
+                                        // Hàm gửi yêu cầu DELETE để xóa sản phẩm
+                                        function submitDelete(event, customerId, productId) {
+                                            event.preventDefault();
+                                            fetch("updateCart?customerId=" + customerId + "&productId=" + productId, {
+                                                method: 'DELETE',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                                }
+                                            })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                        alert(data.message);
+                                                        if (data.status === "success") {
+                                                            window.location.href = "CartServlet";
+                                                        }
+                                                    })
+                                                    .catch(_ => {
+                                                        alert('Something went wrong');
+                                                    });
+                                        }
+        </script>
     </body>
 </html>

@@ -22,7 +22,7 @@ public class AddToCartServlet extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("productId"));
             String redirect = request.getParameter("redirect");
             ProductDAO productDAO = new ProductDAO();
-            Product product = productDAO.getProductByID(productId);
+            Product product = productDAO.getProductById(productId);
 
             HttpSession session = request.getSession();
             Map<Product, Integer> cart = (Map<Product, Integer>) session.getAttribute("cart");

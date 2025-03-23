@@ -13,8 +13,8 @@ import model.Admin;
 import dao.CustomerDAO;
 import dao.AdminDAO;
 
-@WebServlet(name = "LoginControllerServlet", urlPatterns = {"/login"})
-public class LoginControllerServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+public class LoginServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
