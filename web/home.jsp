@@ -18,34 +18,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
-            color: #333;
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%); 
+            color: #333; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-content {
-            flex: 1;
         }
 
         .product-card {
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s;
             background: #ffffff;
-            border: 2px solid #ccc;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid #ccc; 
         }
 
         .product-card:hover {
             transform: scale(1.05);
-            border-color: #d4af37;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15), 0 0 15px rgba(212, 175, 55, 0.5);
+            border-color: #d4af37; 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .card-img-top {
-            height: 400px;
+            height: 400px; 
             object-fit: cover;
         }
 
@@ -54,41 +45,33 @@
         }
 
         .card-text {
-            color: #666;
+            color: #666; 
         }
 
         .card-text strong {
-            color: #333;
+            color: #333; 
         }
 
         .btn-success {
             background: linear-gradient(45deg, #d4af37, #c0a062);
-            color: #333;
+            color: #333; 
             border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
         }
 
         .btn-success:hover {
-            background: linear-gradient(45deg, #c0a062, #d4af37);
+            background: linear-gradient(45deg, #c0a062, #d4af37); 
             color: #333;
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.5);
-            transform: translateY(-2px);
         }
 
-        .btn-primary {
+        .btn-primary { 
             background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
-            color: #333;
+            color: #333; 
             border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
+            background: linear-gradient(45deg, #c0c0c0, #e0e0e0); 
             color: #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
         }
 
         #carouselExample {
@@ -111,47 +94,16 @@
         }
 
         .footer {
-            background: linear-gradient(90deg, #e0e0e0, #c0c0c0);
+            background: linear-gradient(90deg, #e0e0e0, #c0c0c0); 
             color: #333;
             text-align: center;
             padding: 20px 0;
+            margin-top: 10px; 
+            position: relative;
+            bottom: 0;
             width: 100%;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1); 
         }
-
-        .highlight-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #d4af37;
-            background: linear-gradient(45deg, #d4af37, #c0a062);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
-            margin-bottom: 2rem;
-        }
-
-        .highlight-title:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
-        }
-
-        .highlight-title::before {
-            content: '\f52d'; /* Icon nước hoa từ Font Awesome */
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            font-size: 2rem;
-            color: #d4af37;
-            transition: color 0.3s ease;
-        }
-
-        .highlight-title:hover::before {
-            color: #c0a062;
-        }
-
     </style>
 </head>
 <body>
@@ -175,36 +127,29 @@
         </button>
     </div>
 
-    <div class="main-content">
-        <div class="container mt-5">
-            <h2 class="highlight-title">Danh Sách Sản Phẩm Nổi Bật</h2>
-            <div class="row">
-                <c:forEach var="product" items="${productList}">
-                    <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                        <div class="card w-100 product-card">
-                            <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${product.name}</h5>
-                                <p class="card-text flex-grow-1">${product.description}</p>
-                                <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
-                                <c:if test="${isLoggedIn}">
-                                    <div class="d-flex justify-content-between gap-2 mt-auto">
-                                        <a href="checkout?productId=${product.id}" class="btn btn-success w-100">BUY</a>
-                                        <button class="btn btn-primary w-100 add-to-cart" data-id="${product.id}">
-                                            <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
-                                        </button>
-                                    </div>
-                                </c:if>
-                            </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
+        <div class="row">
+            <c:forEach var="product" items="${productList}">
+                <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                    <div class="card w-100 product-card">
+                        <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text flex-grow-1">${product.description}</p>
+                            <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
+                            <c:if test="${isLoggedIn}">
+                                <div class="d-flex justify-content-between gap-2 mt-auto">
+                                    <a href="checkout?productId=${product.id}" class="btn btn-success w-100">BUY</a>
+                                    <button class="btn btn-primary w-100 add-to-cart" data-id="${product.id}">
+                                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                                    </button>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
-                </c:forEach>
-                <c:if test="${empty productList}">
-                    <div class="col-12 text-center">
-                        <p style="color: #666;">Không có sản phẩm nào để hiển thị.</p>
-                    </div>
-                </c:if>
-            </div>
+                </div>
+            </c:forEach>
         </div>
     </div>
 

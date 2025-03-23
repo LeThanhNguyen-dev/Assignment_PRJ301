@@ -10,19 +10,78 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
             min-height: 100vh;
-            padding-top: 20px;
             display: flex;
             flex-direction: column;
         }
 
-        .container {
-            padding: 20px;
-            flex-grow: 1;
+        .navbar {
+            background: #ffffff;
+            border-bottom: 2px solid #ccc;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        h2 {
+        .navbar h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar h2 i {
+            color: #d4af37;
+            transition: color 0.3s ease;
+        }
+
+        .navbar h2:hover i {
+            color: #c0a062;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .navbar-menu a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
+        }
+
+        .navbar-menu a i {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        h2.page-title {
             color: #333;
             font-weight: 700;
             text-align: center;
@@ -34,13 +93,13 @@
             gap: 10px;
         }
 
-        h2 i {
+        h2.page-title i {
             color: #d4af37;
             font-size: 28px;
             transition: color 0.3s ease;
         }
 
-        h2:hover i {
+        h2.page-title:hover i {
             color: #c0a062;
         }
 
@@ -191,7 +250,20 @@
         }
 
         @media (max-width: 768px) {
-            .container {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .navbar-menu {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .navbar-menu a {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .main-content {
                 padding: 15px;
             }
             .form-container, .table-container {
@@ -209,8 +281,24 @@
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2><i class="fas fa-ticket-alt"></i> Quản lý voucher</h2>
+    <c:if test="${sessionScope.session_Admin == null}">
+        <c:redirect url="${pageContext.request.contextPath}/login" />
+    </c:if>
+
+    <div class="navbar">
+        <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
+        <div class="navbar-menu">
+            <a href="${pageContext.request.contextPath}/adminDashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="${pageContext.request.contextPath}/adminProduct"><i class="fas fa-box"></i> Manage Products</a>
+            <a href="${pageContext.request.contextPath}/adminCustomers"><i class="fas fa-users"></i> Manage Customers</a>
+            <a href="${pageContext.request.contextPath}/adminOrders"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+            <a href="${pageContext.request.contextPath}/adminVouchers"><i class="fas fa-ticket-alt"></i> Manage Vouchers</a>
+            <a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h2 class="page-title"><i class="fas fa-ticket-alt"></i> Quản lý voucher</h2>
 
         <!-- Hiển thị thông báo thành công nếu có -->
         <c:if test="${not empty success}">
