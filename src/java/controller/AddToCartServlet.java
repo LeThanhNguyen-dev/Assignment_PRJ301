@@ -20,6 +20,7 @@ public class AddToCartServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
+            String redirect = request.getParameter("redirect");
             ProductDAO productDAO = new ProductDAO();
             Product product = productDAO.getProductByID(productId);
 
@@ -30,14 +31,18 @@ public class AddToCartServlet extends HttpServlet {
             }
 
             if (product != null) {
-                // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
                 cart.put(product, cart.getOrDefault(product, 0) + 1);
                 session.setAttribute("cart", cart);
 
-                int cartSize = cart.values().stream().mapToInt(Integer::intValue).sum();
-                session.setAttribute("cartSize", cartSize);
+                // Tính số loại mặt hàng (số key trong Map)
+                int cartItemCount = cart.keySet().size();
+                session.setAttribute("cartItemCount", cartItemCount);
 
-                response.getWriter().write("{\"cartSize\": " + cartSize + "}");
+                if ("true".equals(redirect)) {
+                    response.sendRedirect("cart.jsp");
+                } else {
+                    response.getWriter().write("{\"cartItemCount\": " + cartItemCount + "}");
+                }
             } else {
                 response.getWriter().write("{\"error\": \"Product not found\"}");
             }

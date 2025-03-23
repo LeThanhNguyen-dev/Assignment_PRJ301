@@ -1,22 +1,22 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
 <%
     // Kiểm tra trạng thái từ request
     String status = request.getParameter("status");
 
-    if ("fail".equals(status)) {
-        session.setAttribute("cartSize", session.getAttribute("cartSize")); // Giữ nguyên giỏ hàng
+    if ("fail".equalsIgnoreCase(status)) {
+        // Giữ nguyên giỏ hàng nếu thất bại
+        session.setAttribute("cartItemCount", session.getAttribute("cartItemCount"));
     } else {
-        // Xóa giỏ hàng trong session nếu đơn hàng thành công
+        // Xóa giỏ hàng và set cartItemCount về 0 nếu thành công
         session.removeAttribute("cart");
-        session.setAttribute("cartSize", 0);
+        session.setAttribute("cartItemCount", 0); // Đồng bộ với header.jsp
     }
 %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title><%= "fail".equals(status) ? "Order Failed" : "Order Confirmation"%></title>
+        <title><%= "fail".equalsIgnoreCase(status) ? "Order Failed" : "Order Confirmation" %></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {
@@ -36,7 +36,7 @@
                 border-radius: 15px;
                 text-align: center;
                 box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
-                border: 2px solid <%= "fail".equals(status) ? "rgba(255, 0, 0, 0.8)" : "rgba(255, 215, 0, 0.8)"%>;
+                border: 2px solid <%= "fail".equalsIgnoreCase(status) ? "rgba(255, 0, 0, 0.8)" : "rgba(255, 215, 0, 0.8)" %>;
             }
 
             .confirmation-icon {
@@ -95,8 +95,8 @@
             }
 
             .success {
-                color: #00ffea; /* Màu xanh sáng */
-                text-shadow: 0 0 10px rgba(0, 255, 234, 0.8); /* Hiệu ứng phát sáng */
+                color: #00ffea;
+                text-shadow: 0 0 10px rgba(0, 255, 234, 0.8);
             }
 
             .fail-btn {
@@ -111,7 +111,7 @@
     </head>
     <body>
         <div class="confirmation-container">
-            <% if ("failed".equalsIgnoreCase(status)) { %>
+            <% if ("fail".equalsIgnoreCase(status)) { %>
             <div class="confirmation-icon fail">❌</div>
             <h1 class="mt-4 fail">Order Failed!</h1>
             <p class="mt-3">Something went wrong. Please try again.</p>
@@ -121,18 +121,16 @@
             <h1 class="mt-4 success">Order Placed Successfully!</h1>
             <p class="mt-3">Thank you for your purchase. Your order has been confirmed.</p>
             <a href="home" class="btn btn-primary mt-4">Back to Home</a>
-            <% }%>
+            <% } %>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-            let cartBadge = document.getElementById("cart-badge");
-                    if (cartBadge) {
-            cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "${sessionScope.cart.size()}" : "0"%>;
-//                    cartBadge.textContent = <%= "failed".equalsIgnoreCase(status) ? "session.getAttribute(\"cartSize\")" : "0"%>;
-            });
-        </script>
+        <%
+     int cartSize = 0;
+     if (session.getAttribute("cartSize") != null) {
+         cartSize = (int) session.getAttribute("cartSize");
+     }
+        %>
+       
     </body>
 </html>

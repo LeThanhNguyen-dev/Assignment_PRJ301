@@ -187,9 +187,9 @@
         <c:if test="${isLoggedIn}">
             <a href="sendEmail"><i class="fas fa-envelope"></i> Contact</a>
             <a href="cart.jsp" class="position-relative">
-                <i class="fas fa-shopping-cart"></i> Cart
-                <span class="new-cart-badge">${sessionScope.cartSize != null ? sessionScope.cartSize : 0}</span>
-            </a>
+    <i class="fas fa-shopping-cart"></i> Cart
+    <span class="new-cart-badge">${sessionScope.cartItemCount != null ? sessionScope.cartItemCount : 0}</span>
+</a>
             <a href="profile"><i class="fas fa-user"></i> ${customer.name}</a>
             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </c:if>

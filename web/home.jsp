@@ -52,28 +52,48 @@
             color: #333; 
         }
 
-        .btn-success {
-            background: linear-gradient(45deg, #d4af37, #c0a062);
-            color: #333; 
-            border: none;
-        }
+           .btn-success, .btn-primary {
+    width: 50%; /* Chia đều 50% mỗi nút trong hàng */
+    padding: 12px 10px; /* Padding đồng nhất */
+    height: 48px; /* Chiều cao cố định */
+    font-size: 15px; /* Cỡ chữ đồng đều */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa icon và text */
+    text-align: center;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Đảm bảo padding không làm vượt kích thước */
+}
 
-        .btn-success:hover {
-            background: linear-gradient(45deg, #c0a062, #d4af37); 
-            color: #333;
-        }
+.btn-success {
+    background: linear-gradient(45deg, #d4af37, #c0a062);
+    color: #fff;
+    border: none;
+}
 
-        .btn-primary { 
-            background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
-            color: #333; 
-            border: none;
-        }
+.btn-success:hover {
+    background: linear-gradient(45deg, #c0a062, #d4af37);
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
 
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #c0c0c0, #e0e0e0); 
-            color: #333;
-        }
+.btn-primary {
+    background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
+    color: #333;
+    border: none;
+}
 
+.btn-primary:hover {
+    background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn i {
+    margin-right: 5px; /* Khoảng cách giữa icon và chữ */
+}
         #carouselExample {
             max-width: 90%;
             margin: 1rem auto;
@@ -106,7 +126,10 @@
         }
     </style>
 </head>
+
+
 <body>
+    
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -140,7 +163,12 @@
                             <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
                             <c:if test="${isLoggedIn}">
                                 <div class="d-flex justify-content-between gap-2 mt-auto">
-                                    <a href="checkout?productId=${product.id}" class="btn btn-success w-100">BUY</a>
+                                    <!-- Nút BUY gửi POST request đến AddToCartServlet -->
+                                    <form action="AddToCartServlet" method="post" class="w-100">
+                                        <input type="hidden" name="productId" value="${product.id}">
+                                        <input type="hidden" name="redirect" value="true">
+                                        <button type="submit" class="btn btn-success w-100">BUY</button>
+                                    </form>
                                     <button class="btn btn-primary w-100 add-to-cart" data-id="${product.id}">
                                         <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
                                     </button>
@@ -159,33 +187,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".add-to-cart").forEach(button => {
-                button.addEventListener("click", function () {
-                    let productId = this.getAttribute("data-id");
-                    addToCart(productId);
-                });
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", function () {
+                let productId = this.getAttribute("data-id");
+                addToCart(productId);
             });
         });
+    });
 
-        function addToCart(productId) {
-            fetch('AddToCartServlet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({'productId': productId})
+    function addToCart(productId) {
+        fetch('AddToCartServlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({'productId': productId})
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.cartItemCount !== undefined) {
+                    document.querySelector('.new-cart-badge').textContent = data.cartItemCount;
+                } else {
+                    alert("Có lỗi xảy ra khi thêm vào giỏ hàng!");
+                }
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.cartSize !== undefined) {
-                        document.querySelector('.new-cart-badge').textContent = data.cartSize;
-                    } else {
-                        alert("Có lỗi xảy ra khi thêm vào giỏ hàng!");
-                    }
-                })
-                .catch(error => console.error('Lỗi:', error));
-        }
-    </script>
+            .catch(error => console.error('Lỗi:', error));
+    }
+</script>
 </body>
 </html>
