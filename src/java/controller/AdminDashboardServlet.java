@@ -17,11 +17,6 @@ public class AdminDashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("session_Admin") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
 
         // Khởi tạo DAO
         CustomerDAO customerDAO = new CustomerDAO();
@@ -33,12 +28,6 @@ public class AdminDashboardServlet extends HttpServlet {
         int totalProducts = productDAO.getTotalProducts();
         int totalOrders = orderDAO.getTotalOrders();
         double totalRevenue = orderDAO.getTotalRevenue();
-
-        // Debugging - In ra giá trị
-        System.out.println("Total Customers: " + totalCustomers);
-        System.out.println("Total Products: " + totalProducts);
-        System.out.println("Total Orders: " + totalOrders);
-        System.out.println("Total Revenue: " + totalRevenue);
 
         // Đặt dữ liệu vào request
         request.setAttribute("totalCustomers", totalCustomers);
