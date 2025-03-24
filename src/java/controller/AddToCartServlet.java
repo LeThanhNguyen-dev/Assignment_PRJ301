@@ -31,13 +31,15 @@ public class AddToCartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         int productId = Integer.parseInt(req.getParameter("productId"));
+        int quantity = Integer.parseInt(req.getParameter("quantity"));
+
         Customer cus = (Customer) session.getAttribute("session_Login");
         ArrayList<CartItem> cartItems = cus.getCart();
         boolean productExists = false;
 
         for (CartItem item : cartItems) {
             if (item.getProductId() == productId) {
-                int newQuantity = item.getQuantity() + 1;
+                int newQuantity = item.getQuantity() + quantity;
                 cartDAO.updateCartItemQuantity(cus.getId(), productId, newQuantity);
                 productExists = true;
                 break;
@@ -48,7 +50,7 @@ public class AddToCartServlet extends HttpServlet {
             CartItem newItem = new CartItem();
             newItem.setCustomerId(cus.getId());
             newItem.setProductId(productId);
-            newItem.setQuantity(1);
+            newItem.setQuantity(quantity);
             cartDAO.insertCartItem(newItem);
         }
 

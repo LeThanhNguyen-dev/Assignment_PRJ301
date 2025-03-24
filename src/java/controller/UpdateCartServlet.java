@@ -63,7 +63,7 @@ public class UpdateCartServlet extends HttpServlet {
                 // Lưu danh sách selectedItems vào session
                 session.setAttribute("selectedItems", selectedItems);
             }
-            response.sendRedirect("checkOut.jsp");
+            request.getRequestDispatcher("CheckoutServlet").forward(request, response);
         } else if ("continue".equals(action)) {
             response.sendRedirect("product");
         }

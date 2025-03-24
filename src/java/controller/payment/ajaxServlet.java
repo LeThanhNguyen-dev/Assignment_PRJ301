@@ -43,10 +43,11 @@ public class ajaxServlet extends HttpServlet {
         String vnp_Command = "pay";
         String orderType = "other";
         String bankCode = req.getParameter("bankCode");
+        HttpSession session = req.getSession();
 
         System.out.println("vao");
 
-        double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
+        double amountDouble = (Double) session.getAttribute("totalBill");
 
         System.out.println(amountDouble);
         if (amountDouble == 0) {
@@ -57,7 +58,6 @@ public class ajaxServlet extends HttpServlet {
         OrderDAO orderDao = new OrderDAO();
         OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
 
-        HttpSession session = req.getSession();
         Customer cus = (Customer) session.getAttribute("session_Login");
         ArrayList<CartItem> listProductCheckOut = (ArrayList<CartItem>) session.getAttribute("selectedItems");
         Order order = new Order(cus.getId(), amountDouble, req.getParameter("address"), "NONE");
@@ -160,5 +160,4 @@ public class ajaxServlet extends HttpServlet {
         resp.getWriter().write(gson.toJson(job));
         resp.sendRedirect(paymentUrl);
     }
-
 }

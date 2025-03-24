@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.CartItem"%>
 <%@page import="java.util.ArrayList"%>
-<%@ page import="model.Customer, model.Product, java.text.DecimalFormat, java.util.Map" %>
+<%@ page import="model.Customer, model.Product" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="header.jsp" %>
 
 <!DOCTYPE html>
@@ -135,43 +136,30 @@
 
             <%
                 Customer customer = (Customer) session.getAttribute("session_Login");
-                ArrayList<CartItem> selectedItems = (ArrayList<CartItem>) session.getAttribute("selectedItems");
-                double cartTotal = 0;
-                
-                // Tính tổng giá trị dựa trên các sản phẩm được chọn
-                if (selectedItems != null) {
-                    for (CartItem item : selectedItems) {
-                        cartTotal += item.getTotalPrice();
-                    }
-                }
-                
-                // Định dạng số theo USD với kí hiệu "$" và 2 chữ số thập phân
-                DecimalFormat df = new DecimalFormat("$#,###.00");
-                String formattedTotal = df.format(cartTotal);
             %>
 
             <form action="payment" method="post">
                 <div class="mb-3 form-group">
                     <label for="fullName">Full Name</label>
                     <input type="text" class="form-control" id="fullName" name="fullName" 
-                           value="<%= (customer != null) ? customer.getName() : "" %>" required>
+                           value="<%= (customer != null) ? customer.getName() : ""%>" required>
                 </div>
 
                 <div class="mb-3 form-group">
                     <label for="email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" 
-                           value="<%= (customer != null) ? customer.getEmail() : "" %>" required>
+                           value="<%= (customer != null) ? customer.getEmail() : ""%>" required>
                 </div>
 
                 <div class="mb-3 form-group">
                     <label for="phone">Phone Number</label>
                     <input type="tel" class="form-control" id="phone" name="phone" 
-                           value="<%= (customer != null) ? customer.getPhone() : "" %>" required>
+                           value="<%= (customer != null) ? customer.getPhone() : ""%>" required>
                 </div>
 
                 <div class="mb-3 form-group">
                     <label for="address">Shipping Address</label>
-                    <textarea class="form-control" id="address" name="address" required><%= (customer != null) ? customer.getAddress() : "" %></textarea>
+                    <textarea class="form-control" id="address" name="address" required><%= (customer != null) ? customer.getAddress() : ""%></textarea>
                 </div>
 
                 <div class="mb-3 form-group">
@@ -179,14 +167,13 @@
                     <select class="form-select" id="paymentMethod" name="paymentMethod" required>
                         <option value="vnpay">VNPAY</option>
                         <option value="cod">Cash on Delivery</option>
-                        <option value="paypal">PayPal</option>
                     </select>
                 </div>
 
                 <div class="text-end">
-                    <h4>Total: <span><%= formattedTotal %></span></h4>
-                    <button type="submit" class="btn btn-success">Confirm Order</button>
-                    <input type="hidden" name="totalBill" value="<%= cartTotal %>">
+                    <h4>Total: <span><fmt:formatNumber value="${totalBill}" type="currency" currencySymbol="$"/></span></h4>
+                    <button type="submit" class="btn btn-success">Confirm Order</button>    
+                    <input type="hidden" name="totalBill" value="${totalBill}">
                 </div>
             </form>
         </div>

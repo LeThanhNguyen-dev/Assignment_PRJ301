@@ -359,13 +359,14 @@
                                         <p class="card-text"><strong>Giá: </strong>$<fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" minFractionDigits="2" maxFractionDigits="2" /></p>
                                         <c:if test="${isLoggedIn}">
                                             <div class="action-buttons">
-                                                <form method="POST" action="buyProduct" class="w-100">
+                                                <form method="POST" action="CheckoutServlet" class="w-100">
                                                     <input type="hidden" name="productId" value="${product.id}">
+                                                    <input type="hidden" name="isBuyNow" value="true">
                                                     <button type="submit" class="btn btn-buy w-100">
                                                         <i class="fas fa-shopping-bag"></i> Mua ngay
                                                     </button>
                                                 </form>
-                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" onClick="addToCart(${product.id})">
+                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" onClick="addToCart(${product.id}, 1)">
                                                     <i class="fas fa-cart-plus"></i> Thêm vào giỏ
                                                 </button>                                        
                                             </div>
@@ -418,12 +419,13 @@
                                         <input type="number" id="quantityInput" class="form-control w-50" min="1" value="1">
                                     </div>
                                     <div class="d-flex gap-3">
-                                        <form method="POST" action="buyProduct" class="d-inline">
+                                        <form id="buyNowForm" method="POST" action="CheckoutServlet" class="d-inline">
                                             <input type="hidden" name="productId" id="modalProductId">
-                                            <input type="hidden" name="quantity" id="buyQuantity">
+                                            <input type="hidden" name="quantity" id="modalQuantity">
+                                            <input type="hidden" name="isBuyNow" value="true">
                                             <button type="submit" class="btn btn-buy" style="width: 150px;"><i class="fas fa-shopping-bag"></i> Mua ngay</button>
                                         </form>
-                                        <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style="width: 150px;"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
+                                        <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style ="width: 150px;"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
                                     </div>
                                 </c:if>
                             </div>
@@ -433,8 +435,8 @@
             </div>
         </div>
         <script>
-                                                    function addToCart(productId) {
-                                                        fetch('AddToCartServlet?productId=' + productId, {
+                                                    function addToCart(productId, quantity) {
+                                                        fetch('AddToCartServlet?productId=' + productId + '&quantity=' + quantity, {
                                                             method: 'GET'
                                                         })
                                                                 .then(response => response.json())
@@ -487,6 +489,26 @@
                                                                 }
                                                             });
                                                         });
+
+                                                        // Thêm sự kiện click cho nút "Thêm vào giỏ" trong modal
+                                                        $('#modalAddToCartBtn').click(function () {
+                                                            const productId = $('#modalProductId').val();
+                                                            const quantity = $('#quantityInput').val();
+
+                                                            if (productId) {
+                                                                addToCart(productId, quantity); // Gọi hàm addToCart với productId
+                                                            } else {
+                                                                alert('Không tìm thấy ID sản phẩm!');
+                                                            }
+                                                        });
+
+
+                                                    });
+                                                    document.getElementById('buyNowForm').addEventListener('submit', function (e) {
+                                                        // Lấy giá trị của quantityInput
+                                                        var quantityValue = document.getElementById('quantityInput').value;
+                                                        // Gán giá trị đó cho modalQuantity
+                                                        document.getElementById('modalQuantity').value = quantityValue;
                                                     });
         </script>
     </body>

@@ -1,11 +1,16 @@
 package controller;
 
+import dao.ProductDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import model.CartItem;
+import model.Customer;
 
 /**
  * Servlet xử lý đơn hàng
@@ -14,9 +19,30 @@ import jakarta.servlet.http.HttpServletResponse;
 public class CheckoutServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("checkout.jsp");
+
+        HttpSession session = request.getSession();
+        Customer cus = (Customer) session.getAttribute("session_Login");
+        double amountTotal = 0;
+        ArrayList<CartItem> selectedItems = session.getAttribute("selectedItems") != null ? (ArrayList<CartItem>) session.getAttribute("selectedItems") : new ArrayList<>();
+
+        if (request.getParameter("isBuyNow") != null) {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 1;
+            selectedItems.add(new CartItem(cus.getId(), productId, quantity));
+        }
+
+        if (selectedItems != null) {
+            for (CartItem item : selectedItems) {
+                amountTotal += item.getTotalPrice();
+            }
+        }
+        session.setAttribute("selectedItems", selectedItems);
+
+        session.setAttribute("totalBill", amountTotal);
+
+        response.sendRedirect("checkOut.jsp");
     }
 
     @Override

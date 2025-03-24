@@ -66,6 +66,8 @@ public class ProductDetailDAO extends DBContext {
         }
         return productDetailDTO;
     }
+    
+    
     public static void main(String[] args) {
         ProductDetailDAO ptd = new ProductDetailDAO();
         
