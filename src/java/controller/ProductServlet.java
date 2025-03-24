@@ -20,7 +20,7 @@ public class ProductServlet extends HttpServlet {
         productDAO.getAllProducts();
     }
 
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Ngăn cache
@@ -28,15 +28,23 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
 
+        // Lấy tham số từ request
         String category = request.getParameter("category");
+        String priceRange = request.getParameter("priceRange");
+
+        // Danh sách sản phẩm
         List<Product> productList;
 
-        if (category == null || category.isEmpty()) {
+        // Trường hợp 1 & 2 & 3: Xử lý logic lọc
+        if ((category == null || category.isEmpty()) && (priceRange == null || priceRange.isEmpty())) {
+            // Không chọn danh mục, không chọn giá -> Lấy tất cả sản phẩm
             productList = productDAO.getAllProducts();
         } else {
-            productList = productDAO.getProductsByCategory(category);
+            // Có ít nhất một tiêu chí lọc (category hoặc priceRange)
+            productList = productDAO.getFilteredProducts(category, priceRange);
         }
 
+        // Lưu danh sách sản phẩm vào request
         request.setAttribute("product", productList);
         request.getRequestDispatcher("/product.jsp").forward(request, response);
     }

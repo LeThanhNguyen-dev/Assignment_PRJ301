@@ -11,6 +11,57 @@ import utils.DBContext;
 
 public class ProductDAO extends DBContext {
 
+    public List<Product> getFilteredProducts(String category, String priceRange) {
+        List<Product> products = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT p.* FROM Product p JOIN Category c ON p.categoryId = c.categoryId WHERE 1=1");
+
+        // Điều kiện lọc theo category
+        if (category != null && !category.isEmpty()) {
+            query.append(" AND c.name = ?");
+        }
+
+        // Điều kiện lọc theo priceRange
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under100":
+                    query.append(" AND p.price < 100");
+                    break;
+                case "100-200":
+                    query.append(" AND p.price BETWEEN 100 AND 200");
+                    break;
+                case "over200":
+                    query.append(" AND p.price > 200");
+                    break;
+            }
+        }
+
+        try (PreparedStatement stmt = c.prepareStatement(query.toString())) {
+            // Gán tham số cho category nếu có
+            int paramIndex = 1;
+            if (category != null && !category.isEmpty()) {
+                stmt.setString(paramIndex++, category);
+            }
+
+            // Thực thi truy vấn
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product(
+                            rs.getInt("productId"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("image"),
+                            rs.getDouble("price"),
+                            rs.getInt("categoryId")
+                    );
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy sản phẩm theo category và priceRange: " + e.getMessage());
+        }
+        return products;
+    }
+
     public List<Product> getProductsByCategory(String category) {
         List<Product> products = new ArrayList<>();
         String query = "SELECT p.* FROM Product p "
@@ -182,9 +233,7 @@ public class ProductDAO extends DBContext {
             System.out.println("Lỗi khi xóa sản phẩm: " + e.getMessage());
         }
     }
-    
-    
-    
+
     public List<ProductSales> getTop3ProductsPerCategory(int categoryId) {
         List<ProductSales> productSalesList = new ArrayList<>();
         String query = """
@@ -239,7 +288,7 @@ public class ProductDAO extends DBContext {
         }
         return productSalesList;
     }
-    
+
     public List<ProductSales> getTop3BestSellingProducts() {
         List<ProductSales> productSalesList = new ArrayList<>();
         String query = """
@@ -272,8 +321,7 @@ public class ProductDAO extends DBContext {
                     totalQuantity DESC;
                 """;
 
-        try (PreparedStatement stmt = c.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = c.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 ProductSales productSales = new ProductSales(
                         rs.getInt("productId"),
@@ -293,7 +341,7 @@ public class ProductDAO extends DBContext {
     public static void main(String[] args) {
         ProductDAO dao = new ProductDAO();
         System.out.println(dao.getProductById(1));
-        
+
         dao.closeConnection();
     }
 }

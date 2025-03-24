@@ -330,14 +330,14 @@
                     <div class="filter-section">
                         <h5><i class="fas fa-money-bill-wave"></i> Lọc theo giá</h5>
                         <div class="price-buttons">
-                            <a href="product?priceRange=under500k" class="btn ${param.priceRange == 'under500k' ? 'active' : ''}">
-                                <i class="fas fa-coins"></i> Dưới 500K
+                            <a href="product?priceRange=under100" class="btn ${param.priceRange == 'under100' ? 'active' : ''}">
+                                <i class="fas fa-coins"></i> Under 100$
                             </a>
-                            <a href="product?priceRange=500k-1m" class="btn ${param.priceRange == '500k-1m' ? 'active' : ''}">
-                                <i class="fas fa-wallet"></i> 500K - 1M
+                            <a href="product?priceRange=100-200" class="btn ${param.priceRange == '100-200' ? 'active' : ''}">
+                                <i class="fas fa-wallet"></i> 100$ - 200$
                             </a>
-                            <a href="product?priceRange=over1m" class="btn ${param.priceRange == 'over1m' ? 'active' : ''}">
-                                <i class="fas fa-money-check-alt"></i> Trên 1M
+                            <a href="product?priceRange=over200" class="btn ${param.priceRange == 'over200' ? 'active' : ''}">
+                                <i class="fas fa-money-check-alt"></i> over 200$
                             </a>
                         </div>
                     </div>

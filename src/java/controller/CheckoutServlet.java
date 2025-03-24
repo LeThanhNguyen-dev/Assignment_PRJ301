@@ -28,6 +28,7 @@ public class CheckoutServlet extends HttpServlet {
         ArrayList<CartItem> selectedItems = session.getAttribute("selectedItems") != null ? (ArrayList<CartItem>) session.getAttribute("selectedItems") : new ArrayList<>();
 
         if (request.getParameter("isBuyNow") != null) {
+            selectedItems.clear();
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 1;
             selectedItems.add(new CartItem(cus.getId(), productId, quantity));
