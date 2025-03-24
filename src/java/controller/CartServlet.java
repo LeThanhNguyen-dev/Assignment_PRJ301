@@ -17,14 +17,6 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/CartServlet")
 public class CartServlet extends HttpServlet {
 
-    private ProductDAO productDAO;
-
-    @Override
-    public void init() throws ServletException {
-        // Khởi tạo instance của ProductDAO
-        productDAO = new ProductDAO();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,13 +28,11 @@ public class CartServlet extends HttpServlet {
             List<CartItem> cartItems = customer.getCart();
             List<Product> productsInCart = new ArrayList<>();
 
-            // Sử dụng instance của ProductDAO để lấy thông tin sản phẩm
             for (CartItem cartItem : cartItems) {
-                Product product = productDAO.getProductById(cartItem.getProductId());
-                if (product != null) {
-                    productsInCart.add(product);
-                }
+                productsInCart.add(cartItem.getProduct());
             }
+
+            System.out.println(cartItems.toString());
 
             // Đặt dữ liệu vào request để JSP sử dụng
             request.setAttribute("productsInCart", productsInCart);
@@ -57,7 +47,5 @@ public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
-    
-    
-    
+
 }

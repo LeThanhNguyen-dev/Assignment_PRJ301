@@ -1,6 +1,7 @@
 package dto;
 
 public class ProductDetailDTO {
+
     private int productId;
     private String name;
     private String description;
@@ -9,7 +10,7 @@ public class ProductDetailDTO {
     private int stock;
     private String brand;
     private String material;
-    private double weight;
+    private double volume;
     private String dimensions;
 
     // Getters và Setters
@@ -77,12 +78,12 @@ public class ProductDetailDTO {
         this.material = material;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getVolume() {
+        return volume;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public String getDimensions() {
@@ -95,7 +96,7 @@ public class ProductDetailDTO {
 
     @Override
     public String toString() {
-        return "ProductDetailDTO{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", image=" + image + ", price=" + price + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", weight=" + weight + ", dimensions=" + dimensions + '}';
+        return "ProductDetailDTO{" + "productId=" + productId + ", name=" + name + ", description=" + description + ", image=" + image + ", price=" + price + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", volume=" + volume + ", dimensions=" + dimensions + '}';
     }
-    
+
 }

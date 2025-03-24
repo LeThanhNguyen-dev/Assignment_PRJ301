@@ -92,12 +92,25 @@ public class CartDAO extends DBContext {
         }
     }
 
+    public boolean insertCartItem(CartItem item) {
+        String query = "INSERT INTO CartItem (customerId, productId, quantity) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, item.getCustomerId());
+            ps.setInt(2, item.getProductId());
+            ps.setInt(3, item.getQuantity());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu thêm thành công
+        } catch (SQLException e) {
+            System.err.println("Error inserting cart item: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         CartDAO dao = new CartDAO();
         dao.getCartByCustomerId(16).forEach(a -> System.out.println(a.toString()));
         dao.updateCartItemQuantity(16, 2, 4);
         dao.getCartByCustomerId(16).forEach(a -> System.out.println(a.toString()));
-
     }
-
 }

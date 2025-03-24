@@ -7,13 +7,12 @@ public class ProductDetail {
     private int stock;
     private String brand;
     private String material;
-    private double weight;
+    private double volume;
     private String dimensions;
 
     // Constructor
     public ProductDetail() {
     }
-
 
     public int getProductId() {
         return productId;
@@ -47,12 +46,12 @@ public class ProductDetail {
         this.material = material;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getVolume() {
+        return volume;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public String getDimensions() {
@@ -65,7 +64,7 @@ public class ProductDetail {
 
     @Override
     public String toString() {
-        return "ProductDetail{" + "productId=" + productId + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", weight=" + weight + ", dimensions=" + dimensions + '}';
+        return "ProductDetail{" + "productId=" + productId + ", stock=" + stock + ", brand=" + brand + ", material=" + material + ", volume=" + volume + ", dimensions=" + dimensions + '}';
     }
-    
+
 }

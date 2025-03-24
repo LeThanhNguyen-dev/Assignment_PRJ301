@@ -6,9 +6,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dao.CartDAO;
+import dao.ProductDAO;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import model.CartItem;
 import model.Customer;
 
 @WebServlet("/updateCart")
@@ -25,21 +29,43 @@ public class UpdateCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Customer cus = (Customer)session.getAttribute("session_Login");
+        Customer cus = (Customer) session.getAttribute("session_Login");
         String action = request.getParameter("action");
 
+        // Lấy danh sách productIds, quantities và selectedProducts từ form
+        String[] productIds = request.getParameterValues("productIds");
+        String[] quantities = request.getParameterValues("quantities");
+        String[] selectedProducts = request.getParameterValues("selectedProducts");
+
         // Cập nhật số lượng cho tất cả sản phẩm
-        for (int i = 0; request.getParameter("productId_" + i) != null; i++) {
-            int productId = Integer.parseInt(request.getParameter("productId_" + i));
-            int quantity = Integer.parseInt(request.getParameter("quantity_" + i));
-            cartDAO.updateCartItemQuantity(cus.getId(), productId, quantity);
+        if (productIds != null && quantities != null && productIds.length == quantities.length) {
+            for (int i = 0; i < productIds.length; i++) {
+                int productId = Integer.parseInt(productIds[i]);
+                int quantity = Integer.parseInt(quantities[i]);
+                cartDAO.updateCartItemQuantity(cus.getId(), productId, quantity);
+            }
         }
 
-        // Chuyển hướng dựa trên action
-        if ("continue".equals(action)) {
-            response.sendRedirect("product");
-        } else if ("checkout".equals(action)) {
+        cus.updateCart(); // Cập nhật giỏ hàng trong session
+
+        if ("checkout".equals(action)) {
+            if (selectedProducts != null) {
+                // Lọc ra các CartItem được chọn
+                List<CartItem> selectedItems = new ArrayList<>();
+                for (String selectedId : selectedProducts) {
+                    for (CartItem item : cus.getCart()) {
+                        if (item.getProductId() == Integer.parseInt(selectedId)) {
+                            selectedItems.add(item);
+                            break;
+                        }
+                    }
+                }
+                // Lưu danh sách selectedItems vào session
+                session.setAttribute("selectedItems", selectedItems);
+            }
             response.sendRedirect("checkOut.jsp");
+        } else if ("continue".equals(action)) {
+            response.sendRedirect("product");
         }
     }
 

@@ -51,7 +51,7 @@ public class CartItem {
         return product.getPrice() * this.quantity;
     }
 
-    public Product getProductById() {
+    public Product getProduct() {
         ProductDAO dao = new ProductDAO();
         return dao.getProductById(productId);
     }

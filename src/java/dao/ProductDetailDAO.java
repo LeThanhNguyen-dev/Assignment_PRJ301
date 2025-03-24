@@ -25,7 +25,7 @@ public class ProductDetailDAO extends DBContext {
                 productDetail.setStock(rs.getInt("stock"));
                 productDetail.setBrand(rs.getString("brand"));
                 productDetail.setMaterial(rs.getString("material"));
-                productDetail.setWeight(rs.getDouble("weight"));
+                productDetail.setVolume(rs.getDouble("volume"));
                 productDetail.setDimensions(rs.getString("dimensions"));
             }
 
@@ -38,7 +38,7 @@ public class ProductDetailDAO extends DBContext {
     public ProductDetailDTO getProductDetailsById(int productId) {
         ProductDetailDTO productDetailDTO = null;
         String query = "SELECT p.productId, p.name, p.description, p.image, p.price, " +
-                      "pd.stock, pd.brand, pd.material, pd.weight, pd.dimensions " +
+                      "pd.stock, pd.brand, pd.material, pd.volume, pd.dimensions " +
                       "FROM Product p " +
                       "LEFT JOIN ProductDetail pd ON p.productId = pd.productId " +
                       "WHERE p.productId = ?";
@@ -58,7 +58,7 @@ public class ProductDetailDAO extends DBContext {
                 productDetailDTO.setStock(rs.getInt("stock"));
                 productDetailDTO.setBrand(rs.getString("brand"));
                 productDetailDTO.setMaterial(rs.getString("material"));
-                productDetailDTO.setWeight(rs.getDouble("weight"));
+                productDetailDTO.setVolume(rs.getDouble("volume"));
                 productDetailDTO.setDimensions(rs.getString("dimensions"));
             }
         } catch (Exception e) {

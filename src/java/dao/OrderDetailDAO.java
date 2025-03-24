@@ -17,7 +17,7 @@ public class OrderDetailDAO {
 
     public boolean addOrderDetail(OrderDetail orderDetail) {
         String query = "INSERT INTO OrderDetail (orderId, productId, quantity, unitPrice, subtotal) "
-                     + "VALUES (?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderDetail.getOrderId());
             ps.setInt(2, orderDetail.getProductId());
@@ -64,7 +64,7 @@ public class OrderDetailDAO {
 
     public boolean updateOrderDetail(OrderDetail orderDetail) {
         String query = "UPDATE OrderDetail SET orderId = ?, productId = ?, quantity = ?, unitPrice = ?, subtotal = ? "
-                     + "WHERE orderDetailId = ?";
+                + "WHERE orderDetailId = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderDetail.getOrderId());
             ps.setInt(2, orderDetail.getProductId());
@@ -80,7 +80,7 @@ public class OrderDetailDAO {
             return false;
         }
     }
-    
+
     public boolean deleteOrderDetailsByOrderId(int orderId) {
         String query = "DELETE FROM OrderDetail WHERE orderId = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -117,5 +117,10 @@ public class OrderDetailDAO {
         orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
         orderDetail.setSubtotal(rs.getDouble("subtotal"));
         return orderDetail;
+    }
+
+    public static void main(String[] args) {
+        OrderDetailDAO dao = new OrderDetailDAO();
+        dao.addOrderDetail(new OrderDetail(3, 2, 15, 120));
     }
 }

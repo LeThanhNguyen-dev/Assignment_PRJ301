@@ -1,6 +1,6 @@
 package controller;
 
-import dao.ProductDAO;
+import dao.CartDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,46 +8,55 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import model.Product;
+import java.util.ArrayList;
+import model.CartItem;
+import model.Customer;
 
 @WebServlet(name = "AddToCartServlet", urlPatterns = {"/AddToCartServlet"})
 public class AddToCartServlet extends HttpServlet {
 
+    private CartDAO cartDAO;
+
+    @Override
+    public void init() throws ServletException {
+        cartDAO = new CartDAO(); // Khởi tạo CartDAO khi servlet được khởi động
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            String redirect = request.getParameter("redirect");
-            ProductDAO productDAO = new ProductDAO();
-            Product product = productDAO.getProductById(productId);
-
-            HttpSession session = request.getSession();
-            Map<Product, Integer> cart = (Map<Product, Integer>) session.getAttribute("cart");
-            if (cart == null) {
-                cart = new HashMap<>();
-            }
-
-            if (product != null) {
-                cart.put(product, cart.getOrDefault(product, 0) + 1);
-                session.setAttribute("cart", cart);
-
-                // Tính số loại mặt hàng (số key trong Map)
-                int cartItemCount = cart.keySet().size();
-                session.setAttribute("cartItemCount", cartItemCount);
-
-                if ("true".equals(redirect)) {
-                    response.sendRedirect("cart.jsp");
-                } else {
-                    response.getWriter().write("{\"cartItemCount\": " + cartItemCount + "}");
-                }
-            } else {
-                response.getWriter().write("{\"error\": \"Product not found\"}");
-            }
-        } catch (Exception e) {
-            response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
-        }
+        doGet(request, response);
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        Customer cus = (Customer) session.getAttribute("session_Login");
+        ArrayList<CartItem> cartItems = cus.getCart();
+        boolean productExists = false;
+
+        for (CartItem item : cartItems) {
+            if (item.getProductId() == productId) {
+                int newQuantity = item.getQuantity() + 1;
+                cartDAO.updateCartItemQuantity(cus.getId(), productId, newQuantity);
+                productExists = true;
+                break;
+            }
+        }
+
+        if (!productExists) {
+            CartItem newItem = new CartItem();
+            newItem.setCustomerId(cus.getId());
+            newItem.setProductId(productId);
+            newItem.setQuantity(1);
+            cartDAO.insertCartItem(newItem);
+        }
+
+        cus.updateCart();
+
+// Trả về JSON
+        resp.setContentType("application/json");
+        resp.getWriter().write("{\"status\": \"success\", \"message\": \"Add to cart successfully\", \"cartSize\": " + cus.getCart().size() + "}");
+    }
+
 }

@@ -8,6 +8,8 @@ package controller.payment;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dao.OrderDAO;
+import dao.OrderDetailDAO;
+import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,10 +27,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
+import model.CartItem;
 import model.Customer;
 import model.Order;
-
+import model.OrderDetail;
 
 @WebServlet("/payment")
 public class ajaxServlet extends HttpServlet {
@@ -45,36 +49,57 @@ public class ajaxServlet extends HttpServlet {
 
         double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
 
+        System.out.println(amountDouble);
         if (amountDouble == 0) {
-            resp.sendRedirect("cart.jsp");
+            resp.sendRedirect("CartServlet");
             return;
         }
 
-        OrderDAO dao = new OrderDAO();
+        OrderDAO orderDao = new OrderDAO();
+        OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+
         HttpSession session = req.getSession();
         Customer cus = (Customer) session.getAttribute("session_Login");
+        ArrayList<CartItem> listProductCheckOut = (ArrayList<CartItem>) session.getAttribute("selectedItems");
         Order order = new Order(cus.getId(), amountDouble, req.getParameter("address"), "NONE");
 
-        int orderId = dao.addOrder(order);
+        int orderId = orderDao.addOrder(order);
+        System.out.println("add orderID: " + orderId);
         if (orderId < 1) {
-            System.out.println("add: " + orderId);
-            resp.sendRedirect("cart.jsp");
+            resp.sendRedirect("CartServlet");
             return;
+        }
+
+        for (CartItem item : listProductCheckOut) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(orderId);
+            orderDetail.setProductId(item.getProductId());
+            orderDetail.setQuantity(item.getQuantity());
+
+            double unitPrice = item.getProduct().getPrice();
+            orderDetail.setUnitPrice(unitPrice);
+
+            System.out.println(orderDetail.toString());
+            boolean success = orderDetailDAO.addOrderDetail(orderDetail);
+            if (!success) {
+                System.err.println("Lỗi khi thêm order detail cho productId: " + item.getProductId());
+            }
         }
 
         String vnp_IpAddr = Config.getIpAddress(req);
 
         long amount = (long) amountDouble * 100000;
-
         String vnp_TmnCode = Config.vnp_TmnCode;
-        String vnp_TxnRef = orderId + "";
+        Random random = new Random();
+
+        String vnp_TxnRef = orderId + "," + 100000 + random.nextInt(900000);
 
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
-        vnp_Params.put("vnp_CurrCode", "VND");
+        vnp_Params.put("vnp_CurrCode", "USD");
 
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);

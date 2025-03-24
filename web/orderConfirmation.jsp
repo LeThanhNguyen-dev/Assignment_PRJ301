@@ -16,7 +16,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title><%= "fail".equalsIgnoreCase(status) ? "Order Failed" : "Order Confirmation" %></title>
+        <title><%= "failed".equalsIgnoreCase(status) ? "Order Failed" : "Order Confirmation" %></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {
@@ -111,7 +111,7 @@
     </head>
     <body>
         <div class="confirmation-container">
-            <% if ("fail".equalsIgnoreCase(status)) { %>
+            <% if ("failed".equalsIgnoreCase(status)) { %>
             <div class="confirmation-icon fail">❌</div>
             <h1 class="mt-4 fail">Order Failed!</h1>
             <p class="mt-3">Something went wrong. Please try again.</p>
@@ -125,12 +125,6 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <%
-     int cartSize = 0;
-     if (session.getAttribute("cartSize") != null) {
-         cartSize = (int) session.getAttribute("cartSize");
-     }
-        %>
        
     </body>
 </html>

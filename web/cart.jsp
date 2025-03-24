@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="header.jsp" %>
 <%@ page import="model.Product" %>
 <%@ page import="dao.ProductDAO" %>
@@ -161,7 +162,7 @@
                 font-size: 18px;
                 margin-top: 20px;
             }
-        </style>
+        </style>        
     </head>
     <body>
         <div class="container cart-container">
@@ -170,6 +171,8 @@
                 <table class="table table-bordered text-center">
                     <thead class="cart-header">
                         <tr>
+                            <!-- Thêm cột checkbox "Chọn tất cả" -->
+                            <th><input type="checkbox" id="selectAll" checked title="Chọn hoặc bỏ chọn tất cả sản phẩm trong giỏ hàng"> Select All</th>
                             <th>Product</th>
                             <th>Name</th>
                             <th>Price</th>
@@ -179,34 +182,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:set var="cartTotal" value="0"/>
                         <c:forEach var="entry" items="${cartItems}" varStatus="loop">
                             <c:set var="product" value="${productsInCart[loop.index]}"/>
                             <c:set var="quantity" value="${entry.quantity}"/>
                             <tr class="cart-item">
+                                <!-- Thêm checkbox cho từng sản phẩm -->
+                                <td><input type="checkbox" name="selectedProducts" value="${product.id}" class="selectItem" checked></td>
                                 <td><img src="${product.image}" alt="${product.name}"></td>
                                 <td>${product.name}</td>
-                                <td class="price" data-price="${product.price}">${product.price} VNĐ</td>
+                                <td class="price" data-price="${product.price}">
+                                    $<fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" minFractionDigits="2" maxFractionDigits="2" />
+                                </td>
                                 <td>
-                                    <input type="hidden" name="productId_${loop.index}" value="${product.id}">
-                                    <input type="number" name="quantity_${loop.index}" class="form-control quantity-input" 
+                                    <!-- Đổi tên input để gửi dạng mảng -->
+                                    <input type="hidden" name="productIds" value="${product.id}">
+                                    <input type="number" name="quantities" class="form-control quantity-input" 
                                            value="${quantity}" min="1" data-product-id="${product.id}">
                                 </td>
-                                <td id="total_${product.id}">${product.price * quantity} VNĐ</td>
+                                <td id="total_${product.id}">
+                                    $<fmt:formatNumber value="${product.price * quantity}" type="number" groupingUsed="true" minFractionDigits="2" maxFractionDigits="2" />
+                                </td>
                                 <td class="action-buttons">
                                     <form id="deleteForm-${product.id}" onsubmit="submitDelete(event, ${customer.id}, ${product.id}); return false;">
                                         <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                                     </form>
                                 </td>
                             </tr>
-                            <c:set var="cartTotal" value="${cartTotal + (product.price * quantity)}"/>
                         </c:forEach>
                     </tbody>
                 </table>
                 <div class="cart-footer">
-                    <h4>Total: <span id="cartTotal">${cartTotal} VNĐ</span></h4>
+                    <h4>Total: <span id="cartTotal">$0.00</span></h4>
                     <button type="submit" name="action" value="continue" class="btn btn-warning btn-lg">Continue Shopping</button>
-                    <button type="submit" name="action" value="checkout" class="btn btn-primary btn-lg">Proceed to Checkout</button>
+                    <!-- Thêm id cho nút checkout để điều khiển trạng thái disabled -->
+                    <button type="submit" name="action" value="checkout" class="btn btn-primary btn-lg" id="checkoutButton">Proceed to Checkout</button>
                 </div>
                 <c:if test="${empty customer.cart}">
                     <p class="empty-cart">Your cart is empty. Add some products to get started!</p>
@@ -218,30 +227,53 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
                                         $(document).ready(function () {
-                                            // Cập nhật badge từ customer.cart khi trang load
+                                            // Cập nhật số lượng sản phẩm trong badge
                                             let cartItemCount = ${customer.cart != null ? customer.cart.size() : 0};
                                             $('.new-cart-badge').text(cartItemCount);
 
-                                            // Cập nhật tổng tiền khi thay đổi số lượng (client-side)
+                                            // Hàm tính tổng bill dựa trên các sản phẩm được chọn
+                                            function updateCartTotal() {
+                                                let cartTotal = 0;
+                                                let selectedItems = $(".selectItem:checked");
+                                                selectedItems.each(function () {
+                                                    let productId = $(this).val(); // Lấy productId từ value của checkbox
+                                                    let rowTotal = parseFloat($("#total_" + productId).text().replace('$', '').replace(/,/g, ''));
+                                                    cartTotal += rowTotal;
+                                                });
+                                                $("#cartTotal").text('$' + cartTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                                                // Vô hiệu hóa nút checkout nếu không có sản phẩm nào được chọn
+                                                $("#checkoutButton").prop("disabled", selectedItems.length === 0);
+                                            }
+
+                                            // Xử lý checkbox "Chọn tất cả"
+                                            $("#selectAll").on("change", function () {
+                                                $(".selectItem").prop("checked", $(this).prop("checked"));
+                                                updateCartTotal();
+                                            });
+
+                                            // Xử lý khi checkbox từng sản phẩm thay đổi
+                                            $(".selectItem").on("change", function () {
+                                                if (!$(this).prop("checked")) {
+                                                    $("#selectAll").prop("checked", false);
+                                                }
+                                                updateCartTotal();
+                                            });
+
+                                            // Xử lý khi thay đổi số lượng
                                             $(".quantity-input").on("input", function () {
                                                 let productId = $(this).data("product-id");
                                                 let quantity = parseInt($(this).val()) || 0;
                                                 let price = parseFloat($(this).closest("tr").find(".price").data("price"));
-
                                                 let productTotal = price * quantity;
-                                                $("#total_" + productId).text(productTotal + " VNĐ");
-
-                                                let cartTotal = 0;
-                                                $(".quantity-input").each(function () {
-                                                    let qty = parseInt($(this).val()) || 0;
-                                                    let prc = parseFloat($(this).closest("tr").find(".price").data("price"));
-                                                    cartTotal += qty * prc;
-                                                });
-                                                $("#cartTotal").text(cartTotal + " VNĐ");
+                                                $("#total_" + productId).text('$' + productTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                                                updateCartTotal();
                                             });
+
+                                            // Tính tổng ban đầu khi trang load (vì mặc định tất cả đều được chọn)
+                                            updateCartTotal();
                                         });
 
-                                        // Hàm gửi yêu cầu DELETE để xóa sản phẩm
+                                        // Hàm xóa sản phẩm (giữ nguyên)
                                         function submitDelete(event, customerId, productId) {
                                             event.preventDefault();
                                             fetch("updateCart?customerId=" + customerId + "&productId=" + productId, {
