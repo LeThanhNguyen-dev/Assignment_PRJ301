@@ -4,7 +4,7 @@
 <%@ include file="header.jsp" %>
 <%@ page import="model.Product" %>
 <%@ page import="dao.ProductDAO" %>
-
+<fmt:setLocale value="en_US" scope="session"/>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -234,15 +234,15 @@
                                                 let cartTotal = 0;
                                                 let selectedItems = $(".selectItem:checked");
                                                 selectedItems.each(function () {
-                                                    let productId = $(this).val(); // Lấy productId từ value của checkbox
+                                                    let productId = $(this).val();
                                                     let rowTotal = parseFloat($("#total_" + productId).text().replace('$', '').replace(/,/g, ''));
-                                                    cartTotal += rowTotal;
+                                                    if (!isNaN(rowTotal)) {
+                                                        cartTotal += rowTotal;
+                                                    }
                                                 });
                                                 $("#cartTotal").text('$' + cartTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
-                                                // Vô hiệu hóa nút checkout nếu không có sản phẩm nào được chọn
                                                 $("#checkoutButton").prop("disabled", selectedItems.length === 0);
                                             }
-
                                             // Xử lý checkbox "Chọn tất cả"
                                             $("#selectAll").on("change", function () {
                                                 $(".selectItem").prop("checked", $(this).prop("checked"));
