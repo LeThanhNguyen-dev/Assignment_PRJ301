@@ -362,10 +362,6 @@
     </style>
 </head>
 <body>
-    <c:if test="${sessionScope.session_Admin == null}">
-        <c:redirect url="${pageContext.request.contextPath}/login" />
-    </c:if>
-
     <div class="navbar">
         <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
         <div class="navbar-menu">
