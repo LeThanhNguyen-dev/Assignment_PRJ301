@@ -72,6 +72,8 @@ public class UpdateCartServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        System.out.println("delete");
         // Lấy tham số từ yêu cầu DELETE
         int customerId = Integer.parseInt(request.getParameter("customerId"));
         int productId = Integer.parseInt(request.getParameter("productId"));

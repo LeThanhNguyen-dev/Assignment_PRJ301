@@ -80,7 +80,7 @@ public class AdminManageProduct extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Product existingProduct = productDAO.getProductByID(id);
+        Product existingProduct = productDAO.getProductById(id);
         request.setAttribute("product", existingProduct);
         request.getRequestDispatcher("adminProduct.jsp").forward(request, response);
     }

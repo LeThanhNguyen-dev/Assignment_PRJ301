@@ -203,9 +203,7 @@
                                     $<fmt:formatNumber value="${product.price * quantity}" type="number" groupingUsed="true" minFractionDigits="2" maxFractionDigits="2" />
                                 </td>
                                 <td class="action-buttons">
-                                    <form id="deleteForm-${product.id}" onsubmit="submitDelete(event, ${customer.id}, ${product.id}); return false;">
-                                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                                    </form>
+                                    <button class="btn btn-danger btn-sm" onClick="submitDelete(${customer.id}, ${product.id})">Remove</button>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -274,8 +272,7 @@
                                         });
 
                                         // Hàm xóa sản phẩm (giữ nguyên)
-                                        function submitDelete(event, customerId, productId) {
-                                            event.preventDefault();
+                                        function submitDelete(customerId, productId) {
                                             fetch("updateCart?customerId=" + customerId + "&productId=" + productId, {
                                                 method: 'DELETE',
                                                 headers: {

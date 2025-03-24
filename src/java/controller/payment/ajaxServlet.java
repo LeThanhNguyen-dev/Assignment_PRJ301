@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dao.OrderDAO;
 import dao.OrderDetailDAO;
-import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -88,7 +87,7 @@ public class ajaxServlet extends HttpServlet {
 
         String vnp_IpAddr = Config.getIpAddress(req);
 
-        long amount = (long) amountDouble * 100000;
+        long amount = (long) amountDouble * 2500000;
         String vnp_TmnCode = Config.vnp_TmnCode;
         Random random = new Random();
 
@@ -99,7 +98,7 @@ public class ajaxServlet extends HttpServlet {
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
-        vnp_Params.put("vnp_CurrCode", "USD");
+        vnp_Params.put("vnp_CurrCode", "VND");
 
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);
