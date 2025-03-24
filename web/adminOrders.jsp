@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Quản lý đơn hàng</title>
+        <title>Quản lý sản phẩm</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
@@ -122,7 +122,7 @@
                 font-size: 16px;
             }
 
-            .form-container input, .form-container select {
+            .form-container input {
                 border: 2px solid #ccc;
                 border-radius: 8px;
                 background-color: #f5f5f5;
@@ -130,7 +130,7 @@
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
 
-            .form-container input:focus, .form-container select:focus {
+            .form-container input:focus {
                 border-color: #d4af37;
                 box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
             }
@@ -263,89 +263,75 @@
             <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
             <div class="navbar-menu">
                 <a href="${pageContext.request.contextPath}/adminDashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="${pageContext.request.contextPath}/adminProduct"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="${pageContext.request.contextPath}/adminCustomers"><i class="fas fa-users"></i> Manage Customers</a>
-            <a href="${pageContext.request.contextPath}/adminOrders"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="${pageContext.request.contextPath}/adminVouchers"><i class="fas fa-ticket-alt"></i> Manage Vouchers</a>
+                <a href="${pageContext.request.contextPath}/adminProduct"><i class="fas fa-box"></i> Manage Products</a>
+                <a href="${pageContext.request.contextPath}/adminCustomers"><i class="fas fa-users"></i> Manage Customers</a>
+                <a href="${pageContext.request.contextPath}/adminOrders"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+                <a href="${pageContext.request.contextPath}/adminVouchers"><i class="fas fa-ticket-alt"></i> Manage Vouchers</a>
                 <a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
 
         <div class="main-content">
-            <h2 class="page-title"><i class="fas fa-shopping-cart"></i> Quản lý đơn hàng</h2>
+            <h2 class="page-title"><i class="fas fa-box"></i> Quản lý sản phẩm</h2>
 
-            <!-- Form chỉnh sửa trạng thái đơn hàng -->
-            <c:if test="${order != null}">
-                <div class="form-container">
-                    <form action="orders" method="post" class="mb-4">
-                        <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="id" value="${order.orderId}">
-                        <div class="mb-3">
-                            <label>ID Khách hàng:</label>
-                            <input type="text" class="form-control" value="${order.customerId}" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label>Tổng tiền:</label>
-                            <input type="text" class="form-control" value="${order.totalAmount}" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label>Ngày đặt:</label>
-                            <input type="text" class="form-control" value="${order.orderDate}" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label>Địa chỉ giao hàng:</label>
-                            <input type="text" class="form-control" value="${order.shippingAddress}" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label>Mã voucher:</label>
-                            <input type="text" class="form-control" value="${order.voucherCode}" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label>Trạng thái:</label>
-                            <select name="status" class="form-control" required>
-                                <option value="Pending" ${order.status == 'Pending' ? 'selected' : ''}>Pending</option>
-                                <option value="Processing" ${order.status == 'Processing' ? 'selected' : ''}>Processing</option>
-                                <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
-                                <option value="Delivered" ${order.status == 'Delivered' ? 'selected' : ''}>Delivered</option>
-                                <option value="Cancelled" ${order.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="d-flex gap-3">
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
-                            <a href="orders" class="btn btn-secondary">Hủy</a>
-                        </div>
-                    </form>
-                </div>
-            </c:if>
+            <!-- Form thêm/sửa sản phẩm -->
+            <div class="form-container">
+                <form action="adminProduct" method="post" class="mb-4">
+                    <input type="hidden" name="action" value="${product != null ? 'update' : 'add'}">
+                    <input type="hidden" name="id" value="${product != null ? product.id : ''}">
+                    <div class="mb-3">
+                        <label>Tên sản phẩm:</label>
+                        <input type="text" name="name" class="form-control" value="${product != null ? product.name : ''}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Mô tả:</label>
+                        <input type="text" name="description" class="form-control" value="${product != null ? product.description : ''}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Hình ảnh:</label>
+                        <input type="text" name="image" class="form-control" value="${product != null ? product.image : ''}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Giá:</label>
+                        <input type="number" step="0.01" name="price" class="form-control" value="${product != null ? product.price : ''}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Danh mục (Category ID):</label>
+                        <input type="number" name="categoryId" class="form-control" value="${product != null ? product.categoryId : ''}" required>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-primary">${product != null ? 'Cập nhật' : 'Thêm mới'}</button>
+                        <a href="adminProduct" class="btn btn-secondary">Hủy</a>
+                    </div>
+                </form>
+            </div>
 
-            <!-- Danh sách đơn hàng -->
+            <!-- Danh sách sản phẩm -->
             <div class="table-container">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>ID Khách hàng</th>
-                            <th>Tổng tiền</th>
-                            <th>Ngày đặt</th>
-                            <th>Địa chỉ giao hàng</th>
-                            <th>Mã voucher</th>
-                            <th>Trạng thái</th>
+                            <th>Tên</th>
+                            <th>Mô tả</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Danh mục</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="order" items="${orders}">
+                        <c:forEach var="product" items="${products}">
                             <tr>
-                                <td>${order.orderId}</td>
-                                <td>${order.customerId}</td>
-                                <td>${order.totalAmount}</td>
-                                <td>${order.orderDate}</td>
-                                <td>${order.shippingAddress}</td>
-                                <td>${order.voucherCode}</td>
-                                <td>${order.status}</td>
+                                <td>${product.id}</td>
+                                <td>${product.name}</td>
+                                <td>${product.description}</td>
+                                <td>${product.image}</td>
+                                <td>${product.price}</td>
+                                <td>${product.categoryId}</td>
                                 <td>
-                                    <a href="orders?action=edit&id=${order.orderId}" class="btn btn-warning btn-sm">Sửa</a>
-                                    <a href="orders?action=delete&id=${order.orderId}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa đơn hàng này?')">Xóa</a>
+                                    <a href="adminProduct?action=edit&id=${product.id}" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="adminProduct?action=delete&id=${product.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                                 </td>
                             </tr>
                         </c:forEach>
