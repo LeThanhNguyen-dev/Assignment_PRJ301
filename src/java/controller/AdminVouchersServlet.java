@@ -15,6 +15,7 @@ import model.Voucher;
 
 @WebServlet("/adminVouchers")
 public class AdminVouchersServlet extends HttpServlet {
+
     private VoucherDAO voucherDAO;
 
     @Override
@@ -28,11 +29,6 @@ public class AdminVouchersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Kiểm tra session admin
-        if (!isAdminLoggedIn(request)) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
 
         String action = request.getParameter("action");
         try {
@@ -55,11 +51,6 @@ public class AdminVouchersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Kiểm tra session admin
-        if (!isAdminLoggedIn(request)) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
 
         String action = request.getParameter("action");
         try {
@@ -75,11 +66,6 @@ public class AdminVouchersServlet extends HttpServlet {
         } catch (Exception e) {
             handleError(request, response, "Đã xảy ra lỗi: " + e.getMessage());
         }
-    }
-
-    // Kiểm tra admin đã đăng nhập chưa
-    private boolean isAdminLoggedIn(HttpServletRequest request) {
-        return request.getSession(false) != null && request.getSession().getAttribute("session_Admin") != null;
     }
 
     // Hiển thị danh sách voucher
