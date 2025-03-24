@@ -82,6 +82,8 @@ public class AdminManageProduct extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Product existingProduct = productDAO.getProductById(id);
         request.setAttribute("product", existingProduct);
+        List<Product> productList = productDAO.getAllProducts();
+        request.setAttribute("products", productList);
         request.getRequestDispatcher("adminProduct.jsp").forward(request, response);
     }
 
