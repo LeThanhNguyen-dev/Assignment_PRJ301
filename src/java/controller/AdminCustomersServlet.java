@@ -38,13 +38,6 @@ public class AdminCustomersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Kiểm tra session admin
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("session_Admin") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
         String action = request.getParameter("action");
         try {
             if (action == null) {
