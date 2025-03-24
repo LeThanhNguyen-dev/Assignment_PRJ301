@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Product;
+import model.ProductSales;
 import utils.DBContext;
 
 public class ProductDAO extends DBContext {
@@ -180,6 +181,112 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println("Lỗi khi xóa sản phẩm: " + e.getMessage());
         }
+    }
+    
+    
+    
+    public List<ProductSales> getTop3ProductsPerCategory(int categoryId) {
+        List<ProductSales> productSalesList = new ArrayList<>();
+        String query = """
+                WITH ProductSales AS (
+                    SELECT 
+                        p.productId,
+                        p.name AS productName,
+                        c.name AS categoryName,
+                        p.categoryId,
+                        SUM(od.quantity) AS totalQuantity,
+                        ROW_NUMBER() OVER (PARTITION BY p.categoryId ORDER BY SUM(od.quantity) DESC, p.productId ASC) AS rank
+                    FROM 
+                        OrderDetail od
+                        INNER JOIN Product p ON od.productId = p.productId
+                        INNER JOIN Category c ON p.categoryId = c.categoryId
+                    WHERE 
+                        p.categoryId = ?  -- Thêm điều kiện lọc theo categoryId
+                    GROUP BY 
+                        p.productId,
+                        p.name,
+                        c.name,
+                        p.categoryId
+                )
+                SELECT 
+                    productId,
+                    productName,
+                    categoryName,
+                    totalQuantity
+                FROM 
+                    ProductSales
+                WHERE 
+                    rank <= 3
+                ORDER BY 
+                    totalQuantity DESC;
+                """;
+
+        try (PreparedStatement stmt = c.prepareStatement(query)) {
+            stmt.setInt(1, categoryId); // Truyền tham số categoryId vào truy vấn
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ProductSales productSales = new ProductSales(
+                            rs.getInt("productId"),
+                            rs.getString("productName"),
+                            rs.getString("categoryName"),
+                            rs.getInt("totalQuantity")
+                    );
+                    productSalesList.add(productSales);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy top 3 sản phẩm bán chạy nhất: " + e.getMessage());
+        }
+        return productSalesList;
+    }
+    
+    public List<ProductSales> getTop3BestSellingProducts() {
+        List<ProductSales> productSalesList = new ArrayList<>();
+        String query = """
+                WITH ProductSales AS (
+                    SELECT 
+                        p.productId,
+                        p.name AS productName,
+                        c.name AS categoryName,
+                        SUM(od.quantity) AS totalQuantity,
+                        ROW_NUMBER() OVER (ORDER BY SUM(od.quantity) DESC, p.productId ASC) AS rank
+                    FROM 
+                        OrderDetail od
+                        INNER JOIN Product p ON od.productId = p.productId
+                        INNER JOIN Category c ON p.categoryId = c.categoryId
+                    GROUP BY 
+                        p.productId,
+                        p.name,
+                        c.name
+                )
+                SELECT 
+                    productId,
+                    productName,
+                    categoryName,
+                    totalQuantity
+                FROM 
+                    ProductSales
+                WHERE 
+                    rank <= 3
+                ORDER BY 
+                    totalQuantity DESC;
+                """;
+
+        try (PreparedStatement stmt = c.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                ProductSales productSales = new ProductSales(
+                        rs.getInt("productId"),
+                        rs.getString("productName"),
+                        rs.getString("categoryName"),
+                        rs.getInt("totalQuantity")
+                );
+                productSalesList.add(productSales);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy top 3 sản phẩm bán chạy nhất tổng quát: " + e.getMessage());
+        }
+        return productSalesList;
     }
 
     // Test

@@ -1,71 +1,69 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controller;
 
 import dao.ProductDAO;
 import jakarta.servlet.RequestDispatcher;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Product;
+import model.ProductSales;
 
-/**
- *
- * @author ADMIN
- */
-@WebServlet(name="HomeServlet", urlPatterns={"/home"})
+@WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
 public class HomeServlet extends HttpServlet {
-   
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
+
     private final ProductDAO productDAO = new ProductDAO();
 
     @Override
-   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProductDAO productDAO = new ProductDAO();
-        List<Product> productList = productDAO.getAllProducts();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy tham số categoryId từ request, mặc định là 1 nếu không hợp lệ
+        String categoryIdStr = request.getParameter("categoryId");
+        int categoryId = 1; // Mặc định là 1 (Men)
+        if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
+            try {
+                int parsedId = Integer.parseInt(categoryIdStr);
+                if (parsedId >= 1 && parsedId <= 3) { // Giới hạn categoryId từ 1 đến 3
+                    categoryId = parsedId;
+                }
+            } catch (NumberFormatException e) {
+                // Nếu không parse được, giữ categoryId = 1
+            }
+        }
 
-    
-        request.setAttribute("productList", productList);
+        // Lấy top 3 sản phẩm bán chạy nhất theo categoryId từ ProductDAO
+        List<ProductSales> topProductSales = productDAO.getTop3ProductsPerCategory(categoryId);
 
+        // Tạo danh sách mới để chứa thông tin chi tiết của sản phẩm
+        List<Product> topProducts = new ArrayList<>();
+        for (ProductSales sales : topProductSales) {
+            Product product = productDAO.getProductById(sales.getProductId());
+            if (product != null) {
+                topProducts.add(product);
+            }
+        }
 
+        // Đặt danh sách sản phẩm và categoryId hiện tại vào request
+        request.setAttribute("topProductList", topProducts);
+        request.setAttribute("selectedCategoryId", categoryId);
+
+        // Chuyển hướng đến home.jsp
         RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
         dispatcher.forward(request, response);
-        
     }
 
-  
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "HomeServlet for displaying top products";
     }
-
 }

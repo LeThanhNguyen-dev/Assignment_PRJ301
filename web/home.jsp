@@ -3,10 +3,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="header.jsp" %>
 
-<c:set var="customer" value="${sessionScope.session_Login}"/>
-<c:set var="isLoggedIn" value="${customer != null}"/>
-<c:set var="productList" value="${requestScope.productList}"/>
-<c:set var="cart" value="${sessionScope.cart}"/>
+<c:set var="topProductList" value="${requestScope.topProductList}"/>
+<c:set var="selectedCategoryId" value="${requestScope.selectedCategoryId}"/>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -18,26 +16,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%); 
-            color: #333; 
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
+            color: #333;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .product-card {
             transition: transform 0.3s;
             background: #ffffff;
-            border: 2px solid #ccc; 
+            border: 2px solid #ccc;
         }
 
         .product-card:hover {
             transform: scale(1.05);
-            border-color: #d4af37; 
+            border-color: #d4af37;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .card-img-top {
-            height: 400px; 
+            height: 350px;
             object-fit: cover;
+            width: 100%;
         }
 
         .card-title {
@@ -45,55 +44,13 @@
         }
 
         .card-text {
-            color: #666; 
+            color: #666;
         }
 
         .card-text strong {
-            color: #333; 
+            color: #333;
         }
 
-           .btn-success, .btn-primary {
-    width: 50%; /* Chia đều 50% mỗi nút trong hàng */
-    padding: 12px 10px; /* Padding đồng nhất */
-    height: 48px; /* Chiều cao cố định */
-    font-size: 15px; /* Cỡ chữ đồng đều */
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Căn giữa icon và text */
-    text-align: center;
-    border-radius: 8px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-sizing: border-box; /* Đảm bảo padding không làm vượt kích thước */
-}
-
-.btn-success {
-    background: linear-gradient(45deg, #d4af37, #c0a062);
-    color: #fff;
-    border: none;
-}
-
-.btn-success:hover {
-    background: linear-gradient(45deg, #c0a062, #d4af37);
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-.btn-primary {
-    background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
-    color: #333;
-    border: none;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-.btn i {
-    margin-right: 5px; /* Khoảng cách giữa icon và chữ */
-}
         #carouselExample {
             max-width: 90%;
             margin: 1rem auto;
@@ -114,32 +71,154 @@
         }
 
         .footer {
-            background: linear-gradient(90deg, #e0e0e0, #c0c0c0); 
+            background: linear-gradient(90deg, #e0e0e0, #c0c0c0);
             color: #333;
             text-align: center;
             padding: 20px 0;
-            margin-top: 10px; 
+            margin-top: 10px;
             position: relative;
             bottom: 0;
             width: 100%;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
+        }
+
+        .no-products {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* CSS cho bong bóng chat */
+        .chat-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-box {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .chat-header {
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #d4af37;
+            color: #fff;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background: #e0e0e0;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+
+        .chat-footer button {
+            padding: 5px 10px;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .chat-footer button:hover {
+            background: linear-gradient(45deg, #c0a062, #d4af37);
         }
     </style>
 </head>
 
-
 <body>
-    
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="img/banner_welcome.png" class="d-block w-100" alt="Banner 1">
+                <img src="${pageContext.request.contextPath}/img/banner_welcome.png" class="d-block w-100" alt="Banner 1">
             </div>
             <div class="carousel-item">
-                <img src="img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png" class="d-block w-100" alt="Banner 3">
+                <img src="${pageContext.request.contextPath}/img/Blue-And-White-Modern-New-Product-Facebook-Ad-1024x536.png" class="d-block w-100" alt="Banner 3">
             </div>
             <div class="carousel-item">
-                <img src="img/476498250_1622121185087076_4096243358621469653_n.png" class="d-block w-100" alt="Banner 2">
+                <img src="${pageContext.request.contextPath}/img/476498250_1622121185087076_4096243358621469653_n.png" class="d-block w-100" alt="Banner 2">
             </div>
         </div>
         <button class="carousel-control-prev" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -151,33 +230,57 @@
     </div>
 
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Danh Sách Sản Phẩm</h2>
+        <h2 class="text-center mb-4">Top 3 Sản Phẩm Bán Chạy Nhất (Danh mục ${selectedCategoryId == 1 ? 'Men' : selectedCategoryId == 2 ? 'Women' : 'Kid'})</h2>
+        
+        <div class="category-buttons">
+            <a href="home?categoryId=1" class="btn category-btn ${selectedCategoryId == 1 ? 'active' : ''}">Men</a>
+            <a href="home?categoryId=2" class="btn category-btn ${selectedCategoryId == 2 ? 'active' : ''}">Women</a>
+            <a href="home?categoryId=3" class="btn category-btn ${selectedCategoryId == 3 ? 'active' : ''}">Kid</a>
+        </div>
+
         <div class="row">
-            <c:forEach var="product" items="${productList}">
-                <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                    <div class="card w-100 product-card">
-                        <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}" style="height:350px; object-fit:cover;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${product.name}</h5>
-                            <p class="card-text flex-grow-1">${product.description}</p>
-                            <p class="card-text"><strong>Giá: </strong>${product.price} VNĐ</p>
-                            <c:if test="${isLoggedIn}">
-                                <div class="d-flex justify-content-between gap-2 mt-auto">
-                                    <!-- Nút BUY gửi POST request đến AddToCartServlet -->
-                                    <form action="AddToCartServlet" method="post" class="w-100">
-                                        <input type="hidden" name="productId" value="${product.id}">
-                                        <input type="hidden" name="redirect" value="true">
-                                        <button type="submit" class="btn btn-success w-100">BUY</button>
-                                    </form>
-                                    <button class="btn btn-primary w-100 add-to-cart" data-id="${product.id}">
-                                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
-                                    </button>
+            <c:choose>
+                <c:when test="${not empty topProductList}">
+                    <c:forEach var="product" items="${topProductList}">
+                        <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                            <div class="card w-100 product-card">
+                                <img src="${pageContext.request.contextPath}/${product.image}" class="card-img-top img-fluid" alt="${product.name}">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text flex-grow-1">${product.description}</p>
+                                    <p class="card-text"><strong>Giá: </strong><fmt:formatNumber value="${product.price}" type="number" pattern="#,##0"/> VNĐ</p>
                                 </div>
-                            </c:if>
+                            </div>
                         </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-12">
+                        <p class="no-products">Hiện chưa có sản phẩm nào trong danh mục này.</p>
                     </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+
+    <!-- Bong bóng chat -->
+    <div class="chat-bubble" id="chatBubble">
+        <i class="fas fa-robot fa-2x"></i>
+    </div>
+
+    <!-- Khung chat -->
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">Hỗ trợ khách hàng</div>
+        <div class="chat-body" id="chatBody">
+            <c:forEach var="message" items="${sessionScope.chatHistory}">
+                <div class="message ${message[0] == 'user' ? 'user-message' : 'bot-message'}">
+                    ${message[1]}
                 </div>
             </c:forEach>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Nhập tin nhắn...">
+            <button onclick="sendMessage()">Gửi</button>
         </div>
     </div>
 
@@ -187,33 +290,63 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".add-to-cart").forEach(button => {
-            button.addEventListener("click", function () {
-                let productId = this.getAttribute("data-id");
-                addToCart(productId);
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatBubble = document.getElementById("chatBubble");
+            const chatBox = document.getElementById("chatBox");
+            const chatBody = document.getElementById("chatBody");
+            let isFirstOpen = true;
+
+            chatBubble.addEventListener("click", function () {
+                if (chatBox.style.display === "none" || chatBox.style.display === "") {
+                    chatBox.style.display = "flex";
+                    if (isFirstOpen && chatBody.children.length === 0) {
+                        appendMessage("bot", "Chào mừng bạn tới với Perfume Shop của chúng tôi!");
+                        isFirstOpen = false;
+                    }
+                    scrollToBottom();
+                } else {
+                    chatBox.style.display = "none";
+                }
+            });
+
+            function scrollToBottom() {
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            window.sendMessage = function() {
+                const input = document.getElementById("chatInput");
+                const message = input.value.trim();
+                if (message) {
+                    appendMessage("user", message);
+                    fetch("${pageContext.request.contextPath}/chat?prompt=" + encodeURIComponent(message), {
+                        method: "GET"
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        appendMessage("bot", data);
+                    })
+                    .catch(error => {
+                        appendMessage("bot", "Lỗi: " + error.message);
+                    });
+                    input.value = "";
+                    scrollToBottom();
+                }
+            };
+
+            function appendMessage(sender, text) {
+                const messageDiv = document.createElement("div");
+                messageDiv.className = "message " + (sender === "user" ? "user-message" : "bot-message");
+                messageDiv.textContent = text;
+                chatBody.appendChild(messageDiv);
+                scrollToBottom();
+            }
+
+            document.getElementById("chatInput").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    sendMessage();
+                }
             });
         });
-    });
-
-    function addToCart(productId) {
-        fetch('AddToCartServlet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({'productId': productId})
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.cartItemCount !== undefined) {
-                    document.querySelector('.new-cart-badge').textContent = data.cartItemCount;
-                } else {
-                    alert("Có lỗi xảy ra khi thêm vào giỏ hàng!");
-                }
-            })
-            .catch(error => console.error('Lỗi:', error));
-    }
-</script>
+    </script>
 </body>
 </html>
