@@ -1,41 +1,42 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Quản lý voucher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
+            display: flex;
+            flex-direction: column;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f5f5f5 0%, #d3d3d3 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .navbar {
-            background: #ffffff;
-            border-bottom: 2px solid #ccc;
-            padding: 15px 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            background: #ffffff;
+            border-bottom: 2px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
         }
 
         .navbar h2 {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
             display: flex;
             align-items: center;
             gap: 10px;
+            margin: 0;
+            font-size: 24px;
+            color: #333;
         }
 
         .navbar h2 i {
@@ -54,14 +55,14 @@
         }
 
         .navbar-menu a {
-            color: #333;
-            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 10px 15px;
-            border-radius: 8px;
+            color: #333;
+            text-decoration: none;
             font-size: 16px;
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
 
@@ -79,18 +80,22 @@
         .main-content {
             flex-grow: 1;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         h2.page-title {
-            color: #333;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            text-transform: uppercase;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
         }
 
         h2.page-title i {
@@ -104,80 +109,124 @@
         }
 
         .form-container {
-            background: #ffffff;
+            width: 800px; /* Tăng từ 450px lên 600px */
+            padding: 50px;
             border: 2px solid #ccc;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
             margin-bottom: 30px;
         }
 
-        .form-container .mb-3 {
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
 
-        .form-container label {
+        label {
+            display: block;
+            margin-bottom: 8px;
             color: #333;
+            font-size: 14px;
             font-weight: 500;
-            font-size: 16px;
         }
 
-        .form-container input {
+        input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
             border: 2px solid #ccc;
             border-radius: 8px;
+            font-size: 14px;
             background-color: #f5f5f5;
             color: #333;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .form-container input:focus {
+        input:focus {
+            outline: none;
             border-color: #d4af37;
             box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
         }
 
-        .form-container .btn-primary {
+        button {
             background: linear-gradient(45deg, #d4af37, #c0a062);
-            border: none;
             color: #333;
-            padding: 10px 20px;
+            padding: 12px 20px;
+            border: none;
             border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
             font-weight: 500;
             transition: all 0.3s ease;
         }
 
-        .form-container .btn-primary:hover {
+        button:hover {
             background: linear-gradient(45deg, #c0a062, #d4af37);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
-        .form-container .btn-secondary {
+        .btn-secondary {
             background: linear-gradient(45deg, #e0e0e0, #c0c0c0);
             border: none;
-            color: #333;
-            padding: 10px 20px;
             border-radius: 8px;
+            color: #333;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 16px;
             font-weight: 500;
             transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
         }
 
-        .form-container .btn-secondary:hover {
+        .btn-secondary:hover {
             background: linear-gradient(45deg, #c0c0c0, #e0e0e0);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-error {
+            background: #ff4d4d;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            margin-bottom: 20px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .alert-success {
+            background: #28a745;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            margin-bottom: 20px;
+            padding: 15px;
+            text-align: center;
         }
 
         .table-container {
             background: #ffffff;
             border: 2px solid #ccc;
             border-radius: 10px;
-            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         .table {
-            width: 100%;
             border-collapse: collapse;
+            width: 100%;
         }
 
         .table thead {
@@ -185,10 +234,11 @@
             color: #333;
         }
 
-        .table th, .table td {
+        .table th,
+        .table td {
+            border-bottom: 1px solid #ccc;
             padding: 12px;
             text-align: center;
-            border-bottom: 1px solid #ccc;
         }
 
         .table tbody tr:hover {
@@ -198,10 +248,10 @@
         .table .btn-warning {
             background: linear-gradient(45deg, #f39c12, #e67e22);
             border: none;
-            color: #333;
-            padding: 8px 15px;
             border-radius: 8px;
+            color: #333;
             font-weight: 500;
+            padding: 6px 12px; /* Giảm kích thước nút */
             transition: all 0.3s ease;
         }
 
@@ -214,10 +264,10 @@
         .table .btn-danger {
             background: linear-gradient(45deg, #ff4d4d, #e63946);
             border: none;
-            color: #fff;
-            padding: 8px 15px;
             border-radius: 8px;
+            color: #fff;
             font-weight: 500;
+            padding: 6px 12px; /* Giảm kích thước nút */
             transition: all 0.3s ease;
         }
 
@@ -227,60 +277,55 @@
             box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
         }
 
-        /* Style cho thông báo lỗi */
-        .alert-error {
-            background: #ff4d4d;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Style cho thông báo thành công */
-        .alert-success {
-            background: #28a745;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
                 align-items: flex-start;
+                flex-direction: column;
             }
+
             .navbar-menu {
                 flex-direction: column;
-                width: 100%;
                 margin-top: 10px;
-            }
-            .navbar-menu a {
                 width: 100%;
-                justify-content: flex-start;
             }
+
+            .navbar-menu a {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
             .main-content {
                 padding: 15px;
             }
-            .form-container, .table-container {
+
+            .form-container {
+                width: 100%;
                 padding: 15px;
             }
-            .table th, .table td {
-                padding: 8px;
-                font-size: 14px;
+
+            .table-container {
+                padding: 15px;
             }
-            .table .btn-warning, .table .btn-danger {
-                padding: 6px 10px;
+
+            .table th,
+            .table td {
                 font-size: 14px;
+                padding: 8px;
+            }
+
+            .table .btn-warning,
+            .table .btn-danger {
+                font-size: 12px;
+                padding: 4px 8px;
             }
         }
     </style>
 </head>
 <body>
+    <c:if test="${sessionScope.session_Admin == null}">
+        <c:redirect url="${pageContext.request.contextPath}/login" />
+    </c:if>
+
     <div class="navbar">
         <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
         <div class="navbar-menu">
@@ -298,38 +343,34 @@
 
         <!-- Hiển thị thông báo thành công nếu có -->
         <c:if test="${not empty success}">
-            <div class="alert-success">
-                ${success}
-            </div>
+            <div class="alert-success">${success}</div>
         </c:if>
 
         <!-- Hiển thị thông báo lỗi nếu có -->
         <c:if test="${not empty error}">
-            <div class="alert-error">
-                ${error}
-            </div>
+            <div class="alert-error">${error}</div>
         </c:if>
 
         <!-- Form thêm/sửa voucher -->
         <div class="form-container">
-            <form action="adminVouchers" method="post" class="mb-4">
+            <form action="adminVouchers" method="post">
                 <input type="hidden" name="action" value="${voucher != null ? 'update' : 'add'}">
                 <input type="hidden" name="id" value="${voucher != null ? voucher.id : ''}">
-                <div class="mb-3">
+                <div class="form-group">
                     <label>Mã voucher:</label>
-                    <input type="text" name="code" class="form-control" value="${voucher != null ? voucher.code : ''}" required>
+                    <input type="text" name="code" value="${voucher != null ? voucher.code : ''}" required>
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                     <label>Giảm giá (%):</label>
-                    <input type="number" step="0.01" name="discount" class="form-control" value="${voucher != null ? voucher.discount : ''}" required>
+                    <input type="number" step="0.01" name="discount" value="${voucher != null ? voucher.discount : ''}" required>
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
                     <label>Ngày hết hạn:</label>
-                    <input type="date" name="expiryDate" class="form-control" value="${voucher != null ? voucher.expiryDate : ''}" required>
+                    <input type="date" name="expiryDate" value="${voucher != null ? voucher.expiryDate : ''}" required>
                 </div>
                 <div class="d-flex gap-3">
-                    <button type="submit" class="btn btn-primary">${voucher != null ? 'Cập nhật' : 'Thêm mới'}</button>
-                    <a href="${pageContext.request.contextPath}/adminVouchers" class="btn btn-secondary">Hủy</a>
+                    <button type="submit">${voucher != null ? 'Cập nhật' : 'Thêm mới'}</button>
+                    <a href="${pageContext.request.contextPath}/adminVouchers" class="btn-secondary">Hủy</a>
                 </div>
             </form>
         </div>
@@ -354,8 +395,10 @@
                             <td>${voucher.discount}</td>
                             <td>${voucher.expiryDate}</td>
                             <td>
-                                <a href="${pageContext.request.contextPath}/adminVouchers?action=edit&id=${voucher.id}" class="btn btn-warning btn-sm">Sửa</a>
-                                <a href="${pageContext.request.contextPath}/adminVouchers?action=delete&id=${voucher.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa voucher này?')">Xóa</a>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="${pageContext.request.contextPath}/adminVouchers?action=edit&id=${voucher.id}" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a href="${pageContext.request.contextPath}/adminVouchers?action=delete&id=${voucher.id}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa voucher này?')">Xóa</a>
+                                </div>
                             </td>
                         </tr>
                     </c:forEach>
@@ -363,6 +406,7 @@
             </table>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

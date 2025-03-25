@@ -26,7 +26,7 @@
         /* Carousel nổi bật */
         #carouselExample {
             width: 100%;
-            margin: 80px auto 0; /* Giữ khoảng cách với navbar */
+            margin: 100px auto 0; /* Giữ khoảng cách với navbar */
             padding: 0; /* Loại bỏ padding để ảnh sát mép */
             position: relative;
             overflow: hidden;

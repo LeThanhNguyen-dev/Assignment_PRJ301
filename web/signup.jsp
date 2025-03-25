@@ -117,7 +117,7 @@
             background: linear-gradient(45deg, #d4af37, #c0a062); /* Gradient vàng nhạt */
             position: absolute;
             right: 0;
-            top: 32px;
+            top: 28px;
             font-size: 14px;
         }
 

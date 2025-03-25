@@ -217,7 +217,7 @@
                 <label>Password:</label>
                 <div class="password-toggle">
                     <input type="password" name="password" id="password" value="${cookie.CookiePassWord.value}" required />
-                    <button type="button" class="toggle-btn" onclick="togglePassword()"><i class="fas fa-eye"></i></button>
+                    <button type="button" class="toggle-btn" onclick="togglePassword()"></button>
                 </div>
 
                 <input type="checkbox" name="rememberme" id="rememberme" value="ON" ${cookie.CookieUserName != null ? 'checked' : ''} />
