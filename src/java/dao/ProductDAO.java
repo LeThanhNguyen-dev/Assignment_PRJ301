@@ -336,6 +336,48 @@ public class ProductDAO extends DBContext {
         }
         return productSalesList;
     }
+    
+    // Lấy sản phẩm có giá cao nhất
+public Product getHighestPricedProduct() {
+    String query = "SELECT * FROM Product WHERE price = (SELECT MAX(price) FROM Product)";
+    try (PreparedStatement stmt = c.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+            return new Product(
+                    rs.getInt("productId"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("image"),
+                    rs.getDouble("price"),
+                    rs.getInt("categoryId")
+            );
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy sản phẩm giá cao nhất: " + e.getMessage());
+    }
+    return null;
+}
+
+// Lấy sản phẩm có giá thấp nhất
+public Product getLowestPricedProduct() {
+    String query = "SELECT * FROM Product WHERE price = (SELECT MIN(price) FROM Product)";
+    try (PreparedStatement stmt = c.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+            return new Product(
+                    rs.getInt("productId"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getString("image"),
+                    rs.getDouble("price"),
+                    rs.getInt("categoryId")
+            );
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy sản phẩm giá thấp nhất: " + e.getMessage());
+    }
+    return null;
+}
 
     // Test
     public static void main(String[] args) {

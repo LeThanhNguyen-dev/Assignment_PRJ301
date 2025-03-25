@@ -56,107 +56,135 @@ public class GeminiServlet extends HttpServlet {
 
         session.setAttribute("chatHistory", chatHistory);
 
-        // Trả về phản hồi dạng text thay vì forward
         response.setContentType("text/plain;charset=UTF-8");
         response.getWriter().write(textContent);
     }
 
     private String processPrompt(String prompt) throws IOException {
-    String lowerPrompt = prompt.toLowerCase();
+        String lowerPrompt = prompt.toLowerCase();
 
-    if (isDateTimeQuestion(lowerPrompt)) {
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return "Hôm nay là ngày " + today.format(formatter) + ".";
-    }
-
-    if (lowerPrompt.contains("voucher") || lowerPrompt.contains("mã giảm giá")) {
-        try {
-            List<model.Voucher> vouchers = voucherDAO.getAllVouchers();
-            if (vouchers.isEmpty()) {
-                return "Hiện tại không có voucher nào khả dụng.";
-            }
-            StringBuilder voucherInfo = new StringBuilder("Danh sách voucher hiện tại:\n");
-            for (model.Voucher v : vouchers) {
-                voucherInfo.append(String.format("- Mã: %s, Giảm: %.2f%%, Hết hạn: %s\n",
-                    v.getCode(), v.getDiscount(), v.getExpiryDate()));
-            }
-            return voucherInfo.toString();
-        } catch (Exception e) {
-            return "Lỗi khi lấy thông tin voucher: " + e.getMessage();
+        // 1. Kiểm tra câu hỏi về ngày giờ
+        if (isDateTimeQuestion(lowerPrompt)) {
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return "Hôm nay là ngày " + today.format(formatter) + ".";
         }
-    }
 
-    if (lowerPrompt.contains("giá") || lowerPrompt.contains("bao nhiêu")) {
-        String productName = extractProductName(lowerPrompt);
-        System.out.println("Extracted product name: " + productName); // Debug
-        if (productName != null) {
-            List<Product> products = productDAO.getProductsByQuery(productName);
-            System.out.println("Found products: " + products.size()); // Debug
-            if (products.isEmpty()) {
-                return "Không tìm thấy sản phẩm '" + productName + "' trong database.";
+        // 2. Kiểm tra voucher/khuyến mãi
+        if (lowerPrompt.contains("voucher") || lowerPrompt.contains("mã giảm giá") || 
+            lowerPrompt.contains("khuyến mãi") || lowerPrompt.contains("ưu đãi")) {
+            try {
+                List<model.Voucher> vouchers = voucherDAO.getAllVouchers();
+                if (vouchers.isEmpty()) {
+                    return "Hiện tại không có voucher hay ưu đãi nào khả dụng.";
+                }
+                StringBuilder voucherInfo = new StringBuilder("Danh sách voucher/ưu đãi hiện tại:\n");
+                for (model.Voucher v : vouchers) {
+                    voucherInfo.append(String.format("- Mã: %s, Giảm: %.2f%%, Hết hạn: %s\n",
+                        v.getCode(), v.getDiscount(), v.getExpiryDate()));
+                }
+                return voucherInfo.toString();
+            } catch (Exception e) {
+                return "Lỗi khi lấy thông tin voucher: " + e.getMessage();
             }
-            StringBuilder priceInfo = new StringBuilder();
-            for (Product p : products) {
-                priceInfo.append(String.format("Sản phẩm: %s - Giá: %.2f VNĐ\n", 
-                    p.getName(), p.getPrice()));
-            }
-            return priceInfo.toString();
-        } else {
-            return "Không thể xác định tên sản phẩm từ câu hỏi của bạn.";
         }
-    }
 
-    if (lowerPrompt.contains("top") && lowerPrompt.contains("bán chạy")) {
-        try {
-            List<ProductSales> topProducts = productDAO.getTop3BestSellingProducts();
-            if (topProducts.isEmpty()) {
-                return "Hiện tại không có dữ liệu về sản phẩm bán chạy.";
+        // 3. Kiểm tra câu hỏi về giá sản phẩm
+        if (lowerPrompt.contains("giá") || lowerPrompt.contains("bao nhiêu") || 
+            lowerPrompt.contains("trị giá") || lowerPrompt.contains("chi phí") || 
+            lowerPrompt.contains("đắt") || lowerPrompt.contains("rẻ")) {
+            String productName = extractProductName(lowerPrompt);
+            if (productName != null && !productName.isEmpty()) {
+                List<Product> products = productDAO.getProductsByQuery(productName);
+                if (products.isEmpty()) {
+                    return "Không tìm thấy sản phẩm '" + productName + "' trong hệ thống.";
+                }
+                StringBuilder priceInfo = new StringBuilder();
+                for (Product p : products) {
+                    priceInfo.append(String.format("Sản phẩm: %s - Giá: %.2f $\n", 
+                        p.getName(), p.getPrice()));
+                }
+                return priceInfo.toString();
             }
-            StringBuilder topInfo = new StringBuilder("Top 3 sản phẩm bán chạy nhất:\n");
-            int totalQuantity = 0;
-            for (int i = 0; i < topProducts.size(); i++) {
-                ProductSales ps = topProducts.get(i);
-                totalQuantity += ps.getTotalQuantity();
-                topInfo.append(String.format("%d. %s (%s) - Số lượng bán: %d\n",
-                    i + 1, ps.getProductName(), ps.getCategoryName(), ps.getTotalQuantity()));
+
+            // Kiểm tra giá cao nhất
+            if (lowerPrompt.contains("cao nhất") || lowerPrompt.contains("đắt nhất") || 
+                lowerPrompt.contains("giá lớn nhất")) {
+                Product highestPricedProduct = productDAO.getHighestPricedProduct();
+                if (highestPricedProduct != null) {
+                    return String.format("Sản phẩm giá cao nhất: %s - Giá: %.2f $", 
+                        highestPricedProduct.getName(), highestPricedProduct.getPrice());
+                }
+                return "Không tìm thấy sản phẩm giá cao nhất.";
             }
-            topInfo.append(String.format("Tổng số lượng bán của top 3: %d", totalQuantity));
-            return topInfo.toString();
-        } catch (Exception e) {
-            return "Lỗi khi lấy top sản phẩm: " + e.getMessage();
+
+            // Kiểm tra giá thấp nhất
+            if (lowerPrompt.contains("thấp nhất") || lowerPrompt.contains("rẻ nhất") || 
+                lowerPrompt.contains("giá nhỏ nhất")) {
+                Product lowestPricedProduct = productDAO.getLowestPricedProduct();
+                if (lowestPricedProduct != null) {
+                    return String.format("Sản phẩm giá thấp nhất: %s - Giá: %.2f $", 
+                        lowestPricedProduct.getName(), lowestPricedProduct.getPrice());
+                }
+                return "Không tìm thấy sản phẩm giá thấp nhất.";
+            }
+
+            return "Vui lòng cung cấp tên sản phẩm hoặc hỏi cụ thể hơn (ví dụ: 'giá của nước hoa X là bao nhiêu?').";
         }
+
+        // 4. Kiểm tra top sản phẩm bán chạy
+        if (lowerPrompt.contains("top") || lowerPrompt.contains("bán chạy") || 
+            lowerPrompt.contains("nổi bật") || lowerPrompt.contains("phổ biến")) {
+            try {
+                List<ProductSales> topProducts = productDAO.getTop3BestSellingProducts();
+                if (topProducts.isEmpty()) {
+                    return "Hiện tại không có dữ liệu về sản phẩm bán chạy.";
+                }
+                StringBuilder topInfo = new StringBuilder("Top 3 sản phẩm bán chạy nhất:\n");
+                int totalQuantity = 0;
+                for (int i = 0; i < topProducts.size(); i++) {
+                    ProductSales ps = topProducts.get(i);
+                    totalQuantity += ps.getTotalQuantity();
+                    topInfo.append(String.format("%d. %s (%s) - Số lượng bán: %d\n",
+                        i + 1, ps.getProductName(), ps.getCategoryName(), ps.getTotalQuantity()));
+                }
+                topInfo.append(String.format("Tổng số lượng bán của top 3: %d", totalQuantity));
+                return topInfo.toString();
+            } catch (Exception e) {
+                return "Lỗi khi lấy danh sách sản phẩm bán chạy: " + e.getMessage();
+            }
+        }
+
+        // 5. Gọi Gemini API nếu không khớp điều kiện nào
+        String apiResult = callGeminiAPI(prompt);
+        return extractTextFromJson(apiResult);
     }
 
-    String apiResult = callGeminiAPI(prompt);
-    return extractTextFromJson(apiResult);
-}
-
+    // Cải thiện phương thức trích xuất tên sản phẩm
     private String extractProductName(String prompt) {
-    String[] words = prompt.split("\\s+");
-    StringBuilder productName = new StringBuilder();
-    boolean foundKeyword = false;
+        String[] words = prompt.split("\\s+");
+        StringBuilder productName = new StringBuilder();
+        List<String> stopWords = List.of("giá", "bao nhiêu", "trị giá", "chi phí", "của", 
+                                        "cao nhất", "thấp nhất", "đắt nhất", "rẻ nhất", 
+                                        "là", "thế nào", "ra sao");
 
-    for (int i = 0; i < words.length; i++) {
-        if (words[i].equals("giá") || words[i].equals("bao nhiêu")) {
-            foundKeyword = true;
-            break;
+        for (String word : words) {
+            if (stopWords.contains(word)) {
+                break; // Dừng khi gặp từ khóa kết thúc
+            }
+            if (productName.length() > 0) {
+                productName.append(" ");
+            }
+            productName.append(word);
         }
-        if (i > 0 && words[i - 1].equals("của")) {
-            continue; // Bỏ qua từ "của"
-        }
-        if (productName.length() > 0) {
-            productName.append(" ");
-        }
-        productName.append(words[i]);
+
+        return productName.length() > 0 ? productName.toString().trim() : null;
     }
 
-    return foundKeyword && productName.length() > 0 ? productName.toString() : null;
-}
-
+    // Kiểm tra câu hỏi về ngày giờ
     private boolean isDateTimeQuestion(String prompt) {
-        return prompt.contains("hôm nay") && 
-               (prompt.contains("ngày bao nhiêu") || prompt.contains("ngày mấy"));
+        return (prompt.contains("hôm nay") || prompt.contains("ngày nay") || prompt.contains("hiện tại")) && 
+               (prompt.contains("ngày bao nhiêu") || prompt.contains("ngày mấy") || prompt.contains("ngày nào"));
     }
 
     private String callGeminiAPI(String prompt) throws IOException {

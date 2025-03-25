@@ -23,7 +23,6 @@
                 padding: 0;
             }
 
-
             #carouselExample {
                 width: 100%;
                 max-width: 1200px;
@@ -43,13 +42,11 @@
                 transform: scale(1.05);
             }
 
-            /* Container chính */
             .container {
                 max-width: 1200px;
                 padding: 40px 15px;
             }
 
-            /* Tiêu đề */
             .section-title {
                 font-size: 2rem;
                 font-weight: 700;
@@ -70,7 +67,6 @@
                 transform: translateX(-50%);
             }
 
-            /* Nút danh mục */
             .category-buttons {
                 display: flex;
                 justify-content: center;
@@ -96,7 +92,7 @@
                 box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
             }
 
-            /* Thẻ sản phẩm */
+            /* Sửa lỗi chiều cao không đều của product-card */
             .product-card {
                 background: #fff;
                 border: none;
@@ -104,6 +100,9 @@
                 overflow: hidden;
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
+                min-height: 450px; /* Chiều cao tối thiểu */
+                display: flex;
+                flex-direction: column;
             }
 
             .product-card:hover {
@@ -125,6 +124,10 @@
             .card-body {
                 padding: 20px;
                 text-align: center;
+                flex-grow: 1; /* Đảm bảo card-body chiếm hết không gian còn lại */
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
 
             .card-title {
@@ -138,6 +141,7 @@
                 font-size: 0.9rem;
                 color: #7f8c8d;
                 margin-bottom: 15px;
+                flex-grow: 1; /* Đẩy giá xuống dưới */
             }
 
             .price {
@@ -154,7 +158,40 @@
                 margin: 20px 0;
             }
 
-            /* Footer */
+            /* Section giới thiệu nước hoa */
+            .perfume-intro {
+                background: #fff;
+                padding: 40px 0;
+                margin: 40px 0;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .intro-content {
+                opacity: 0;
+                transform: translateY(30px);
+                animation: fadeInUp 1s ease forwards;
+            }
+
+            .intro-content h3 {
+                font-size: 1.8rem;
+                color: #2c3e50;
+                margin-bottom: 20px;
+            }
+
+            .intro-content p {
+                font-size: 1rem;
+                color: #7f8c8d;
+                line-height: 1.6;
+            }
+
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             .footer {
                 background: #2c3e50;
                 color: #ecf0f1;
@@ -169,7 +206,6 @@
                 text-decoration: none;
             }
 
-            /* Chat bubble */
             .chat-bubble {
                 position: fixed;
                 bottom: 30px;
@@ -336,6 +372,22 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <!-- Section giới thiệu nước hoa -->
+            <div class="perfume-intro">
+                <div class="container">
+                    <div class="intro-content">
+                        <h3 class="section-title">Nước Hoa Là Gì?</h3>
+                        <p>
+                            Nước hoa là một hỗn hợp tinh tế của các tinh dầu thơm, hợp chất tạo hương và dung môi, được sử dụng để mang lại mùi hương dễ chịu cho cơ thể, quần áo hoặc không gian sống. Từ xa xưa, nước hoa đã được xem như biểu tượng của sự sang trọng và cá tính.
+                        </p>
+                        <h3 class="section-title">Công Dụng Của Nước Hoa</h3>
+                        <p>
+                            Nước hoa không chỉ giúp bạn tỏa hương thơm quyến rũ mà còn thể hiện phong cách riêng, tăng sự tự tin và tạo ấn tượng lâu dài. Ngoài ra, một số mùi hương còn có khả năng thư giãn tinh thần, giảm căng thẳng và khơi gợi cảm xúc tích cực.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Chat Bubble -->
@@ -361,68 +413,68 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2025 Perfume Elegance. All rights reserved. <a href="#">Nhung Chu Be Dan</a></p>
+            <p>© 2025 Perfume Elegance. All rights reserved. <a href="#">Nhung Chu Be Dan</a></p>
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const chatBubble = document.getElementById("chatBubble");
-                        const chatBox = document.getElementById("chatBox");
-                        const chatBody = document.getElementById("chatBody");
-                        let isFirstOpen = true;
+            document.addEventListener("DOMContentLoaded", function () {
+                const chatBubble = document.getElementById("chatBubble");
+                const chatBox = document.getElementById("chatBox");
+                const chatBody = document.getElementById("chatBody");
+                let isFirstOpen = true;
 
-                        chatBubble.addEventListener("click", function () {
-                            if (chatBox.style.display === "none" || chatBox.style.display === "") {
-                                chatBox.style.display = "flex";
-                                if (isFirstOpen && chatBody.children.length === 0) {
-                                    appendMessage("bot", "Chào mừng bạn đến với Perfume Elegance! Tôi có thể giúp gì cho bạn?");
-                                    isFirstOpen = false;
-                                }
-                                scrollToBottom();
-                            } else {
-                                chatBox.style.display = "none";
-                            }
-                        });
-
-                        function scrollToBottom() {
-                            chatBody.scrollTop = chatBody.scrollHeight;
+                chatBubble.addEventListener("click", function () {
+                    if (chatBox.style.display === "none" || chatBox.style.display === "") {
+                        chatBox.style.display = "flex";
+                        if (isFirstOpen && chatBody.children.length === 0) {
+                            appendMessage("bot", "Chào mừng bạn đến với Perfume Elegance! Tôi có thể giúp gì cho bạn?");
+                            isFirstOpen = false;
                         }
+                        scrollToBottom();
+                    } else {
+                        chatBox.style.display = "none";
+                    }
+                });
 
-                        window.sendMessage = function () {
-                            const input = document.getElementById("chatInput");
-                            const message = input.value.trim();
-                            if (message) {
-                                appendMessage("user", message);
-                                fetch("${pageContext.request.contextPath}/chat?prompt=" + encodeURIComponent(message), {
-                                    method: "GET"
-                                })
-                                        .then(response => response.text())
-                                        .then(data => {
-                                            appendMessage("bot", data);
-                                        })
-                                        .catch(error => {
-                                            appendMessage("bot", "Lỗi: " + error.message);
-                                        });
-                                input.value = "";
-                                scrollToBottom();
-                            }
-                        };
+                function scrollToBottom() {
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }
 
-                        function appendMessage(sender, text) {
-                            const messageDiv = document.createElement("div");
-                            messageDiv.className = "message " + (sender === "user" ? "user-message" : "bot-message");
-                            messageDiv.textContent = text;
-                            chatBody.appendChild(messageDiv);
-                            scrollToBottom();
-                        }
+                window.sendMessage = function () {
+                    const input = document.getElementById("chatInput");
+                    const message = input.value.trim();
+                    if (message) {
+                        appendMessage("user", message);
+                        fetch("${pageContext.request.contextPath}/chat?prompt=" + encodeURIComponent(message), {
+                            method: "GET"
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                appendMessage("bot", data);
+                            })
+                            .catch(error => {
+                                appendMessage("bot", "Lỗi: " + error.message);
+                            });
+                        input.value = "";
+                        scrollToBottom();
+                    }
+                };
 
-                        document.getElementById("chatInput").addEventListener("keypress", function (e) {
-                            if (e.key === "Enter") {
-                                sendMessage();
-                            }
-                        });
-                    });
+                function appendMessage(sender, text) {
+                    const messageDiv = document.createElement("div");
+                    messageDiv.className = "message " + (sender === "user" ? "user-message" : "bot-message");
+                    messageDiv.textContent = text;
+                    chatBody.appendChild(messageDiv);
+                    scrollToBottom();
+                }
+
+                document.getElementById("chatInput").addEventListener("keypress", function (e) {
+                    if (e.key === "Enter") {
+                        sendMessage();
+                    }
+                });
+            });
         </script>
     </body>
 </html>
