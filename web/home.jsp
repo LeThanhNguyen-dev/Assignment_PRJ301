@@ -26,23 +26,23 @@
         /* Carousel nổi bật */
         #carouselExample {
             width: 100%;
-            margin: 100px auto 0; /* Giữ khoảng cách với navbar */
-            padding: 0; /* Loại bỏ padding để ảnh sát mép */
+            margin: 100px auto 0;
+            padding: 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Thêm bóng để nổi bật */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .carousel-inner {
-            background: linear-gradient(135deg, #f9e9c9 0%, #d4af37 100%); /* Nền gradient vàng */
+            background: linear-gradient(135deg, #f9e9c9 0%, #d4af37 100%);
         }
 
         .carousel-item img {
             width: 100%;
-            height: 600px; /* Tăng chiều cao để ấn tượng hơn */
-            object-fit: cover; /* Lấp đầy khung, không để trống */
-            border-radius: 0; /* Loại bỏ bo góc để ảnh trải rộng */
-            transition: opacity 0.5s ease; /* Hiệu ứng chuyển mượt mà */
+            height: 600px;
+            object-fit: cover;
+            border-radius: 0;
+            transition: opacity 0.5s ease;
         }
 
         .carousel-item {
@@ -56,16 +56,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.2); /* Lớp phủ mờ để tăng độ sâu */
+            background: rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
 
-        .carousel-item img:hover {
-            transform: none; /* Giữ nguyên không phóng to/thu nhỏ */
-        }
-
         .carousel-control-prev, .carousel-control-next {
-            z-index: 2; /* Đưa nút điều hướng lên trên lớp phủ */
+            z-index: 2;
         }
 
         .container {
@@ -91,6 +87,57 @@
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
+        }
+
+        /* Style cho nút Khám Phá Ngay */
+        .explore-btn {
+            display: block;
+            padding: 14px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #d4af37, #c0a062);
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto;
+            width: fit-content;
+            text-align: center;
+        }
+
+        .explore-btn:hover {
+            background: linear-gradient(45deg, #c0a062, #d4af37);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+            color: #fff;
+        }
+
+        .explore-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .explore-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .explore-btn i {
+            margin-left: 8px;
+            font-size: 1.1rem;
         }
 
         .category-buttons {
@@ -457,6 +504,11 @@
                 </c:otherwise>
             </c:choose>
         </div>
+
+        <!-- Nút Khám Phá Ngay (Di chuyển xuống dưới danh sách sản phẩm) -->
+        <a href="${pageContext.request.contextPath}/product" class="explore-btn">
+            Khám Phá Ngay <i class="fas fa-arrow-right"></i>
+        </a>
 
         <!-- Section giới thiệu nước hoa -->
         <div class="perfume-intro">

@@ -28,23 +28,20 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
 
-        // Lấy tham số từ request
         String category = request.getParameter("category");
         String priceRange = request.getParameter("priceRange");
 
-        // Danh sách sản phẩm
         List<Product> productList;
 
-        // Trường hợp 1 & 2 & 3: Xử lý logic lọc
         if ((category == null || category.isEmpty()) && (priceRange == null || priceRange.isEmpty())) {
-            // Không chọn danh mục, không chọn giá -> Lấy tất cả sản phẩm
+        
             productList = productDAO.getAllProducts();
         } else {
-            // Có ít nhất một tiêu chí lọc (category hoặc priceRange)
+       
             productList = productDAO.getFilteredProducts(category, priceRange);
         }
 
-        // Lưu danh sách sản phẩm vào request
+     
         request.setAttribute("product", productList);
         request.getRequestDispatcher("/product.jsp").forward(request, response);
     }

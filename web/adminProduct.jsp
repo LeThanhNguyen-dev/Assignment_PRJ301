@@ -109,7 +109,7 @@
         }
 
         .form-container {
-            width: 800px; /* Tăng từ 450px lên 600px */
+            width: 800px;
             padding: 50px;
             border: 2px solid #ccc;
             border-radius: 15px;
@@ -231,7 +231,7 @@
             border-radius: 8px;
             color: #333;
             font-weight: 500;
-            padding: 6px 12px; /* Giảm kích thước nút */
+            padding: 6px 12px; 
             transition: all 0.3s ease;
         }
 
@@ -247,7 +247,7 @@
             border-radius: 8px;
             color: #fff;
             font-weight: 500;
-            padding: 6px 12px; /* Giảm kích thước nút */
+            padding: 6px 12px; 
             transition: all 0.3s ease;
         }
 
