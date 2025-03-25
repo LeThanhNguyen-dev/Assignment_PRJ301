@@ -194,7 +194,7 @@
             <a href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </c:if>
         <c:if test="${!isLoggedIn}">
-            <a href="login.jsp"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="login"><i class="fas fa-sign-in-alt"></i> Login</a>
         </c:if>
     </div>
 </header>

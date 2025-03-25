@@ -142,7 +142,7 @@
         </form>
         <p class="error-message ${requestScope.error != null ? 'show' : ''}">${requestScope.error}</p>
         <div class="back-link">
-            <a href="login.jsp"><i class="fas fa-arrow-left"></i> Back to Login</a>
+            <a href="login"><i class="fas fa-arrow-left"></i> Back to Login</a>
         </div>
     </div>
 </body>

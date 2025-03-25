@@ -201,7 +201,7 @@
     <div class="containers">
         <h2><i class="fas fa-envelope"></i> Liên Hệ</h2>
         <div class="contact-info">
-            <p><strong>Địa chỉ:</strong> 344 Nguyễn Duy Hiệu, thành phố Hội An</p>
+            <p><strong>Địa chỉ:</strong> 344 Nguyễn Duy Hiệu, Thành Phố Hội An</p>
             <p><strong>Điện thoại:</strong> 0796555878</p>
             <p><strong>Email:</strong> nhungchubedan@gmail.com</p>
         </div>

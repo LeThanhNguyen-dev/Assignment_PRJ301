@@ -203,7 +203,7 @@
         <p class="text-danger">${requestScope.error}</p>
         <p class="text-success">${requestScope.message}</p>
         <p class="mt-3 text-center">
-            Already have an account? <a href="login.jsp">Login</a>
+            Already have an account? <a href="login">Login</a>
         </p>
     </div>
 

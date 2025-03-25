@@ -227,10 +227,10 @@
             </form>
             <div class="sign_up">
                 <span>Don't have an account?</span>
-                <a class="nav-link link" href="signup.jsp">Sign Up</a>
+                <a class="nav-link link" href="register">Sign Up</a>
             </div>
             <div class="forgot-password">
-                <a href="forgotPassword.jsp">Forgot your password?</a>
+                <a href="forgotPassword">Forgot your password?</a>
             </div>
             <p class="error-message ${requestScope.error != null ? 'show' : ''}">${requestScope.error}</p>
             <p class="success-message">${param.message}</p>
