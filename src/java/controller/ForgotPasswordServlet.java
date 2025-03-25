@@ -44,7 +44,7 @@ public class ForgotPasswordServlet extends HttpServlet {
 
             EmailUtil.sendEmail(email, subject, message);
             // Chuyển hướng đến trang reset password
-            response.sendRedirect("resetPassword.jsp");
+            response.sendRedirect("resetPassword");
         } catch (Exception e) {
             System.err.println("Loi khi goi reset OTP ");
         }

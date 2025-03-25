@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CartDAO;
+import dao.ProductDetailDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,10 +17,12 @@ import model.Customer;
 public class AddToCartServlet extends HttpServlet {
 
     private CartDAO cartDAO;
+    private ProductDetailDAO productDetailDAO;
 
     @Override
     public void init() throws ServletException {
         cartDAO = new CartDAO(); // Khởi tạo CartDAO khi servlet được khởi động
+        productDetailDAO = new ProductDetailDAO();
     }
 
     @Override
@@ -32,8 +35,14 @@ public class AddToCartServlet extends HttpServlet {
         HttpSession session = req.getSession();
         int productId = Integer.parseInt(req.getParameter("productId"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
-
         Customer cus = (Customer) session.getAttribute("session_Login");
+
+        if (productDetailDAO.getProductDetailsById(productId).getStock() < quantity) {
+            resp.setContentType("application/json");
+            resp.getWriter().write("{\"status\": \"fail\", \"message\": \"Please check stock before adding to cart\", \"cartSize\": " + cus.getCart().size() + "}");
+            return;
+        }
+
         ArrayList<CartItem> cartItems = cus.getCart();
         boolean productExists = false;
 

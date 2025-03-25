@@ -1,6 +1,7 @@
 package controller;
 
 import dao.ProductDAO;
+import dao.ProductDetailDAO;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -12,15 +13,17 @@ import model.Product;
 
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
-    private ProductDAO productDAO; 
+
+    private ProductDAO productDAO;
+    private ProductDetailDAO pdtDAO;
 
     @Override
     public void init() throws ServletException {
         productDAO = new ProductDAO();
-        productDAO.getAllProducts();
+        pdtDAO = new ProductDetailDAO();
     }
 
-   @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Ngăn cache
@@ -34,15 +37,17 @@ public class ProductServlet extends HttpServlet {
         List<Product> productList;
 
         if ((category == null || category.isEmpty()) && (priceRange == null || priceRange.isEmpty())) {
-        
+
             productList = productDAO.getAllProducts();
         } else {
-       
+
             productList = productDAO.getFilteredProducts(category, priceRange);
         }
 
-     
+        List<Integer> soldOutListIds = pdtDAO.getIdListSoldOut();
+        request.setAttribute("soldOutListIds", soldOutListIds);
         request.setAttribute("product", productList);
+
         request.getRequestDispatcher("/product.jsp").forward(request, response);
     }
 

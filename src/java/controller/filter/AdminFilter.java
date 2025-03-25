@@ -26,7 +26,7 @@ public class AdminFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String requestURI = httpRequest.getRequestURI();
 
-        if (requestURI.contains("/admin")) {
+            if (requestURI.contains("/admin")) {
             if (isAdminLoggedIn(httpRequest)) {
                 chain.doFilter(request, response);
             } else {

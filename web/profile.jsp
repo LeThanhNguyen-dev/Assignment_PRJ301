@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <c:set var="customer" value="${sessionScope.session_Login}"/>
 <c:set var="isLoggedIn" value="${customer != null}"/>
@@ -205,7 +206,7 @@
                     <label>Địa chỉ:</label> <span>${customer.address}</span>
                 </div>
                 <div class="text-center mt-4">
-                    <a href="editProfile.jsp" class="btn btn-warning">Chỉnh sửa thông tin</a>
+                    <a href="updateProfile" class="btn btn-warning">Chỉnh sửa thông tin</a>
                     <a href="home" class="btn btn-primary">Quay lại</a>
                 </div>
                 <p class="text-success mt-3">${requestScope.message}</p>
@@ -222,7 +223,7 @@
                                         <th>Ngày đặt</th>
                                         <th>Tổng tiền</th>
                                         <th>Trạng thái</th>
-                                        
+
                                         <th>Địa chỉ</th>
 
                                     </tr>
@@ -232,11 +233,11 @@
                                         <tr>
                                             <td>${order.orderId}</td>
                                             <td>${order.orderDate}</td>
-                                            <td>${order.totalAmount} VNĐ</td>
+                                            <td>$<fmt:formatNumber value="${order.totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2"/></td>
                                             <td>${order.status}</td>
                                             <td>${order.shippingAddress}</td>
 
-                                            
+
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -247,12 +248,6 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-            </div>
-        </c:if>
-        <c:if test="${!isLoggedIn}">
-            <p class="text-danger">Vui lòng đăng nhập để xem thông tin cá nhân!</p>
-            <div class="text-center">
-                <a href="login.jsp" class="btn btn-primary">Đăng nhập</a>
             </div>
         </c:if>
     </div>

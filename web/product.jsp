@@ -446,6 +446,8 @@
                                                                         const cartBadge = document.querySelector('.cart-badge');
                                                                         cartBadge.textContent = data.cartSize; // Giá trị từ server
                                                                         alert(data.message);
+                                                                    } else {
+                                                                        alert(data.message);
                                                                     }
                                                                 })
                                                                 .catch(error => console.error('Error:', error));

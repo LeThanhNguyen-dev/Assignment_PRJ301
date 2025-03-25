@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/ProductDetailServlet")
 public class ProductDetailServlet extends HttpServlet {
+
     private ProductDetailDAO productDetailDAO;
 
     @Override
@@ -20,7 +21,7 @@ public class ProductDetailServlet extends HttpServlet {
         productDetailDAO = new ProductDetailDAO();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIdStr = request.getParameter("productId");
         int productId;

@@ -20,16 +20,11 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-                    System.out.println("do gett profife Sẻvlet ");
+
+        System.out.println("do gett profife Sẻvlet ");
 
         HttpSession session = request.getSession();
         Customer currentCustomer = (Customer) session.getAttribute("session_Login");
-
-        if (currentCustomer == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
 
         System.out.println("Fetching orders for customer ID: " + currentCustomer.getId());
 
@@ -73,8 +68,6 @@ public class ProfileServlet extends HttpServlet {
 
     public static void main(String[] args) {
         OrderDAO orderDAO = new OrderDAO();
-        OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-        
 
         List<Order> orders = orderDAO.getOrdersByCustomerId(1);
         for (Order order : orders) {

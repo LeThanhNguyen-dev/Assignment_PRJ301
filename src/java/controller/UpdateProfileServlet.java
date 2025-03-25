@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,35 +8,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Customer;
-import model.Order;
-import model.OrderDetail;
 import dao.CustomerDAO;
-import dao.OrderDAO;
-import dao.OrderDetailDAO;
 
 @WebServlet(name = "UpdateProfileServlet", urlPatterns = {"/updateProfile"})
 public class UpdateProfileServlet extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("editProfile.jsp").forward(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-            System.out.println("do Pót Update Sẻvlet ");
+        System.out.println("do Pót Update Sẻvlet ");
         HttpSession session = request.getSession();
         Customer currentCustomer = (Customer) session.getAttribute("session_Login");
-
-        if (currentCustomer == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
 
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
 
-        if (name == null || phone == null || email == null || address == null ||
-            name.trim().isEmpty() || phone.trim().isEmpty() || email.trim().isEmpty() || address.trim().isEmpty()) {
+        if (name == null || phone == null || email == null || address == null
+                || name.trim().isEmpty() || phone.trim().isEmpty() || email.trim().isEmpty() || address.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng điền đầy đủ thông tin!");
             request.getRequestDispatcher("editProfile.jsp").forward(request, response);
             return;
@@ -50,13 +45,13 @@ public class UpdateProfileServlet extends HttpServlet {
         }
 
         Customer updatedCustomer = new Customer(
-            currentCustomer.getId(),
-            currentCustomer.getUsername(),
-            currentCustomer.getPassword(),
-            name,
-            phone,
-            email,
-            address
+                currentCustomer.getId(),
+                currentCustomer.getUsername(),
+                currentCustomer.getPassword(),
+                name,
+                phone,
+                email,
+                address
         );
 
         CustomerDAO customerDAO = new CustomerDAO();
@@ -67,10 +62,9 @@ public class UpdateProfileServlet extends HttpServlet {
             return;
         }
 
-        if (updateCustomerInDB(customerDAO, updatedCustomer)) {
+        if (customerDAO.updateCustomerInDB(updatedCustomer)) {
             session.setAttribute("session_Login", updatedCustomer);
             request.setAttribute("message", "Cập nhật thông tin thành công!");
-
 
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         } else {
@@ -79,25 +73,4 @@ public class UpdateProfileServlet extends HttpServlet {
         }
     }
 
-    private boolean updateCustomerInDB(CustomerDAO customerDAO, Customer customer) {
-        String query = "UPDATE Customer SET name = ?, phone = ?, email = ?, address = ? WHERE customerId = ?";
-
-        try {
-            java.sql.PreparedStatement stmt = customerDAO.c.prepareStatement(query);
-            stmt.setString(1, customer.getName());
-            stmt.setString(2, customer.getPhone());
-            stmt.setString(3, customer.getEmail());
-            stmt.setString(4, customer.getAddress());
-            stmt.setInt(5, customer.getId());
-
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    
-    
 }

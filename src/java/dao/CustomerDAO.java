@@ -10,8 +10,6 @@ import utils.DBContext;
 
 public class CustomerDAO extends DBContext {
 
-
-
     public Customer checkLogin(String username, String password) {
         Customer customer = null;
         String query = "SELECT * FROM Customer WHERE username = ? AND password = ?";
@@ -45,11 +43,10 @@ public class CustomerDAO extends DBContext {
 
         return customer;
     }
-    
+
     public int getTotalCustomers() {
         String sql = "SELECT COUNT(*) FROM Customer";
-        try (PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -89,7 +86,7 @@ public class CustomerDAO extends DBContext {
             return false;
         }
     }
-    
+
     public boolean addCustomer(Customer customer) {
         String query = "INSERT INTO Customer (username, password, name, phone, email, address) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -173,5 +170,23 @@ public class CustomerDAO extends DBContext {
         return false;
     }
 
-    
+    public boolean updateCustomerInDB(Customer customer) {
+        String query = "UPDATE Customer SET name = ?, phone = ?, email = ?, address = ? WHERE customerId = ?";
+
+        try (PreparedStatement stmt = c.prepareStatement(query)) {
+            
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getPhone());
+            stmt.setString(3, customer.getEmail());
+            stmt.setString(4, customer.getAddress());
+            stmt.setInt(5, customer.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

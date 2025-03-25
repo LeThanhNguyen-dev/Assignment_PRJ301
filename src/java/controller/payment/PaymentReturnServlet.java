@@ -6,6 +6,7 @@ package controller.payment;
 
 import dao.CartDAO;
 import dao.OrderDAO;
+import dao.ProductDetailDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,8 +31,12 @@ public class PaymentReturnServlet extends HttpServlet {
         String vnp_ResponseCode = req.getParameter("vnp_ResponseCode");  // Lấy mã phản hồi từ VNPAY
         String vnp_TxnRef = req.getParameter("vnp_TxnRef");
         String orderId = vnp_TxnRef.split(",")[0];// Mã đơn hàng
+        
         OrderDAO orderDAO = new OrderDAO();
+        ProductDetailDAO productDetailDAO = new ProductDetailDAO();
+        
         HttpSession session = req.getSession();
+        
         Customer cus = (Customer) session.getAttribute("session_Login");
         ArrayList<CartItem> selectedItems = (ArrayList<CartItem>) session.getAttribute("selectedItems");
         String status;
@@ -42,6 +47,7 @@ public class PaymentReturnServlet extends HttpServlet {
                 CartDAO cartDAO = new CartDAO();
                 for (CartItem item : selectedItems) {
                     cartDAO.deleteCartItem(cus.getId(), item.getProductId());
+                    productDetailDAO.updateStock(item.getProductId(), item.getQuantity());
                 }
                 // Xóa selectedItems khỏi session sau khi xóa
                 session.removeAttribute("selectedItems");
