@@ -37,13 +37,21 @@ public class HomeServlet extends HttpServlet {
 
         // Lấy top 3 sản phẩm bán chạy nhất theo categoryId từ ProductDAO
         List<ProductSales> topProductSales = productDAO.getTop3ProductsPerCategory(categoryId);
-
-        // Tạo danh sách mới để chứa thông tin chi tiết của sản phẩm
         List<Product> topProducts = new ArrayList<>();
-        for (ProductSales sales : topProductSales) {
-            Product product = productDAO.getProductById(sales.getProductId());
-            if (product != null) {
-                topProducts.add(product);
+
+        if (topProductSales == null || topProductSales.isEmpty()) {
+            // Nếu không có dữ liệu bán hàng, lấy 3 sản phẩm đầu tiên của danh mục
+            String categoryName = categoryId == 1 ? "Men" : categoryId == 2 ? "Women" : "Kid";
+            List<Product> allProducts = productDAO.getProductsByCategory(categoryName);
+            topProducts = allProducts.size() > 3 ? allProducts.subList(0, 3) : allProducts;
+            request.setAttribute("noSalesData", "Hiện chưa có dữ liệu bán hàng cho danh mục này.");
+        } else {
+            // Nếu có dữ liệu bán hàng, lấy thông tin sản phẩm chi tiết
+            for (ProductSales sales : topProductSales) {
+                Product product = productDAO.getProductById(sales.getProductId());
+                if (product != null) {
+                    topProducts.add(product);
+                }
             }
         }
 
