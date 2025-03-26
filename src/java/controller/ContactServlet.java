@@ -26,7 +26,7 @@ public class ContactServlet extends HttpServlet {
         String email = request.getParameter("email");
         String message = request.getParameter("message");
 
-        String subject = "Contact Form Message from " + name;
+        String subject = "Contact Message from " + name;
         String body = "Message from: " + name + "\nEmail: " + email + "\n\n" + message;
 
         executor.submit(() -> {

@@ -70,7 +70,7 @@ public class AdminManageProduct extends HttpServlet {
 
             Product newProduct = new Product(0, name, description, image, price, categoryId);
             productDAO.addProduct(newProduct); // Gọi phương thức thêm mới (sẽ thêm vào ProductDAO)
-            response.sendRedirect("adminProduct");
+            response.sendRedirect("adminProduct?message=Add " + name + " successfully");
         } else {
             request.getRequestDispatcher("adminProduct.jsp").forward(request, response); // Hiển thị form thêm
         }

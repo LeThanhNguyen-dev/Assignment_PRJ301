@@ -447,7 +447,6 @@
                                             <input type="hidden" name="productId" id="modalProductId">
                                             <input type="hidden" name="quantity" id="modalQuantity">
                                             <input type="hidden" name="isBuyNow" value="true">
-                                            <button type="submit" class="btn btn-buy" style="width: 150px;"><i class="fas fa-shopping-bag"></i> Buy now</button>
                                         </form>
                                         <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style ="width: 150px;"><i class="fas fa-cart-plus"></i>Add to Cart</button>
                                     </div>

@@ -66,7 +66,7 @@ public class UpdateProfileServlet extends HttpServlet {
             session.setAttribute("session_Login", updatedCustomer);
             request.setAttribute("message", "Cập nhật thông tin thành công!");
 
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
+            request.getRequestDispatcher("profile").forward(request, response);
         } else {
             request.setAttribute("error", "Cập nhật thông tin thất bại!");
             request.getRequestDispatcher("editProfile.jsp").forward(request, response);
