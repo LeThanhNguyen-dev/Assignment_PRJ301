@@ -129,7 +129,7 @@ public class GeminiServlet extends HttpServlet {
                 return "Không tìm thấy sản phẩm giá thấp nhất.";
             }
 
-            return "Vui lòng cung cấp tên sản phẩm hoặc hỏi cụ thể hơn (ví dụ: 'giá của nước hoa X là bao nhiêu?').";
+            return "Vui lòng cung cấp tên sản phẩm hoặc hỏi cụ thể hơn (ví dụ: 'X giá bao nhiêu?').";
         }
 
         // 4. Kiểm tra top sản phẩm bán chạy
