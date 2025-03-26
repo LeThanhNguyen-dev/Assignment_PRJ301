@@ -357,9 +357,11 @@
                                 <div class="card w-100 product-card">
                                     <div class="image-container">
                                         <img src="${product.image}" class="card-img-top img-fluid" alt="${product.name}">
-                                        <div class="overlay">
-                                            <a href="#" class="view-detail" data-product-id="${product.id}">Xem chi tiết</a>
-                                        </div>
+                                        <c:if test="${isLoggedIn}">
+                                            <div class="overlay">
+                                                <a href="#" class="view-detail" data-product-id="${product.id}">Xem chi tiết</a>
+                                            </div>
+                                        </c:if>
                                     </div>
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">${product.name}</h5>
@@ -487,6 +489,7 @@
                                                                         data: {productId: productId},
                                                                         dataType: 'json',
                                                                         success: function (response) {
+                                                                            console.log("id duoi: " + productId);
                                                                             // Kiểm tra nếu có lỗi
                                                                             if (response.error) {
                                                                                 alert(response.error);
@@ -528,12 +531,12 @@
 
 
                                                             });
-                                                            document.getElementById('buyNowForm').addEventListener('submit', function (e) {
-                                                                // Lấy giá trị của quantityInput
-                                                                var quantityValue = document.getElementById('quantityInput').value;
-                                                                // Gán giá trị đó cho modalQuantity
-                                                                document.getElementById('modalQuantity').value = quantityValue;
-                                                            });
+//                                                            document.getElementById('buyNowForm').addEventListener('submit', function () {
+//                                                                // Lấy giá trị của quantityInput
+//                                                                var quantityValue = document.getElementById('quantityInput').value;
+//                                                                // Gán giá trị đó cho modalQuantity
+//                                                                document.getElementById('modalQuantity').value = quantityValue;
+//                                                            });
         </script>
     </body>
 </html>
