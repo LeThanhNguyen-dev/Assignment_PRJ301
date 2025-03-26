@@ -166,7 +166,7 @@
                     <label for="paymentMethod">Payment Method</label>
                     <select class="form-select" id="paymentMethod" name="paymentMethod" required>
                         <option value="vnpay">VNPAY</option>
-                        <option value="cod">Cash on Delivery</option>
+                        <option value="cod" disabled>Cash on Delivery (Temporarily Unavailable)</option> 
                     </select>
                 </div>
 

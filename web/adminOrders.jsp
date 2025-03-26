@@ -186,6 +186,7 @@
                             <th>Địa chỉ giao hàng</th>
                             <th>Mã voucher</th>
                             <th>Trạng thái</th>
+                            <th>Thanh toán</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -198,6 +199,11 @@
                                 <td>${order.shippingAddress}</td>
                                 <td>${order.voucherCode}</td>
                                 <td>${order.status}</td>
+                                <c:if test="${order.status.equals('Processing')}">
+                                    <td>
+                                        <button onClick="thanhtoan(${order.orderId})" class="btn btn-success btn-sm">Thanh toán</button>
+                                    </td>
+                                </c:if>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -205,5 +211,17 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                            function thanhtoan(orderId) {
+                                                console.log("vao thanh toan: " + orderId);
+                                                fetch('AdminPaymentUpdateServlet?orderId=' + orderId, {
+                                                    method: 'POST'
+                                                })
+                                                        .then(response => response.json())
+                                                        .then(_ => {
+                                                            window.location.reload();
+                                                        })
+                                            }
+        </script>
     </body>
 </html>
