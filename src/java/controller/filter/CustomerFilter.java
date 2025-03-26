@@ -40,6 +40,7 @@ public class CustomerFilter implements Filter {
         String contextPath = httpRequest.getContextPath();
         String path = requestURI.substring(contextPath.length());
 
+        System.out.println(path);
         // Danh sách các URI không cần kiểm tra session
         boolean isExcludedPath = path.equals("/home")
                 || path.equals("/")
@@ -48,6 +49,7 @@ public class CustomerFilter implements Filter {
                 || path.equals("/forgotPassword")
                 || path.equals("/resetPassword")
                 || path.startsWith("/admin")
+                || path.startsWith("/img")
                 || path.equals("/register")
                 || path.equals("/search")
                 || path.equals("/product");

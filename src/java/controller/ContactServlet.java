@@ -37,7 +37,7 @@ public class ContactServlet extends HttpServlet {
             }
         });
 
-        request.setAttribute("messageStatus", "Email is being sent!");
+        request.setAttribute("messageStatus", "An email was sent to us.");
         request.getRequestDispatcher("contact.jsp").forward(request, response);
     }
     @Override

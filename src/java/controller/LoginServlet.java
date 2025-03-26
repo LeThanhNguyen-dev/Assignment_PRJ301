@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
             }
 
             customerDAO.closeConnection(); 
-            response.sendRedirect("product"); 
+            response.sendRedirect("home"); 
         } else {
             request.setAttribute("error", "Invalid username or password!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
