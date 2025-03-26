@@ -6,7 +6,7 @@
 <c:set var="customer" value="${sessionScope.session_Login}"/>
 <c:set var="isLoggedIn" value="${customer != null}"/>
 <c:set var="productList" value="${requestScope.product}"/>
-
+<c:set var="idsProductIsSoldOut" value="${requestScope.idsProductIsSoldOut}"/>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -277,6 +277,14 @@
                 opacity: 1; /* Hiển thị overlay khi hover */
             }
 
+            .error-message {
+                color: #ff4d4d;
+                text-align: center;
+                margin-top: 15px;
+                font-size: 14px;
+                transition: opacity 0.3s ease;
+            }
+
 
             @media (max-width: 768px) {
                 .sidebar {
@@ -359,16 +367,30 @@
                                         <p class="card-text"><strong>Giá: </strong>$<fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" minFractionDigits="2" maxFractionDigits="2" /></p>
                                         <c:if test="${isLoggedIn}">
                                             <div class="action-buttons">
-                                                <form method="POST" action="CheckoutServlet" class="w-100">
-                                                    <input type="hidden" name="productId" value="${product.id}">
-                                                    <input type="hidden" name="isBuyNow" value="true">
-                                                    <button type="submit" class="btn btn-buy w-100">
-                                                        <i class="fas fa-shopping-bag"></i> Mua ngay
-                                                    </button>
-                                                </form>
-                                                <button type="button" class="btn btn-cart add-to-cart-btn w-100" onClick="addToCart(${product.id}, 1)">
-                                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
-                                                </button>                                        
+                                                <c:choose>
+                                                    <c:when test="${idsProductIsSoldOut.contains(product.id)}">
+                                                        <!-- Sản phẩm hết hàng: vô hiệu hóa nút -->
+                                                        <button type="button" class="btn btn-buy w-100" disabled>
+                                                            <i class="fas fa-shopping-bag"></i> Sold out
+                                                        </button>
+                                                        <c:if  test="${product.id.toString().equals(param.soldOutProductId)}">
+                                                            <p class="error-message w-100">${param.error}</p>
+                                                        </c:if>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <!-- Sản phẩm còn hàng: giữ nguyên nút -->
+                                                        <form method="POST" action="CheckoutServlet" class="w-100">
+                                                            <input type="hidden" name="productId" value="${product.id}">
+                                                            <input type="hidden" name="isBuyNow" value="true">
+                                                            <button type="submit" class="btn btn-buy w-100">
+                                                                <i class="fas fa-shopping-bag"></i> Buy now
+                                                            </button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-cart add-to-cart-btn w-100" onClick="addToCart(${product.id}, 1)">
+                                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                                        </button>
+                                                    </c:otherwise>
+                                                </c:choose>                                      
                                             </div>
                                         </c:if>
                                     </div>
@@ -377,7 +399,7 @@
                         </c:forEach>
                         <c:if test="${empty productList}">
                             <div class="col-12 text-center">
-                                <p style="color: #666;">Không có sản phẩm nào. ${error}</p>
+                                <p style="color: #666;">No product. ${error}</p>
                             </div>
                         </c:if>
                     </div>
@@ -395,7 +417,7 @@
             <div class="modal-dialog" style="max-width: 800px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="productDetailModalLabel">Chi Tiết Sản Phẩm</h5>
+                        <h5 class="modal-title" id="productDetailModalLabel">Product detail</h5>
                         <!-- Bỏ button Đóng -->
                     </div>
                     <div class="modal-body">
@@ -406,16 +428,16 @@
                             <div class="col-md-6">
                                 <h5 id="modalProductName"></h5>
                                 <p id="modalProductDescription"></p>
-                                <p><strong>Giá: </strong><span id="modalProductPrice"></span></p>
-                                <p><strong>Thương hiệu: </strong><span id="modalProductBrand"></span></p>
-                                <p><strong>Chất liệu: </strong><span id="modalProductMaterial"></span></p>
-                                <p><strong>Dung tích: </strong><span id="modalProductVolume"></span> ml</p>
-                                <p><strong>Kích thước: </strong><span id="modalProductDimensions"></span></p>
-                                <p><strong>Tồn kho: </strong><span id="modalProductStock"></span></p>
+                                <p><strong>Price </strong><span id="modalProductPrice"></span></p>
+                                <p><strong>Brand: </strong><span id="modalProductBrand"></span></p>
+                                <p><strong>Material: </strong><span id="modalProductMaterial"></span></p>
+                                <p><strong>Volume: </strong><span id="modalProductVolume"></span> ml</p>
+                                <p><strong>Dimension: </strong><span id="modalProductDimensions"></span></p>
+                                <p><strong>Stock: </strong><span id="modalProductStock"></span></p>
                                 <!-- Thêm ô chọn số lượng -->
                                 <c:if test="${isLoggedIn}">
                                     <div class="mb-3">
-                                        <label for="quantityInput" class="form-label"><strong>Số lượng:</strong></label>
+                                        <label for="quantityInput" class="form-label"><strong>Quantity:</strong></label>
                                         <input type="number" id="quantityInput" class="form-control w-50" min="1" value="1">
                                     </div>
                                     <div class="d-flex gap-3">
@@ -423,9 +445,9 @@
                                             <input type="hidden" name="productId" id="modalProductId">
                                             <input type="hidden" name="quantity" id="modalQuantity">
                                             <input type="hidden" name="isBuyNow" value="true">
-                                            <button type="submit" class="btn btn-buy" style="width: 150px;"><i class="fas fa-shopping-bag"></i> Mua ngay</button>
+                                            <button type="submit" class="btn btn-buy" style="width: 150px;"><i class="fas fa-shopping-bag"></i> Buy now</button>
                                         </form>
-                                        <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style ="width: 150px;"><i class="fas fa-cart-plus"></i> Thêm vào giỏ</button>
+                                        <button type="button" class="btn btn-cart add-to-cart-btn" id="modalAddToCartBtn" style ="width: 150px;"><i class="fas fa-cart-plus"></i>Add to Cart</button>
                                     </div>
                                 </c:if>
                             </div>
@@ -435,83 +457,83 @@
             </div>
         </div>
         <script>
-                                                    function addToCart(productId, quantity) {
-                                                        fetch('AddToCartServlet?productId=' + productId + '&quantity=' + quantity, {
-                                                            method: 'GET'
-                                                        })
-                                                                .then(response => response.json())
-                                                                .then(data => {
-                                                                    if (data.status === 'success') {
-                                                                        // Cập nhật badge giỏ hàng
-                                                                        const cartBadge = document.querySelector('.cart-badge');
-                                                                        cartBadge.textContent = data.cartSize; // Giá trị từ server
-                                                                        alert(data.message);
-                                                                    } else {
-                                                                        alert(data.message);
-                                                                    }
+                                                            function addToCart(productId, quantity) {
+                                                                fetch('AddToCartServlet?productId=' + productId + '&quantity=' + quantity, {
+                                                                    method: 'GET'
                                                                 })
-                                                                .catch(error => console.error('Error:', error));
-                                                    }
-                                                    $(document).ready(function () {
-                                                        // Xử lý sự kiện khi nhấn "Xem chi tiết"
-                                                        $('.view-detail').click(function (e) {
-                                                            e.preventDefault();
-                                                            const productId = $(this).data('product-id');
-
-                                                            // Gửi yêu cầu AJAX để lấy chi tiết sản phẩm
-                                                            $.ajax({
-                                                                url: 'ProductDetailServlet',
-                                                                type: 'GET',
-                                                                data: {productId: productId},
-                                                                dataType: 'json',
-                                                                success: function (response) {
-                                                                    // Kiểm tra nếu có lỗi
-                                                                    if (response.error) {
-                                                                        alert(response.error);
-                                                                        return;
-                                                                    }
-
-                                                                    // Điền dữ liệu từ ProductDetailDTO
-                                                                    $('#modalProductImage').attr('src', response.image);
-                                                                    $('#modalProductName').text(response.name);
-                                                                    $('#modalProductDescription').text(response.description);
-                                                                    $('#modalProductPrice').text(Number(response.price).toLocaleString('en-US', {style: 'currency', currency: 'USD'}));
-                                                                    $('#modalProductId').val(response.productId);
-                                                                    $('#modalProductBrand').text(response.brand || 'Không có thông tin');
-                                                                    $('#modalProductMaterial').text(response.material || 'Không có thông tin');
-                                                                    $('#modalProductVolume').text(response.volume || 'Không có thông tin');
-                                                                    $('#modalProductDimensions').text(response.dimensions || 'Không có thông tin');
-                                                                    $('#modalProductStock').text(response.stock || '0');
-
-                                                                    // Hiển thị modal
-                                                                    $('#productDetailModal').modal('show');
-                                                                },
-                                                                error: function () {
-                                                                    alert('Có lỗi xảy ra khi lấy chi tiết sản phẩm!');
-                                                                }
-                                                            });
-                                                        });
-
-                                                        // Thêm sự kiện click cho nút "Thêm vào giỏ" trong modal
-                                                        $('#modalAddToCartBtn').click(function () {
-                                                            const productId = $('#modalProductId').val();
-                                                            const quantity = $('#quantityInput').val();
-
-                                                            if (productId) {
-                                                                addToCart(productId, quantity); // Gọi hàm addToCart với productId
-                                                            } else {
-                                                                alert('Không tìm thấy ID sản phẩm!');
+                                                                        .then(response => response.json())
+                                                                        .then(data => {
+                                                                            if (data.status === 'success') {
+                                                                                // Cập nhật badge giỏ hàng
+                                                                                const cartBadge = document.querySelector('.cart-badge');
+                                                                                cartBadge.textContent = data.cartSize; // Giá trị từ server
+                                                                                alert(data.message);
+                                                                            } else {
+                                                                                alert(data.message);
+                                                                            }
+                                                                        })
+                                                                        .catch(error => console.error('Error:', error));
                                                             }
-                                                        });
+                                                            $(document).ready(function () {
+                                                                // Xử lý sự kiện khi nhấn "Xem chi tiết"
+                                                                $('.view-detail').click(function (e) {
+                                                                    e.preventDefault();
+                                                                    const productId = $(this).data('product-id');
+
+                                                                    // Gửi yêu cầu AJAX để lấy chi tiết sản phẩm
+                                                                    $.ajax({
+                                                                        url: 'ProductDetailServlet',
+                                                                        type: 'GET',
+                                                                        data: {productId: productId},
+                                                                        dataType: 'json',
+                                                                        success: function (response) {
+                                                                            // Kiểm tra nếu có lỗi
+                                                                            if (response.error) {
+                                                                                alert(response.error);
+                                                                                return;
+                                                                            }
+
+                                                                            // Điền dữ liệu từ ProductDetailDTO
+                                                                            $('#modalProductImage').attr('src', response.image);
+                                                                            $('#modalProductName').text(response.name);
+                                                                            $('#modalProductDescription').text(response.description);
+                                                                            $('#modalProductPrice').text(Number(response.price).toLocaleString('en-US', {style: 'currency', currency: 'USD'}));
+                                                                            $('#modalProductId').val(response.productId);
+                                                                            $('#modalProductBrand').text(response.brand || 'No information');
+                                                                            $('#modalProductMaterial').text(response.material || 'No information');
+                                                                            $('#modalProductVolume').text(response.volume || 'No information');
+                                                                            $('#modalProductDimensions').text(response.dimensions || 'No information');
+                                                                            $('#modalProductStock').text(response.stock || '0');
+
+                                                                            // Hiển thị modal
+                                                                            $('#productDetailModal').modal('show');
+                                                                        },
+                                                                        error: function () {
+                                                                            alert('Có lỗi xảy ra khi lấy chi tiết sản phẩm!');
+                                                                        }
+                                                                    });
+                                                                });
+
+                                                                // Thêm sự kiện click cho nút "Thêm vào giỏ" trong modal
+                                                                $('#modalAddToCartBtn').click(function () {
+                                                                    const productId = $('#modalProductId').val();
+                                                                    const quantity = $('#quantityInput').val();
+
+                                                                    if (productId) {
+                                                                        addToCart(productId, quantity); // Gọi hàm addToCart với productId
+                                                                    } else {
+                                                                        alert('Không tìm thấy ID sản phẩm!');
+                                                                    }
+                                                                });
 
 
-                                                    });
-                                                    document.getElementById('buyNowForm').addEventListener('submit', function (e) {
-                                                        // Lấy giá trị của quantityInput
-                                                        var quantityValue = document.getElementById('quantityInput').value;
-                                                        // Gán giá trị đó cho modalQuantity
-                                                        document.getElementById('modalQuantity').value = quantityValue;
-                                                    });
+                                                            });
+                                                            document.getElementById('buyNowForm').addEventListener('submit', function (e) {
+                                                                // Lấy giá trị của quantityInput
+                                                                var quantityValue = document.getElementById('quantityInput').value;
+                                                                // Gán giá trị đó cho modalQuantity
+                                                                document.getElementById('modalQuantity').value = quantityValue;
+                                                            });
         </script>
     </body>
 </html>

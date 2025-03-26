@@ -162,6 +162,14 @@
                 font-size: 18px;
                 margin-top: 20px;
             }
+
+            .error-message {
+                color: #dc3545;
+                text-align: center;
+                margin-top: 15px;
+                font-size: 14px;
+                transition: opacity 0.3s ease;
+            }
         </style>        
     </head>
     <body>
@@ -218,6 +226,8 @@
                 <c:if test="${empty customer.cart}">
                     <p class="empty-cart">Your cart is empty. Add some products to get started!</p>
                 </c:if>
+
+                <p class="error-message">${param.error}</p>
             </form>
         </div>
 

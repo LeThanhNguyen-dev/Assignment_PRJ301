@@ -1,6 +1,6 @@
 package controller;
 
-import dao.ProductDAO;
+import dao.ProductDetailDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,16 +24,22 @@ public class CheckoutServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         Customer cus = (Customer) session.getAttribute("session_Login");
+        ProductDetailDAO ptd = new ProductDetailDAO();
+
         double amountTotal = 0;
         ArrayList<CartItem> selectedItems = session.getAttribute("selectedItems") != null ? (ArrayList<CartItem>) session.getAttribute("selectedItems") : new ArrayList<>();
 
         if (request.getParameter("isBuyNow") != null) {
-            
-            
-            selectedItems.clear();// khong co j
+            selectedItems.clear();
             int productId = Integer.parseInt(request.getParameter("productId"));
             int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 1;
-            selectedItems.add(new CartItem(cus.getId(), productId, quantity));
+
+            if (ptd.checkStockIsEnough(productId, quantity)) {
+                selectedItems.add(new CartItem(cus.getId(), productId, quantity));
+            } else {
+                response.sendRedirect("product?error=Product is out of stock, please come back later&soldOutProductId=" + productId);
+                return;
+            }
         }
 
         if (selectedItems != null) {
@@ -45,7 +51,7 @@ public class CheckoutServlet extends HttpServlet {
 
         session.setAttribute("totalBill", amountTotal);
 
-        response.sendRedirect("checkOut.jsp");
+        request.getRequestDispatcher("checkOut.jsp").forward(request, response);
     }
 
     @Override

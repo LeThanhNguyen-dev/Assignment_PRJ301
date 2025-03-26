@@ -106,7 +106,7 @@ public class ProductDetailDAO extends DBContext {
 
         return soldOutProductIds;
     }
-    
+
     public List<Product> getListSoldOutProducts() {
         List<Product> soldOutProducts = new ArrayList<>();
         String sql = "SELECT p.productId, p.name, p.description, p.image, p.price, p.categoryId "
@@ -132,6 +132,25 @@ public class ProductDetailDAO extends DBContext {
         }
 
         return soldOutProducts;
+    }
+
+    public boolean checkStockIsEnough(int productId, int quantity) {
+        String sql = "SELECT stock FROM ProductDetail WHERE productId = ?";
+
+        try {
+            PreparedStatement stmt = c.prepareStatement(sql);
+            stmt.setInt(1, productId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int stock = rs.getInt("stock");
+                return stock >= quantity;  // Chỉ trả về true nếu stock đủ
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;  // Trả về false nếu không tìm thấy sản phẩm
     }
 
     public static void main(String[] args) {

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dao.CartDAO;
-import dao.ProductDAO;
+import dao.ProductDetailDAO;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -19,10 +19,13 @@ import model.Customer;
 public class UpdateCartServlet extends HttpServlet {
 
     private CartDAO cartDAO;
+    private ProductDetailDAO ptd;
 
     @Override
     public void init() throws ServletException {
         cartDAO = new CartDAO(); // Khởi tạo CartDAO
+        ptd = new ProductDetailDAO();
+
     }
 
     @Override
@@ -52,18 +55,34 @@ public class UpdateCartServlet extends HttpServlet {
             if (selectedProducts != null) {
                 // Lọc ra các CartItem được chọn
                 List<CartItem> selectedItems = new ArrayList<>();
+                List<String> outOfStockProducts = new ArrayList<>();
                 for (String selectedId : selectedProducts) {
                     for (CartItem item : cus.getCart()) {
                         if (item.getProductId() == Integer.parseInt(selectedId)) {
-                            selectedItems.add(item);
-                            break;
+                            if (ptd.checkStockIsEnough(item.getProductId(), item.getQuantity())) {
+                                selectedItems.add(item);
+                                break;
+                            } else {
+                                String productName = item.getProduct().getName(); // Giả sử phương thức này tồn tại
+                                outOfStockProducts.add(productName);
+                            }
                         }
                     }
                 }
-                // Lưu danh sách selectedItems vào session
-                session.setAttribute("selectedItems", selectedItems);
+
+                if (!outOfStockProducts.isEmpty()) {
+                    // Tạo thông báo lỗi với danh sách tên sản phẩm hết hàng
+                    String errorMessage = "The following products are out of stock: " + String.join(", ", outOfStockProducts);
+                    // Mã hóa thông báo để đảm bảo an toàn khi gửi qua URL
+                    String encodedMessage = java.net.URLEncoder.encode(errorMessage, "UTF-8");
+                    response.sendRedirect("CartServlet?error=" + encodedMessage);
+                } else {
+                    session.setAttribute("selectedItems", selectedItems);
+
+                    request.getRequestDispatcher("CheckoutServlet").forward(request, response);
+                }
             }
-            request.getRequestDispatcher("CheckoutServlet").forward(request, response);
+
         } else if ("continue".equals(action)) {
             response.sendRedirect("product");
         }
@@ -72,7 +91,7 @@ public class UpdateCartServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         System.out.println("delete");
         // Lấy tham số từ yêu cầu DELETE
         int customerId = Integer.parseInt(request.getParameter("customerId"));
@@ -81,9 +100,9 @@ public class UpdateCartServlet extends HttpServlet {
         // Xóa sản phẩm khỏi giỏ hàng trong cơ sở dữ liệu
         boolean success = cartDAO.deleteCartItem(customerId, productId);
         if (success) {
-            response.getWriter().write("{\"status\": \"success\", \"message\": \"Xóa thành công!\"}");
+            response.getWriter().write("{\"status\": \"success\", \"message\": \"Delete Successfully!\"}");
         } else {
-            response.getWriter().write("{\"status\": \"error\", \"message\": \"Xóa thất bại!\"}");
+            response.getWriter().write("{\"status\": \"error\", \"message\": \"Fail to delete!\"}");
         }
     }
 }

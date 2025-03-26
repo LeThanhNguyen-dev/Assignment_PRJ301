@@ -44,8 +44,8 @@ public class ProductServlet extends HttpServlet {
             productList = productDAO.getFilteredProducts(category, priceRange);
         }
 
-        List<Integer> soldOutListIds = pdtDAO.getIdListSoldOut();
-        request.setAttribute("soldOutListIds", soldOutListIds);
+        List<Integer> idsProductIsSoldOut = pdtDAO.getIdListSoldOut();
+        request.setAttribute("idsProductIsSoldOut", idsProductIsSoldOut);
         request.setAttribute("product", productList);
 
         request.getRequestDispatcher("/product.jsp").forward(request, response);

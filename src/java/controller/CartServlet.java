@@ -7,6 +7,7 @@ import model.CartItem;
 import model.Customer;
 import model.Product;
 import dao.ProductDAO;
+import dao.ProductDetailDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,6 +23,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("session_Login");
+        ProductDetailDAO ptd = new ProductDetailDAO();
 
         if (customer != null && customer.getCart() != null) {
             customer.updateCart();
@@ -31,8 +33,6 @@ public class CartServlet extends HttpServlet {
             for (CartItem cartItem : cartItems) {
                 productsInCart.add(cartItem.getProduct());
             }
-
-            System.out.println(cartItems.toString());
 
             // Đặt dữ liệu vào request để JSP sử dụng
             request.setAttribute("productsInCart", productsInCart);
