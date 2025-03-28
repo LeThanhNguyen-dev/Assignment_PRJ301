@@ -73,7 +73,6 @@ public class EmailUtil {
                 + "</html>";
     }
 
-
     public static String createOrderStatusMessage(String status) {
         // Xác định nội dung dựa trên trạng thái đơn hàng
         String message;

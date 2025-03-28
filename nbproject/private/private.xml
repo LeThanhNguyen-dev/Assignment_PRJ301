@@ -3,8 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Assignment_PRJ301/src/java/utils/EmailUtil.java</file>
-            <file>file:/D:/Assignment_PRJ301/src/java/controller/ContactServlet.java</file>
+            <file>file:/D:/Assignment_PRJ301/web/signup.jsp</file>
+            <file>file:/D:/Assignment_PRJ301/src/java/controller/SendOTPServlet.java</file>
             <file>file:/D:/Assignment_PRJ301/src/java/controller/filter/CustomerFilter.java</file>
         </group>
     </open-files>
